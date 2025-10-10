@@ -11,10 +11,10 @@ interface HeaderProps {
 
 export default function Header({ createPlayer }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { startPlaying } = usePlayer()
+  const { startPlaying, startVideoPlaying } = usePlayer()
 
   const handleWatchLive = () => {
-    createPlayer('watch')
+    startVideoPlaying()
   }
 
   // Close mobile menu when clicking outside or on escape key

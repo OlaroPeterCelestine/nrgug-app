@@ -10,6 +10,12 @@ interface PlayerContextType {
   startPlaying: () => void
   shouldStartPlaying: boolean
   resetStartPlaying: () => void
+  isVideoPlayerVisible: boolean
+  showVideoPlayer: () => void
+  hideVideoPlayer: () => void
+  startVideoPlaying: () => void
+  shouldStartVideoPlaying: boolean
+  resetStartVideoPlaying: () => void
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined)
@@ -17,6 +23,8 @@ const PlayerContext = createContext<PlayerContextType | undefined>(undefined)
 export function PlayerProvider({ children }: { children: ReactNode }) {
   const [isPlayerVisible, setIsPlayerVisible] = useState(false)
   const [shouldStartPlaying, setShouldStartPlaying] = useState(false)
+  const [isVideoPlayerVisible, setIsVideoPlayerVisible] = useState(false)
+  const [shouldStartVideoPlaying, setShouldStartVideoPlaying] = useState(false)
 
   const showPlayer = () => setIsPlayerVisible(true)
   const hidePlayer = () => setIsPlayerVisible(false)
@@ -27,6 +35,14 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   }
   const resetStartPlaying = () => setShouldStartPlaying(false)
 
+  const showVideoPlayer = () => setIsVideoPlayerVisible(true)
+  const hideVideoPlayer = () => setIsVideoPlayerVisible(false)
+  const startVideoPlaying = () => {
+    setShouldStartVideoPlaying(true)
+    setIsVideoPlayerVisible(true)
+  }
+  const resetStartVideoPlaying = () => setShouldStartVideoPlaying(false)
+
   return (
     <PlayerContext.Provider value={{
       isPlayerVisible,
@@ -35,7 +51,13 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       minimizePlayer,
       startPlaying,
       shouldStartPlaying,
-      resetStartPlaying
+      resetStartPlaying,
+      isVideoPlayerVisible,
+      showVideoPlayer,
+      hideVideoPlayer,
+      startVideoPlaying,
+      shouldStartVideoPlaying,
+      resetStartVideoPlaying
     }}>
       {children}
     </PlayerContext.Provider>
