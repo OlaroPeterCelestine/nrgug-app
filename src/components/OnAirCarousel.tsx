@@ -59,12 +59,27 @@ export default function OnAirCarousel() {
     if (selectedDay === 'all') {
       return shows.slice(0, 6) // Show only first 6 shows when all days selected
     }
+    if (selectedDay === 'weekdays') {
+      return shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
+    }
     return shows.filter(show => show.day_of_week === selectedDay)
   }
 
   const getUniqueDays = () => {
     const days = shows.map(show => show.day_of_week)
-    return ['all', ...Array.from(new Set(days))]
+    const uniqueDays = Array.from(new Set(days))
+    
+    // Group Monday-Thursday into weekdays
+    const hasWeekdays = uniqueDays.some(day => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
+    const weekendDays = uniqueDays.filter(day => !['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
+    
+    const groupedDays = ['all']
+    if (hasWeekdays) {
+      groupedDays.push('weekdays')
+    }
+    groupedDays.push(...weekendDays)
+    
+    return groupedDays
   }
 
   const isValidImageUrl = (url: string | null | undefined): boolean => {
@@ -94,7 +109,9 @@ export default function OnAirCarousel() {
             <p className="text-gray-400 text-sm mt-1">
               {selectedDay === 'all' 
                 ? `Showing ${Math.min(6, shows.length)} of ${shows.length} shows`
-                : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
+                : selectedDay === 'weekdays'
+                  ? `Showing ${getFilteredShows().length} shows for Weekdays (Mon-Thu)`
+                  : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
               }
             </p>
           )}
@@ -112,7 +129,7 @@ export default function OnAirCarousel() {
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
-                {day === 'all' ? 'All Days' : day}
+                {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Weekdays' : day}
               </button>
             ))}
           </div>
