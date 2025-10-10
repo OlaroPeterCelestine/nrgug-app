@@ -110,8 +110,14 @@ export default function OnAirCarousel() {
               {selectedDay === 'all' 
                 ? `Showing ${Math.min(6, shows.length)} of ${shows.length} shows`
                 : selectedDay === 'weekdays'
-                  ? `Showing ${getFilteredShows().length} shows for Weekdays (Mon-Thu)`
-                  : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
+                  ? `Showing ${getFilteredShows().length} shows for Mon-Thu`
+                  : selectedDay === 'Friday'
+                    ? `Showing ${getFilteredShows().length} shows for Friday`
+                    : selectedDay === 'Saturday'
+                      ? `Showing ${getFilteredShows().length} shows for Sat`
+                      : selectedDay === 'Sunday'
+                        ? `Showing ${getFilteredShows().length} shows for Sun`
+                        : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
               }
             </p>
           )}
@@ -129,7 +135,7 @@ export default function OnAirCarousel() {
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
-                {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Weekdays' : day}
+                {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Friday' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day}
               </button>
             ))}
           </div>
