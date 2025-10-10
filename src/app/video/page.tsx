@@ -101,11 +101,11 @@ export default function VideoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white" style={{ paddingBottom: 0 }}>
       <Header createPlayer={createPlayer} />
       
       {/* Full Screen Video Container */}
-      <div className="relative w-full h-screen bg-black">
+      <div className="relative w-full bg-black" style={{ height: 'calc(100vh - 64px)' }}>
         {/* Video Player */}
         <div className="absolute inset-0 w-full h-full">
           <iframe
