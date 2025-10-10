@@ -109,29 +109,96 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
-      audioRef.current.preload = "none"
+      audioRef.current.preload = "auto" // Preload the audio stream
       
-      // Simulate buffering for a few seconds
-      setTimeout(() => {
+      // Set up event listeners for better buffering control
+      const audio = audioRef.current
+      
+      const handleCanPlay = () => {
         setIsBuffering(false)
-      }, 2000)
+        console.log('Audio ready to play')
+      }
+      
+      const handleLoadStart = () => {
+        setIsBuffering(true)
+        console.log('Audio loading started')
+      }
+      
+      const handleWaiting = () => {
+        setIsBuffering(true)
+        console.log('Audio waiting for data')
+      }
+      
+      const handleCanPlayThrough = () => {
+        setIsBuffering(false)
+        console.log('Audio can play through without stopping')
+      }
+      
+      const handleError = (e: any) => {
+        console.error('Audio error:', e)
+        setIsBuffering(false)
+      }
+      
+      // Add event listeners
+      audio.addEventListener('canplay', handleCanPlay)
+      audio.addEventListener('loadstart', handleLoadStart)
+      audio.addEventListener('waiting', handleWaiting)
+      audio.addEventListener('canplaythrough', handleCanPlayThrough)
+      audio.addEventListener('error', handleError)
+      
+      // Start loading the audio immediately
+      audio.load()
+      
+      // Cleanup function
+      return () => {
+        audio.removeEventListener('canplay', handleCanPlay)
+        audio.removeEventListener('loadstart', handleLoadStart)
+        audio.removeEventListener('waiting', handleWaiting)
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough)
+        audio.removeEventListener('error', handleError)
+      }
     }
   }, [])
 
   // Handle start playing signal
   useEffect(() => {
     if (shouldStartPlaying && audioRef.current && !isPlaying) {
-      // Start playing the audio
-      audioRef.current.play().then(() => {
-        setIsPlaying(true)
-        setIsBuffering(false)
-        // Notify parent that playback has started
-        if (onPlaybackStarted) {
-          onPlaybackStarted()
+      // Check if audio is ready to play
+      if (audioRef.current.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+        // Audio is already buffered, start playing immediately
+        audioRef.current.play().then(() => {
+          setIsPlaying(true)
+          setIsBuffering(false)
+          console.log('Audio started playing immediately')
+          // Notify parent that playback has started
+          if (onPlaybackStarted) {
+            onPlaybackStarted()
+          }
+        }).catch((error) => {
+          console.error('Failed to start playback:', error)
+        })
+      } else {
+        // Audio not ready yet, wait for it to be ready
+        const handleCanPlay = () => {
+          if (shouldStartPlaying && !isPlaying) {
+            audioRef.current?.play().then(() => {
+              setIsPlaying(true)
+              setIsBuffering(false)
+              console.log('Audio started playing after buffering')
+              // Notify parent that playback has started
+              if (onPlaybackStarted) {
+                onPlaybackStarted()
+              }
+            }).catch((error) => {
+              console.error('Failed to start playback:', error)
+            })
+          }
+          audioRef.current?.removeEventListener('canplay', handleCanPlay)
         }
-      }).catch((error) => {
-        console.error('Failed to start playback:', error)
-      })
+        
+        audioRef.current.addEventListener('canplay', handleCanPlay)
+        setIsBuffering(true)
+      }
     }
   }, [shouldStartPlaying, isPlaying, onPlaybackStarted])
 
@@ -252,7 +319,7 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
                     ? 'text-sm sm:text-base truncate' 
                     : 'text-xs sm:text-sm truncate'
               }`}>
-                {isBuffering ? 'Buffering...' : (currentShow?.show_name || 'NRG Live Radio')}
+                {isBuffering ? 'Preparing...' : (currentShow?.show_name || 'NRG Live Radio')}
               </h3>
               <p className={`text-gray-400 transition-all duration-500 ${
                 isFullyExpanded 
@@ -275,7 +342,9 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
                   </div>
                   <span className={`text-green-400 font-medium ${
                     isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'
-                  }`}>LIVE</span>
+                  }`}>
+                    {isBuffering ? 'PREPARING' : 'LIVE'}
+                  </span>
                 </div>
                 {currentShow && (
                   <div className={`text-gray-300 ${
