@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export default function Header({ createPlayer }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { showPlayer } = usePlayer()
+  const { startPlaying } = usePlayer()
 
   // Close mobile menu when clicking outside or on escape key
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function Header({ createPlayer }: HeaderProps) {
           {/* Live Action Buttons - Desktop */}
           <div className="hidden md:flex items-center space-x-3">
             <button 
-              onClick={() => showPlayer()}
+              onClick={() => startPlaying()}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center space-x-2"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -256,7 +256,7 @@ export default function Header({ createPlayer }: HeaderProps) {
                   <div className="flex flex-col space-y-3 px-4">
                     <button 
                       onClick={() => {
-                        showPlayer()
+                        startPlaying()
                         setIsMobileMenuOpen(false)
                       }}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors w-full flex items-center justify-center space-x-2"
@@ -280,7 +280,7 @@ export default function Header({ createPlayer }: HeaderProps) {
             {/* Sticky Live Action Buttons - Mobile */}
             <div className="md:hidden fixed bottom-4 left-4 right-4 z-50 flex space-x-3">
               <button 
-                onClick={() => showPlayer()}
+                onClick={() => startPlaying()}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex-1 shadow-lg flex items-center justify-center space-x-2"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

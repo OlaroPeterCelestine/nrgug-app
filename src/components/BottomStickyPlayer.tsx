@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 
 interface BottomStickyPlayerProps {
   isVisible: boolean
+  shouldStartPlaying?: boolean
+  onPlaybackStarted?: () => void
 }
 
 interface Show {
@@ -15,7 +17,7 @@ interface Show {
   day_of_week: string
 }
 
-export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProps) {
+export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPlaybackStarted }: BottomStickyPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isBuffering, setIsBuffering] = useState(true)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -115,6 +117,23 @@ export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProp
       }, 2000)
     }
   }, [])
+
+  // Handle start playing signal
+  useEffect(() => {
+    if (shouldStartPlaying && audioRef.current && !isPlaying) {
+      // Start playing the audio
+      audioRef.current.play().then(() => {
+        setIsPlaying(true)
+        setIsBuffering(false)
+        // Notify parent that playback has started
+        if (onPlaybackStarted) {
+          onPlaybackStarted()
+        }
+      }).catch((error) => {
+        console.error('Failed to start playback:', error)
+      })
+    }
+  }, [shouldStartPlaying, isPlaying, onPlaybackStarted])
 
   const togglePlayPause = () => {
     if (audioRef.current) {
