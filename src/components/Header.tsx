@@ -13,6 +13,10 @@ export default function Header({ createPlayer }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { startPlaying } = usePlayer()
 
+  const handleWatchLive = () => {
+    createPlayer('watch')
+  }
+
   // Close mobile menu when clicking outside or on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -127,7 +131,10 @@ export default function Header({ createPlayer }: HeaderProps) {
               </svg>
               <span>Listen Live</span>
             </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center space-x-2">
+            <button 
+              onClick={handleWatchLive}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center space-x-2"
+            >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
@@ -266,7 +273,13 @@ export default function Header({ createPlayer }: HeaderProps) {
                       </svg>
                       <span>Listen Live</span>
                     </button>
-                    <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors w-full flex items-center justify-center space-x-2">
+                    <button 
+                      onClick={() => {
+                        handleWatchLive()
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors w-full flex items-center justify-center space-x-2"
+                    >
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
@@ -288,7 +301,10 @@ export default function Header({ createPlayer }: HeaderProps) {
                 </svg>
                 <span>Listen Live</span>
               </button>
-              <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex-1 shadow-lg flex items-center justify-center space-x-2">
+              <button 
+                onClick={handleWatchLive}
+                className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex-1 shadow-lg flex items-center justify-center space-x-2"
+              >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
