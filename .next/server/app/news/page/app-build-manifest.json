@@ -1,0 +1,23 @@
+{
+  "pages": {
+    "/news/page": [
+      "static/chunks/[root-of-the-server]__fba0a45f._.css",
+      "static/chunks/7de76_e69222a1._.js",
+      "static/chunks/nrg-website-dev_src_7db942f9._.js",
+      "static/chunks/nrg-website-dev_app_layout_tsx_85eac425._.js",
+      "static/chunks/7de76_next_dist_client_components_builtin_global-error_8a8cf361.js",
+      "static/chunks/nrg-website-dev_bffbd36c._.js",
+      "static/chunks/7de76_next_ee2bd8ec._.js",
+      "static/chunks/nrg-website-dev_app_news_page_tsx_8a8cf361._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_7845d4c5._.js",
+      "static/chunks/7de76_next_dist_compiled_react-dom_0639ac0f._.js",
+      "static/chunks/7de76_next_dist_compiled_next-devtools_index_7683712b.js",
+      "static/chunks/7de76_next_dist_compiled_76701d07._.js",
+      "static/chunks/7de76_next_dist_client_25863801._.js",
+      "static/chunks/7de76_next_dist_c3d8dafe._.js",
+      "static/chunks/7de76_@swc_helpers_cjs_17271189._.js",
+      "static/chunks/nrg-website-dev_a0ff3932._.js",
+      "static/chunks/turbopack-nrg-website-dev_ec96e645._.js"
+    ]
+  }
+}
