@@ -54,19 +54,19 @@ export default function WhatsAppButton() {
     <div className="fixed bottom-24 right-8 z-[100]">
       {/* Inquiry Menu */}
       {isMenuOpen && (
-        <div className="absolute bottom-20 right-0 bg-white rounded-2xl shadow-2xl border border-gray-200 w-64 max-h-80 overflow-y-auto">
+        <div className="absolute bottom-20 right-0 bg-black rounded-2xl shadow-2xl border border-gray-700 w-64 max-h-80 overflow-y-auto">
           <div className="p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3 text-center">How can we help you?</h3>
+            <h3 className="text-lg font-semibold text-white mb-3 text-center">How can we help you?</h3>
             <div className="space-y-2">
               {inquiryOptions.map((inquiry) => (
                 <button
                   key={inquiry.id}
                   onClick={() => handleInquiryClick(inquiry)}
-                  className="w-full text-left p-3 rounded-xl hover:bg-green-50 hover:text-green-700 transition-colors duration-200 border border-transparent hover:border-green-200"
+                  className="w-full text-left p-3 rounded-xl hover:bg-gray-800 hover:text-green-400 transition-colors duration-200 border border-transparent hover:border-gray-600"
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm font-medium">{inquiry.title}</span>
+                    <span className="text-sm font-medium text-white">{inquiry.title}</span>
                   </div>
                 </button>
               ))}
