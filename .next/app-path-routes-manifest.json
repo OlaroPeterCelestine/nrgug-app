@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/clients/page": "/clients",
+  "/contact/page": "/contact",
+  "/events/page": "/events",
+  "/news/[id]/page": "/news/[id]",
+  "/news/page": "/news",
+  "/page": "/",
+  "/shop/page": "/shop",
+  "/shows/page": "/shows"
+}

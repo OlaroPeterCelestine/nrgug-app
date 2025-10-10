@@ -1,0 +1,16 @@
+{
+  "pages": {
+    "/news/[id]/page": [
+      "static/chunks/46cd09ce5a5f4a45.css",
+      "static/chunks/25416b76fdfefbf4.js",
+      "static/chunks/7dd66bdf8a7e5707.js",
+      "static/chunks/c86246f07fc7d837.js",
+      "static/chunks/40d84fb114c0f38b.js",
+      "static/chunks/6420740671896b80.js",
+      "static/chunks/569f8ca39997ccda.js",
+      "static/chunks/150316a471952cee.js",
+      "static/chunks/3e0f93b37bf948e9.js",
+      "static/chunks/turbopack-66a3cd7079ccda69.js"
+    ]
+  }
+}

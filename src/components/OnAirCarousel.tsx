@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 interface Show {
   id: number
+  show_name: string
   image: string
   time: string
   presenters: string
@@ -164,11 +165,12 @@ export default function OnAirCarousel() {
                     className="w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
                   />
                 </div>
-                <div className="mt-4 text-center">
-                  <h3 className="text-lg font-bold mb-2">{show.presenters}</h3>
-                  <p className="text-red-500 font-semibold mb-1">{show.time}</p>
-                  <p className="text-gray-400 text-sm">{show.day_of_week}</p>
-                </div>
+        <div className="mt-4 text-center">
+          <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
+          <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
+          <p className="text-red-500 font-semibold mb-1">{show.time}</p>
+          <p className="text-gray-400 text-sm">{show.day_of_week}</p>
+        </div>
               </div>
             ))}
           </div>

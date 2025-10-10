@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 interface Show {
   id: number
+  show_name: string
   image: string
   time: string
   presenters: string
@@ -196,8 +197,11 @@ export default function ShowsPage() {
                       />
                     </div>
                     <div className="flex-1 text-center lg:text-left">
-                      <h3 className="text-3xl font-bold mb-4">{currentShow.presenters}</h3>
+                      <h3 className="text-3xl font-bold mb-4">{currentShow.show_name}</h3>
                       <p className="text-red-100 text-xl mb-4">
+                        {currentShow.presenters}
+                      </p>
+                      <p className="text-red-100 text-lg mb-4">
                         {currentShow.time}
                       </p>
                       <p className="text-red-200 text-lg mb-4">
@@ -272,8 +276,11 @@ export default function ShowsPage() {
                     
                     <div className="p-6">
                       <h3 className="text-xl font-bold mb-2 group-hover:text-red-400 transition-colors">
-                        {show.presenters}
+                        {show.show_name}
                       </h3>
+                      <p className="text-gray-300 text-sm mb-1">
+                        {show.presenters}
+                      </p>
                       <p className="text-gray-400 text-sm mb-2">
                         {show.day_of_week}
                       </p>
