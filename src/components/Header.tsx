@@ -114,6 +114,16 @@ export default function Header({ createPlayer }: HeaderProps) {
             </li>
           </ul>
 
+          {/* Live Action Buttons - Desktop */}
+          <div className="hidden md:flex items-center space-x-3">
+            <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+              Listen Now
+            </button>
+            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+              Watch Live
+            </button>
+          </div>
+
 
           {/* Mobile Toggle */}
           <button
@@ -231,9 +241,28 @@ export default function Header({ createPlayer }: HeaderProps) {
                 </li>
                 
                 {/* Live Actions - Mobile */}
+                <li className="border-t border-gray-700 pt-4 mt-4">
+                  <div className="flex flex-col space-y-3 px-4">
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors w-full">
+                      Listen Now
+                    </button>
+                    <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors w-full">
+                      Watch Live
+                    </button>
+                  </div>
+                </li>
               </ul>
             </nav>
 
+            {/* Sticky Live Action Buttons - Mobile */}
+            <div className="md:hidden fixed bottom-4 left-4 right-4 z-50 flex space-x-3">
+              <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex-1 shadow-lg">
+                Listen Now
+              </button>
+              <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex-1 shadow-lg">
+                Watch Live
+              </button>
+            </div>
           </div>
         </div>
       </header>
