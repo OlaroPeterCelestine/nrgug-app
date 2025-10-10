@@ -19,7 +19,7 @@ interface Show {
 
 export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPlaybackStarted }: BottomStickyPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isBuffering, setIsBuffering] = useState(true)
+  const [isBuffering, setIsBuffering] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isFullyExpanded, setIsFullyExpanded] = useState(false)
   const [shows, setShows] = useState<Show[]>([])
@@ -85,17 +85,6 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
 
   useEffect(() => {
     fetchShows()
-    
-    // Start preloading audio immediately when component mounts
-    if (audioRef.current) {
-      const audio = audioRef.current
-      audio.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
-      audio.preload = "auto"
-      audio.crossOrigin = "anonymous"
-      audio.volume = 1.0
-      audio.load()
-      console.log('Audio preloading started on mount')
-    }
   }, [])
 
   useEffect(() => {
@@ -119,78 +108,8 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
 
   useEffect(() => {
     if (audioRef.current) {
-      const audio = audioRef.current
-      
-      // Set audio properties for faster loading
-      audio.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
-      audio.preload = "auto"
-      audio.crossOrigin = "anonymous"
-      audio.volume = 1.0
-      
-      // Set up event listeners for better buffering control
-      const handleCanPlay = () => {
-        setIsBuffering(false)
-        console.log('Audio ready to play')
-      }
-      
-      const handleLoadStart = () => {
-        setIsBuffering(true)
-        console.log('Audio loading started')
-      }
-      
-      const handleWaiting = () => {
-        setIsBuffering(true)
-        console.log('Audio waiting for data')
-      }
-      
-      const handleCanPlayThrough = () => {
-        setIsBuffering(false)
-        console.log('Audio can play through without stopping')
-      }
-      
-      const handleError = (e: any) => {
-        console.error('Audio error:', e)
-        setIsBuffering(false)
-      }
-      
-      const handleLoadedData = () => {
-        setIsBuffering(false)
-        console.log('Audio data loaded')
-      }
-      
-      const handleProgress = () => {
-        if (audio.buffered.length > 0) {
-          const bufferedEnd = audio.buffered.end(audio.buffered.length - 1)
-          const duration = audio.duration
-          if (duration > 0 && bufferedEnd / duration > 0.1) { // 10% buffered
-            setIsBuffering(false)
-            console.log('Audio buffered enough to play')
-          }
-        }
-      }
-      
-      // Add event listeners
-      audio.addEventListener('canplay', handleCanPlay)
-      audio.addEventListener('loadstart', handleLoadStart)
-      audio.addEventListener('waiting', handleWaiting)
-      audio.addEventListener('canplaythrough', handleCanPlayThrough)
-      audio.addEventListener('loadeddata', handleLoadedData)
-      audio.addEventListener('progress', handleProgress)
-      audio.addEventListener('error', handleError)
-      
-      // Start loading the audio immediately
-      audio.load()
-      
-      // Cleanup function
-      return () => {
-        audio.removeEventListener('canplay', handleCanPlay)
-        audio.removeEventListener('loadstart', handleLoadStart)
-        audio.removeEventListener('waiting', handleWaiting)
-        audio.removeEventListener('canplaythrough', handleCanPlayThrough)
-        audio.removeEventListener('loadeddata', handleLoadedData)
-        audio.removeEventListener('progress', handleProgress)
-        audio.removeEventListener('error', handleError)
-      }
+      audioRef.current.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
+      audioRef.current.preload = "none"
     }
   }, [])
 
@@ -199,63 +118,16 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
     if (shouldStartPlaying && audioRef.current && !isPlaying) {
       const audio = audioRef.current
       
-      // Try to play immediately regardless of ready state
-      const attemptPlay = () => {
-        audio.play().then(() => {
-          setIsPlaying(true)
-          setIsBuffering(false)
-          console.log('Audio started playing')
-          // Notify parent that playback has started
-          if (onPlaybackStarted) {
-            onPlaybackStarted()
-          }
-        }).catch((error) => {
-          console.log('Play failed, waiting for more data:', error)
-          // If play fails, wait for more data and try again
-          const handleCanPlay = () => {
-            if (shouldStartPlaying && !isPlaying) {
-              audio.play().then(() => {
-                setIsPlaying(true)
-                setIsBuffering(false)
-                console.log('Audio started playing after retry')
-                if (onPlaybackStarted) {
-                  onPlaybackStarted()
-                }
-              }).catch((retryError) => {
-                console.error('Retry play failed:', retryError)
-                setIsBuffering(false)
-              })
-            }
-            audio.removeEventListener('canplay', handleCanPlay)
-          }
-          
-          audio.addEventListener('canplay', handleCanPlay)
-          setIsBuffering(true)
-        })
-      }
-      
-      // Start playing attempt immediately
-      attemptPlay()
-      
-      // Fallback timeout - force play after 1 second even if not ready
-      const fallbackTimeout = setTimeout(() => {
-        if (!isPlaying && shouldStartPlaying) {
-          console.log('Fallback: forcing audio play after timeout')
-          audio.play().then(() => {
-            setIsPlaying(true)
-            setIsBuffering(false)
-            if (onPlaybackStarted) {
-              onPlaybackStarted()
-            }
-          }).catch((error) => {
-            console.error('Fallback play failed:', error)
-            setIsBuffering(false)
-          })
+      // Play immediately
+      audio.play().then(() => {
+        setIsPlaying(true)
+        console.log('Audio started playing')
+        if (onPlaybackStarted) {
+          onPlaybackStarted()
         }
-      }, 1000)
-      
-      // Cleanup timeout
-      return () => clearTimeout(fallbackTimeout)
+      }).catch((error) => {
+        console.error('Play failed:', error)
+      })
     }
   }, [shouldStartPlaying, isPlaying, onPlaybackStarted])
 
@@ -376,7 +248,7 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
                     ? 'text-sm sm:text-base truncate' 
                     : 'text-xs sm:text-sm truncate'
               }`}>
-                {isBuffering ? 'Preparing...' : (currentShow?.show_name || 'NRG Live Radio')}
+                {currentShow?.show_name || 'NRG Live Radio'}
               </h3>
               <p className={`text-gray-400 transition-all duration-500 ${
                 isFullyExpanded 
@@ -400,7 +272,7 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
                   <span className={`text-green-400 font-medium ${
                     isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'
                   }`}>
-                    {isBuffering ? 'PREPARING' : 'LIVE'}
+                    LIVE
                   </span>
                 </div>
                 {currentShow && (
