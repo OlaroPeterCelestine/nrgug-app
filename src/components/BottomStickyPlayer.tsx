@@ -85,6 +85,17 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
 
   useEffect(() => {
     fetchShows()
+    
+    // Start preloading audio immediately when component mounts
+    if (audioRef.current) {
+      const audio = audioRef.current
+      audio.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
+      audio.preload = "auto"
+      audio.crossOrigin = "anonymous"
+      audio.volume = 1.0
+      audio.load()
+      console.log('Audio preloading started on mount')
+    }
   }, [])
 
   useEffect(() => {
@@ -108,12 +119,15 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
-      audioRef.current.preload = "auto" // Preload the audio stream
-      
-      // Set up event listeners for better buffering control
       const audio = audioRef.current
       
+      // Set audio properties for faster loading
+      audio.src = "https://dc4.serverse.com/proxy/nrgugstream/stream"
+      audio.preload = "auto"
+      audio.crossOrigin = "anonymous"
+      audio.volume = 1.0
+      
+      // Set up event listeners for better buffering control
       const handleCanPlay = () => {
         setIsBuffering(false)
         console.log('Audio ready to play')
@@ -139,11 +153,29 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
         setIsBuffering(false)
       }
       
+      const handleLoadedData = () => {
+        setIsBuffering(false)
+        console.log('Audio data loaded')
+      }
+      
+      const handleProgress = () => {
+        if (audio.buffered.length > 0) {
+          const bufferedEnd = audio.buffered.end(audio.buffered.length - 1)
+          const duration = audio.duration
+          if (duration > 0 && bufferedEnd / duration > 0.1) { // 10% buffered
+            setIsBuffering(false)
+            console.log('Audio buffered enough to play')
+          }
+        }
+      }
+      
       // Add event listeners
       audio.addEventListener('canplay', handleCanPlay)
       audio.addEventListener('loadstart', handleLoadStart)
       audio.addEventListener('waiting', handleWaiting)
       audio.addEventListener('canplaythrough', handleCanPlayThrough)
+      audio.addEventListener('loadeddata', handleLoadedData)
+      audio.addEventListener('progress', handleProgress)
       audio.addEventListener('error', handleError)
       
       // Start loading the audio immediately
@@ -155,6 +187,8 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
         audio.removeEventListener('loadstart', handleLoadStart)
         audio.removeEventListener('waiting', handleWaiting)
         audio.removeEventListener('canplaythrough', handleCanPlayThrough)
+        audio.removeEventListener('loadeddata', handleLoadedData)
+        audio.removeEventListener('progress', handleProgress)
         audio.removeEventListener('error', handleError)
       }
     }
@@ -163,42 +197,65 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
   // Handle start playing signal
   useEffect(() => {
     if (shouldStartPlaying && audioRef.current && !isPlaying) {
-      // Check if audio is ready to play
-      if (audioRef.current.readyState >= 2) { // HAVE_CURRENT_DATA or higher
-        // Audio is already buffered, start playing immediately
-        audioRef.current.play().then(() => {
+      const audio = audioRef.current
+      
+      // Try to play immediately regardless of ready state
+      const attemptPlay = () => {
+        audio.play().then(() => {
           setIsPlaying(true)
           setIsBuffering(false)
-          console.log('Audio started playing immediately')
+          console.log('Audio started playing')
           // Notify parent that playback has started
           if (onPlaybackStarted) {
             onPlaybackStarted()
           }
         }).catch((error) => {
-          console.error('Failed to start playback:', error)
-        })
-      } else {
-        // Audio not ready yet, wait for it to be ready
-        const handleCanPlay = () => {
-          if (shouldStartPlaying && !isPlaying) {
-            audioRef.current?.play().then(() => {
-              setIsPlaying(true)
-              setIsBuffering(false)
-              console.log('Audio started playing after buffering')
-              // Notify parent that playback has started
-              if (onPlaybackStarted) {
-                onPlaybackStarted()
-              }
-            }).catch((error) => {
-              console.error('Failed to start playback:', error)
-            })
+          console.log('Play failed, waiting for more data:', error)
+          // If play fails, wait for more data and try again
+          const handleCanPlay = () => {
+            if (shouldStartPlaying && !isPlaying) {
+              audio.play().then(() => {
+                setIsPlaying(true)
+                setIsBuffering(false)
+                console.log('Audio started playing after retry')
+                if (onPlaybackStarted) {
+                  onPlaybackStarted()
+                }
+              }).catch((retryError) => {
+                console.error('Retry play failed:', retryError)
+                setIsBuffering(false)
+              })
+            }
+            audio.removeEventListener('canplay', handleCanPlay)
           }
-          audioRef.current?.removeEventListener('canplay', handleCanPlay)
-        }
-        
-        audioRef.current.addEventListener('canplay', handleCanPlay)
-        setIsBuffering(true)
+          
+          audio.addEventListener('canplay', handleCanPlay)
+          setIsBuffering(true)
+        })
       }
+      
+      // Start playing attempt immediately
+      attemptPlay()
+      
+      // Fallback timeout - force play after 1 second even if not ready
+      const fallbackTimeout = setTimeout(() => {
+        if (!isPlaying && shouldStartPlaying) {
+          console.log('Fallback: forcing audio play after timeout')
+          audio.play().then(() => {
+            setIsPlaying(true)
+            setIsBuffering(false)
+            if (onPlaybackStarted) {
+              onPlaybackStarted()
+            }
+          }).catch((error) => {
+            console.error('Fallback play failed:', error)
+            setIsBuffering(false)
+          })
+        }
+      }, 1000)
+      
+      // Cleanup timeout
+      return () => clearTimeout(fallbackTimeout)
     }
   }, [shouldStartPlaying, isPlaying, onPlaybackStarted])
 
