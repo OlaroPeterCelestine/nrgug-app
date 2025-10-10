@@ -3,8 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import { PlayerProvider } from '@/contexts/PlayerContext'
-import PlayerWrapper from '@/components/PlayerWrapper'
-import WhatsAppButton from '@/components/WhatsAppButton'
+import ConditionalComponents from '@/components/ConditionalComponents'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -32,8 +31,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans relative bg-black text-white`} suppressHydrationWarning>
         <PlayerProvider>
           {children}
-          <PlayerWrapper />
-          <WhatsAppButton />
+          <ConditionalComponents />
         </PlayerProvider>
         <Analytics />
       </body>

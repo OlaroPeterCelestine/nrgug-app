@@ -101,7 +101,7 @@ export default function VideoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white" style={{ paddingBottom: 0 }}>
+    <div className="min-h-screen bg-black text-white">
       <Header createPlayer={createPlayer} />
       
       {/* Full Screen Video Container */}
