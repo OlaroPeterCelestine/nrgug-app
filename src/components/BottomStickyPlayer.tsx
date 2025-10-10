@@ -6,13 +6,103 @@ interface BottomStickyPlayerProps {
   isVisible: boolean
 }
 
+interface Show {
+  id: number
+  show_name: string
+  image: string
+  time: string
+  presenters: string
+  day_of_week: string
+}
+
 export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isBuffering, setIsBuffering] = useState(true)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isFullyExpanded, setIsFullyExpanded] = useState(false)
+  const [shows, setShows] = useState<Show[]>([])
+  const [currentShow, setCurrentShow] = useState<Show | null>(null)
+  const [loading, setLoading] = useState(true)
   
   const audioRef = useRef<HTMLAudioElement>(null)
+
+  // Fetch shows from API
+  const fetchShows = async () => {
+    try {
+      const response = await fetch('https://nrgug-api-production.up.railway.app/api/shows')
+      if (response.ok) {
+        const data = await response.json()
+        setShows(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch shows:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Get current day of week
+  const getCurrentDay = () => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    return days[new Date().getDay()]
+  }
+
+  // Get current time in HH:MM format
+  const getCurrentTime = () => {
+    const now = new Date()
+    return now.toLocaleTimeString('en-US', { 
+      hour12: false, 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    })
+  }
+
+  // Find current show based on day and time
+  const getCurrentShow = () => {
+    if (shows.length === 0) return null
+
+    const currentDay = getCurrentDay()
+    const currentTime = getCurrentTime()
+    
+    // Filter shows for current day
+    const todayShows = shows.filter(show => show.day_of_week === currentDay)
+    
+    if (todayShows.length === 0) return null
+
+    // Find show that matches current time
+    for (const show of todayShows) {
+      const [startTime, endTime] = show.time.split(' - ')
+      if (currentTime >= startTime && currentTime <= endTime) {
+        return show
+      }
+    }
+
+    // If no show matches current time, return the first show of the day
+    return todayShows[0]
+  }
+
+  useEffect(() => {
+    fetchShows()
+  }, [])
+
+  useEffect(() => {
+    if (shows.length > 0) {
+      const show = getCurrentShow()
+      setCurrentShow(show)
+    }
+  }, [shows])
+
+  // Update current show every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (shows.length > 0) {
+        const show = getCurrentShow()
+        setCurrentShow(show)
+      }
+    }, 60000) // Check every minute
+
+    return () => clearInterval(interval)
+  }, [shows])
 
   useEffect(() => {
     if (audioRef.current) {
@@ -126,8 +216,8 @@ export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProp
                   : 'w-12 h-12 sm:w-14 sm:h-14'
             }`}>
               <img 
-                src="https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg" 
-                alt="NRG Live Radio"
+                src={currentShow?.image || "https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg"} 
+                alt={currentShow?.show_name || "NRG Live Radio"}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -143,7 +233,7 @@ export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProp
                     ? 'text-sm sm:text-base truncate' 
                     : 'text-xs sm:text-sm truncate'
               }`}>
-                {isBuffering ? 'Buffering...' : 'NRG Live Radio'}
+                {isBuffering ? 'Buffering...' : (currentShow?.show_name || 'NRG Live Radio')}
               </h3>
               <p className={`text-gray-400 transition-all duration-500 ${
                 isFullyExpanded 
@@ -152,20 +242,29 @@ export default function BottomStickyPlayer({ isVisible }: BottomStickyPlayerProp
                     ? 'text-xs sm:text-sm truncate' 
                     : 'text-xs truncate'
               }`}>
-                Live from Kampala, Uganda
+                {currentShow?.presenters || 'Live from Kampala, Uganda'}
               </p>
             </div>
             
-            {/* Live Indicator */}
+            {/* Live Indicator and Show Time */}
             <div className={`flex items-center ${isFullyExpanded ? 'justify-center mb-6' : 'mb-1'}`}>
-              <div className="flex items-center">
-                <div className="relative flex h-2 w-2 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <div className="relative flex h-2 w-2 mr-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </div>
+                  <span className={`text-green-400 font-medium ${
+                    isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'
+                  }`}>LIVE</span>
                 </div>
-                <span className={`text-green-400 font-medium ${
-                  isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'
-                }`}>LIVE</span>
+                {currentShow && (
+                  <div className={`text-gray-300 ${
+                    isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'
+                  }`}>
+                    {currentShow.time}
+                  </div>
+                )}
               </div>
             </div>
           </div>

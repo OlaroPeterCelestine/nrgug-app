@@ -10,7 +10,6 @@ import OnAirCarousel from '@/components/OnAirCarousel'
 import NewsSection from '@/components/NewsSection'
 import VideosSection from '@/components/VideosSection'
 import ClientCarousel from '@/components/ClientCarousel'
-import WhatsAppButton from '@/components/WhatsAppButton'
 
 interface NewsArticle {
   id: number
@@ -359,7 +358,6 @@ export default function Home() {
             </div>
 
             {/* WhatsApp Button */}
-            <WhatsAppButton />
           </>
         )}
       </main>

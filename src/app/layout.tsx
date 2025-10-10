@@ -4,6 +4,7 @@ import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import { PlayerProvider } from '@/contexts/PlayerContext'
 import PlayerWrapper from '@/components/PlayerWrapper'
+import WhatsAppButton from '@/components/WhatsAppButton'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({
         <PlayerProvider>
           {children}
           <PlayerWrapper />
+          <WhatsAppButton />
         </PlayerProvider>
         <Analytics />
       </body>
