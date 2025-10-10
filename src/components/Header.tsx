@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { usePlayer } from '@/contexts/PlayerContext'
 import Image from 'next/image'
 
@@ -11,10 +12,11 @@ interface HeaderProps {
 
 export default function Header({ createPlayer }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { startPlaying, startVideoPlaying } = usePlayer()
+  const { startPlaying } = usePlayer()
+  const router = useRouter()
 
   const handleWatchLive = () => {
-    startVideoPlaying()
+    router.push('/video')
   }
 
   // Close mobile menu when clicking outside or on escape key
