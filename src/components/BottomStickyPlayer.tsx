@@ -66,8 +66,14 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
     const currentDay = getCurrentDay()
     const currentTime = getCurrentTime()
     
-    // Filter shows for current day
-    const todayShows = shows.filter(show => show.day_of_week === currentDay)
+    // Filter shows for current day and sort by start time
+    const todayShows = shows
+      .filter(show => show.day_of_week === currentDay)
+      .sort((a, b) => {
+        const aStartTime = a.time.split(' - ')[0]
+        const bStartTime = b.time.split(' - ')[0]
+        return aStartTime.localeCompare(bStartTime)
+      })
     
     if (todayShows.length === 0) return null
 
@@ -79,7 +85,7 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
       }
     }
 
-    // If no show matches current time, return the first show of the day
+    // If no show matches current time, return the first show of the day (earliest)
     return todayShows[0]
   }
 

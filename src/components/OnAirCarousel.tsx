@@ -56,13 +56,34 @@ export default function OnAirCarousel() {
   }
 
   const getFilteredShows = () => {
+    let filteredShows = []
+    
     if (selectedDay === 'all') {
-      return shows.slice(0, 6) // Show only first 6 shows when all days selected
+      filteredShows = shows
+    } else if (selectedDay === 'weekdays') {
+      filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
+    } else {
+      filteredShows = shows.filter(show => show.day_of_week === selectedDay)
     }
-    if (selectedDay === 'weekdays') {
-      return shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
-    }
-    return shows.filter(show => show.day_of_week === selectedDay)
+    
+    // Sort shows by start time within each day
+    return filteredShows
+      .sort((a, b) => {
+        // First sort by day of week
+        const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        const aDayIndex = dayOrder.indexOf(a.day_of_week)
+        const bDayIndex = dayOrder.indexOf(b.day_of_week)
+        
+        if (aDayIndex !== bDayIndex) {
+          return aDayIndex - bDayIndex
+        }
+        
+        // Then sort by start time within the same day
+        const aStartTime = a.time.split(' - ')[0]
+        const bStartTime = b.time.split(' - ')[0]
+        return aStartTime.localeCompare(bStartTime)
+      })
+      .slice(0, selectedDay === 'all' ? 6 : filteredShows.length)
   }
 
   const getUniqueDays = () => {
