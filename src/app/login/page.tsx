@@ -63,8 +63,11 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="bg-gray-900 rounded-lg shadow-2xl p-8 border border-gray-700">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-              <p className="text-gray-400">Sign in to access your account</p>
+              <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
+              <p className="text-gray-400">Administrator login only</p>
+              <div className="mt-2 px-3 py-1 bg-red-900/30 border border-red-700 rounded-lg">
+                <p className="text-red-400 text-sm">🔒 Restricted Access</p>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -109,10 +112,13 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center">
               <p className="text-gray-400 text-sm">
-                Don't have an account?{' '}
-                <a href="#" className="text-red-500 hover:text-red-400 transition-colors">
-                  Contact Administrator
+                Need admin access?{' '}
+                <a href="/contact" className="text-red-500 hover:text-red-400 transition-colors">
+                  Contact System Administrator
                 </a>
+              </p>
+              <p className="text-gray-500 text-xs mt-2">
+                This login is restricted to authorized administrators only
               </p>
             </div>
           </div>
@@ -126,11 +132,11 @@ export default function LoginPage() {
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
                 <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-lg font-medium text-white">Login Failed</h3>
+                <h3 className="text-lg font-medium text-white">Admin Access Denied</h3>
               </div>
             </div>
             
