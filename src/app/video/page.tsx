@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface Show {
   id: number
@@ -15,6 +16,7 @@ export default function VideoPage() {
   const [shows, setShows] = useState<Show[]>([])
   const [currentShow, setCurrentShow] = useState<Show | null>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   // Fetch shows from API
   const fetchShows = async () => {
@@ -114,6 +116,29 @@ export default function VideoPage() {
             allowFullScreen
             title="NRG Radio Live Video"
           />
+        </div>
+
+        {/* Close Button */}
+        <div className="absolute top-4 right-4 z-20">
+          <button
+            onClick={() => router.push('/')}
+            className="w-12 h-12 bg-black/80 hover:bg-black/90 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 border border-gray-600 hover:border-gray-400"
+            title="Close Video"
+          >
+            <svg 
+              className="w-6 h-6 text-white" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M6 18L18 6M6 6l12 12" 
+              />
+            </svg>
+          </button>
         </div>
 
         {/* Show Information Card */}
