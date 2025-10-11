@@ -119,32 +119,57 @@ export default function BottomStickyPlayer({ isVisible, shouldStartPlaying, onPl
     }
   }, [])
 
+  // Cleanup effect to handle component unmounting
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        // Pause and reset audio on cleanup
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
+    }
+  }, [])
+
   // Handle start playing signal
   useEffect(() => {
     if (shouldStartPlaying && audioRef.current && !isPlaying) {
       const audio = audioRef.current
       
-      // Play immediately
-      audio.play().then(() => {
-        setIsPlaying(true)
-        console.log('Audio started playing')
-        if (onPlaybackStarted) {
-          onPlaybackStarted()
-        }
-      }).catch((error) => {
-        console.error('Play failed:', error)
-      })
+      // Check if audio is still in the DOM
+      if (audio.isConnected) {
+        // Play immediately
+        audio.play().then(() => {
+          setIsPlaying(true)
+          console.log('Audio started playing')
+          if (onPlaybackStarted) {
+            onPlaybackStarted()
+          }
+        }).catch((error) => {
+          console.error('Play failed:', error)
+          // Reset playing state on error
+          setIsPlaying(false)
+        })
+      } else {
+        console.warn('Audio element not connected to DOM, skipping play')
+      }
     }
   }, [shouldStartPlaying, isPlaying, onPlaybackStarted])
 
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    if (audioRef.current && audioRef.current.isConnected) {
       if (isPlaying) {
         audioRef.current.pause()
+        setIsPlaying(false)
       } else {
-        audioRef.current.play()
+        audioRef.current.play().then(() => {
+          setIsPlaying(true)
+        }).catch((error) => {
+          console.error('Play failed:', error)
+          setIsPlaying(false)
+        })
       }
-      setIsPlaying(!isPlaying)
+    } else {
+      console.warn('Audio element not available or not connected to DOM')
     }
   }
 
