@@ -93,7 +93,7 @@ export default function OnAirCarousel() {
         const bStartTime = b.time.split(' - ')[0]
         return aStartTime.localeCompare(bStartTime)
       })
-      .slice(0, selectedDay === 'all' ? 6 : filteredShows.length)
+      .slice(0, filteredShows.length)
   }
 
   const getUniqueDays = () => {
@@ -153,7 +153,7 @@ export default function OnAirCarousel() {
           {shows.length > 0 && (
             <p className="text-gray-400 text-sm mt-1">
               {selectedDay === 'all' 
-                ? `Showing ${Math.min(6, shows.length)} of ${shows.length} shows`
+                ? `Showing all ${shows.length} shows`
                 : selectedDay === 'weekdays'
                   ? `Showing ${getFilteredShows().length} shows for Mon-Thu`
                   : selectedDay === 'Friday'
@@ -170,19 +170,30 @@ export default function OnAirCarousel() {
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
           {/* Day Filter */}
           <div className="flex flex-wrap gap-2">
-            {getUniqueDays().map((day) => (
-              <button
-                key={day}
-                onClick={() => setSelectedDay(day)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  selectedDay === day
-                    ? 'bg-red-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Fri' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day}
-              </button>
-            ))}
+            {getUniqueDays().map((day) => {
+              const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+              const isToday = day === currentDay
+              const isSelected = selectedDay === day
+              
+              return (
+                <button
+                  key={day}
+                  onClick={() => setSelectedDay(day)}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors relative ${
+                    isSelected
+                      ? 'bg-red-600 text-white'
+                      : isToday
+                        ? 'bg-blue-600 text-white border-2 border-blue-400'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Fri' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day}
+                  {isToday && !isSelected && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full"></span>
+                  )}
+                </button>
+              )
+            })}
           </div>
         </div>
       </header>
