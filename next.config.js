@@ -107,6 +107,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-6481c927139b4654ace8022882acbd62.r2.dev',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

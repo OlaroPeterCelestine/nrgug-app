@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { apiUtils } from '@/lib/api-utils'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 interface Show {
   id: number
@@ -102,6 +104,8 @@ export default function VideoPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <Header createPlayer={() => {}} />
+      
       {/* Full Screen Video Container */}
       <div className="relative w-full bg-black" style={{ height: '100vh' }}>
         {/* Video Player */}
@@ -172,6 +176,8 @@ export default function VideoPage() {
         )}
 
       </div>
+      
+      <Footer />
     </div>
   )
 }

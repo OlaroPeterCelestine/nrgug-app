@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 interface Show {
   id: number
@@ -102,6 +104,8 @@ export default function ShowsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <Header createPlayer={() => {}} />
+      
       {/* Header */}
       <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -308,6 +312,8 @@ export default function ShowsPage() {
           </>
         )}
       </div>
+      
+      <Footer />
     </div>
   )
 }

@@ -17,11 +17,27 @@ interface Show {
 export default function OnAirCarousel() {
   const [shows, setShows] = useState<Show[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedDay, setSelectedDay] = useState<string>('all')
+  const [selectedDay, setSelectedDay] = useState<string>('')
 
   useEffect(() => {
     fetchShows()
+    
+    // Set up auto-refresh every minute to update when shows end
+    const interval = setInterval(() => {
+      fetchShows()
+    }, 60000) // Refresh every 60 seconds
+    
+    return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    if (shows.length > 0 && !selectedDay) {
+      const availableDays = getUniqueDays()
+      if (availableDays.length > 0) {
+        setSelectedDay(availableDays[0])
+      }
+    }
+  }, [shows, selectedDay])
 
   const fetchShows = async () => {
     try {
@@ -37,31 +53,77 @@ export default function OnAirCarousel() {
     }
   }
 
+  // Function to check if a show is currently on air or upcoming
+  const isShowOnAirOrUpcoming = (show) => {
+    const now = new Date()
+    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
+    const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+    
+    // Check if it's the right day
+    if (show.day_of_week !== currentDay) {
+      return false
+    }
+    
+    // Parse show time - handle both "08:00" and "08:00 - 10:00" formats
+    let startTime, endTime
+    if (show.time.includes(' - ')) {
+      [startTime, endTime] = show.time.split(' - ')
+    } else {
+      // If no end time, assume 2-hour duration
+      startTime = show.time
+      const [hours, minutes] = startTime.split(':').map(Number)
+      const endHours = hours + 2
+      endTime = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+    }
+    
+    // Check if current time is within the show's time range
+    return currentTime >= startTime && currentTime <= endTime
+  }
+
+  // Function to check if a show is upcoming today
+  const isShowUpcomingToday = (show) => {
+    const now = new Date()
+    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
+    const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+    
+    // Check if it's the right day
+    if (show.day_of_week !== currentDay) {
+      return false
+    }
+    
+    // Parse show start time - handle both formats
+    let startTime
+    if (show.time.includes(' - ')) {
+      [startTime] = show.time.split(' - ')
+    } else {
+      startTime = show.time
+    }
+    
+    // Check if show starts after current time
+    return currentTime < startTime
+  }
+
   const getFilteredShows = () => {
     let filteredShows = []
     
-    if (selectedDay === 'all') {
-      filteredShows = shows
-    } else if (selectedDay === 'weekdays') {
+    if (selectedDay === 'weekdays') {
       filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
+    } else if (selectedDay === 'Saturday') {
+      filteredShows = shows.filter(show => show.day_of_week === 'Saturday')
+    } else if (selectedDay === 'Sunday') {
+      filteredShows = shows.filter(show => show.day_of_week === 'Sunday')
+    } else if (selectedDay === 'Friday') {
+      filteredShows = shows.filter(show => show.day_of_week === 'Friday')
     } else {
-      filteredShows = shows.filter(show => show.day_of_week === selectedDay)
+      // If no day selected or invalid selection, return empty array
+      filteredShows = []
     }
     
-    // Sort shows by start time within each day, starting from current day
+    // Sort shows in order: Saturday → Sunday → Mon-Thu → Friday
     return filteredShows
       .sort((a, b) => {
-        // Get current day and create day order starting from today
-        const today = new Date().getDay()
-        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-        const currentDayName = dayNames[today]
-        
-        // Create day order starting from current day
-        const dayOrder = []
-        for (let i = 0; i < 7; i++) {
-          const dayIndex = (today + i) % 7
-          dayOrder.push(dayNames[dayIndex])
-        }
+        // Create fixed day order: Saturday → Sunday → Mon-Thu → Friday
+        const dayOrder = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         
         const aDayIndex = dayOrder.indexOf(a.day_of_week)
         const bDayIndex = dayOrder.indexOf(b.day_of_week)
@@ -71,8 +133,8 @@ export default function OnAirCarousel() {
         }
         
         // Then sort by start time within the same day
-        const aStartTime = a.time.split(' - ')[0]
-        const bStartTime = b.time.split(' - ')[0]
+        const aStartTime = a.time.includes(' - ') ? a.time.split(' - ')[0] : a.time
+        const bStartTime = b.time.includes(' - ') ? b.time.split(' - ')[0] : b.time
         return aStartTime.localeCompare(bStartTime)
       })
       .slice(0, filteredShows.length)
@@ -82,38 +144,32 @@ export default function OnAirCarousel() {
     const days = shows.map(show => show.day_of_week)
     const uniqueDays = Array.from(new Set(days))
     
-    // Get current day and create day order starting from today, ending with Sunday
     const today = new Date().getDay()
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const currentDayName = dayNames[today]
     
-    // Create day order starting from current day, wrapping to include all days up to Sunday
-    const dayOrder = []
-    for (let i = 0; i < 7; i++) {
-      const dayIndex = (today + i) % 7
-      dayOrder.push(dayNames[dayIndex])
-    }
-    
-    // Ensure Sunday is always at the end if it's not the current day
-    if (today !== 0) { // If today is not Sunday
-      const sundayIndex = dayOrder.indexOf('Sunday')
-      if (sundayIndex !== -1) {
-        dayOrder.splice(sundayIndex, 1)
-        dayOrder.push('Sunday')
-      }
-    }
-    
-    // Group Monday-Thursday into weekdays
+    // Check for each day group
     const hasWeekdays = uniqueDays.some(day => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
-    const weekendDays = uniqueDays.filter(day => !['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
+    const hasSaturday = uniqueDays.includes('Saturday')
+    const hasSunday = uniqueDays.includes('Sunday')
+    const hasFriday = uniqueDays.includes('Friday')
     
-    const groupedDays = ['all']
+    const groupedDays = []
+    
+    // Always show in order: Saturday → Sunday → Mon-Thu → Friday
+    // But highlight current day
+    if (hasSaturday) {
+      groupedDays.push('Saturday')
+    }
+    if (hasSunday) {
+      groupedDays.push('Sunday')
+    }
     if (hasWeekdays) {
       groupedDays.push('weekdays')
     }
-    
-    // Add weekend days in current day order
-    const orderedWeekendDays = dayOrder.filter(day => weekendDays.includes(day))
-    groupedDays.push(...orderedWeekendDays)
+    if (hasFriday) {
+      groupedDays.push('Friday')
+    }
     
     return groupedDays
   }
@@ -161,27 +217,20 @@ export default function OnAirCarousel() {
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
           {/* Day Filter */}
           <div className="flex flex-wrap gap-2">
-            {getUniqueDays().map((day) => {
-              const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-              const isToday = day === currentDay
+            {['Saturday', 'Sunday', 'weekdays', 'Friday'].map((day) => {
               const isSelected = selectedDay === day
               
               return (
                 <button
                   key={day}
                   onClick={() => setSelectedDay(day)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors relative ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                     isSelected
                       ? 'bg-red-600 text-white'
-                      : isToday
-                        ? 'bg-red-500 text-white border-2 border-red-400'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  {day === 'all' ? 'All Days' : day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Fri' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day}
-                  {isToday && !isSelected && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full"></span>
-                  )}
+                  {day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Fri' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day}
                 </button>
               )
             })}
@@ -212,31 +261,48 @@ export default function OnAirCarousel() {
               No shows scheduled for {selectedDay === 'all' ? 'this period' : selectedDay}
             </div>
             <p className="text-gray-500">Check back later or try a different day</p>
+            <div className="mt-4 text-sm text-gray-600">
+              <p>Current time: {new Date().toLocaleTimeString()}</p>
+              <p>Current day: {new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
+              <p>Total shows available: {shows.length}</p>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
-            {getFilteredShows().map((show) => (
-              <div
-                key={show.id}
-                className="group"
-              >
-                <div className="relative">
-                  <Image
-                    src={getImageSrc(show)}
-                    alt={show.presenters || `Show ${show.id}`}
-                    width={300}
-                    height={160}
-                    className="w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
-                  />
+            {getFilteredShows().map((show) => {
+              const isCurrentlyOnAir = isShowOnAirOrUpcoming(show)
+              const isUpcoming = isShowUpcomingToday(show)
+              
+              return (
+                <div key={show.id} className="group">
+                  <div className="relative">
+                    <Image
+                      src={getImageSrc(show)}
+                      alt={show.presenters || `Show ${show.id}`}
+                      width={300}
+                      height={160}
+                      className="w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
+                    />
+                    {isCurrentlyOnAir && (
+                      <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                        LIVE
+                      </div>
+                    )}
+                    {isUpcoming && (
+                      <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        UPCOMING
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
+                    <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
+                    <p className="font-semibold mb-1 text-red-500">{show.time}</p>
+                    <p className="text-sm text-gray-400">{show.day_of_week}</p>
+                  </div>
                 </div>
-        <div className="mt-4 text-center">
-          <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
-          <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
-          <p className="text-red-500 font-semibold mb-1">{show.time}</p>
-          <p className="text-gray-400 text-sm">{show.day_of_week}</p>
-        </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

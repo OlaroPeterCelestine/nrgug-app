@@ -37,8 +37,8 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#121212] text-white flex flex-col min-h-[30vh] mt-12">
-      <div className="container mx-auto px-6 flex-grow pt-12 pb-8">
+    <footer className="bg-[#121212] text-white">
+      <div className="container mx-auto px-6 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="space-y-4">
             <h2 className="text-xl font-bold tracking-wider">
@@ -131,7 +131,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 mt-auto">
+      <div className="border-t border-gray-800">
         <div className="container mx-auto px-6 py-4 flex flex-col sm:flex-row items-center">
           <p className="text-gray-500 text-xs mr-auto mb-2 sm:mb-0">
             106.5 NRGRADIO © 2025. All Rights Reserved.

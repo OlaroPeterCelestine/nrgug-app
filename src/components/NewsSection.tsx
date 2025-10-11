@@ -78,8 +78,16 @@ export default function NewsSection() {
     }
   }
 
+  const mapOldR2Url = (url: string): string => {
+    // Map old R2 URLs to new R2 URLs
+    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev')) {
+      return url.replace('pub-6481c927139b4654ace8022882acbd62.r2.dev', 'pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')
+    }
+    return url
+  }
+
   return (
-    <section className="max-w-7xl mx-auto mt-24">
+    <section className="max-w-7xl mx-auto mt-24 mb-16">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
           <h2 className="text-3xl font-black text-outline-red">Latest News</h2>
@@ -109,7 +117,7 @@ export default function NewsSection() {
                 <div className="relative h-48 bg-gray-800">
                   {article.image && isValidImageUrl(article.image) ? (
                     <Image
-                      src={article.image}
+                      src={mapOldR2Url(article.image)}
                       alt={article.title || `News article ${article.id}`}
                       width={400}
                       height={240}
@@ -144,9 +152,7 @@ export default function NewsSection() {
                     {article.title || 'Untitled Article'}
                   </h3>
 
-                  <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
-                    {truncateContent(article.story || '')}
-                  </p>
+                
 
                   <div className="mt-auto">
                     <Link

@@ -5,11 +5,15 @@
 @layer base {
   body {
     font-family: var(--font-inter), "Inter", sans-serif;
+  }
+  
+  /* Only add padding when sticky players are present */
+  body.has-sticky-players {
     padding-bottom: 80px; /* Space for bottom sticky player */
   }
   
   @media (min-width: 640px) {
-    body {
+    body.has-sticky-players {
       padding-bottom: 100px; /* Space for bottom sticky player on desktop */
     }
   }
