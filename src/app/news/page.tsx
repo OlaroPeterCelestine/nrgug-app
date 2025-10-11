@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -40,23 +41,11 @@ export default function NewsPage() {
   const fetchNews = async () => {
     try {
       setLoading(true)
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/news', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
+      const data = await apiUtils.fetchNews()
 
-      if (response.ok) {
-        const contentType = response.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json()
-          if (data && data.length > 0) {
-            setMainArticle(data[0]) // First article as main story
-            setArticles(data.slice(1)) // Rest as side articles
-          }
-        }
+      if (data && data.length > 0) {
+        setMainArticle(data[0]) // First article as main story
+        setArticles(data.slice(1)) // Rest as side articles
       }
     } catch (error) {
       console.error('Error fetching news:', error)

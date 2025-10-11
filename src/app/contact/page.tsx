@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Header from '@/components/Header'
+import { apiUtils } from '@/lib/api-utils'
 import Footer from '@/components/Footer'
 
 export default function ContactPage() {
@@ -48,22 +49,10 @@ export default function ContactPage() {
     setMessage('')
 
     try {
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (response.ok) {
-        setMessage('Thank you for your message! We will get back to you soon.')
-        setIsSuccess(true)
-        setFormData({ purpose: '', name: '', email: '', subject: '', message: '' })
-      } else {
-        setMessage('Something went wrong. Please try again.')
-        setIsSuccess(false)
-      }
+      await apiUtils.submitContactForm(formData)
+      setMessage('Thank you for your message! We will get back to you soon.')
+      setIsSuccess(true)
+      setFormData({ purpose: '', name: '', email: '', subject: '', message: '' })
     } catch (error) {
       console.error('Error submitting contact form:', error)
       setMessage('Network error. Please try again.')

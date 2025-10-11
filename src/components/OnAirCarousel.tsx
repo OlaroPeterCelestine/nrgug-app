@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -26,28 +27,9 @@ export default function OnAirCarousel() {
     try {
       console.log('🎯 Fetching shows from API...')
       setLoading(true)
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/shows', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
-
-      if (response.ok) {
-        const contentType = response.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json()
-          console.log('✅ Shows data received:', data)
-          setShows((data || []).slice(0, 6)) // Show only the first 6 shows
-        } else {
-          console.error('❌ Response is not JSON:', contentType)
-        }
-      } else {
-        console.error('❌ API response not ok:', response.status, response.statusText)
-        const errorText = await response.text()
-        console.error('Error response body:', errorText)
-      }
+      const data = await apiUtils.fetchShows()
+      console.log('✅ Shows data received:', data)
+      setShows((data || []).slice(0, 6)) // Show only the first 6 shows
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
     } finally {

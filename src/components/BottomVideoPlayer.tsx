@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 
 interface BottomVideoPlayerProps {
   isVisible: boolean
@@ -30,11 +31,8 @@ export default function BottomVideoPlayer({ isVisible, shouldStartPlaying, onPla
   // Fetch shows from API
   const fetchShows = async () => {
     try {
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/shows')
-      if (response.ok) {
-        const data = await response.json()
-        setShows(data)
-      }
+      const data = await apiUtils.fetchShows()
+      setShows(data)
     } catch (error) {
       console.error('Failed to fetch shows:', error)
     } finally {

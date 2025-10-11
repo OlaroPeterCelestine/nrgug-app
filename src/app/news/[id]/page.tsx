@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import { useParams, useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -66,29 +67,13 @@ export default function NewsStoryPage() {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
       
-      const response = await fetch(`https://nrgug-api-production.up.railway.app/api/news/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        signal: controller.signal
-      })
+      const data = await apiUtils.fetchNewsById(id)
 
       clearTimeout(timeoutId)
-      console.log('Response status:', response.status) // Debug log
-      
-      if (response.ok) {
-        const data = await response.json()
-        console.log('Fetched article data:', data) // Debug log
-        console.log('Story content:', data.story) // Debug log
-        setArticle(data)
-        setError(null) // Clear any previous errors
-      } else {
-        const errorText = await response.text()
-        console.error('Failed to fetch article:', response.status, response.statusText, errorText)
-        setError(`News story not found (${response.status})`)
-      }
+      console.log('Fetched article data:', data) // Debug log
+      console.log('Story content:', data.story) // Debug log
+      setArticle(data)
+      setError(null) // Clear any previous errors
     } catch (error) {
       console.error('Error fetching news story:', error)
       if (error instanceof Error && error.name === 'AbortError') {
@@ -103,20 +88,10 @@ export default function NewsStoryPage() {
 
   const fetchRelatedNews = async () => {
     try {
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/news', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        // Filter out the current article and get up to 3 related articles
-        const related = data.filter((item: NewsArticle) => item.id !== parseInt(params.id as string)).slice(0, 3)
-        setRelatedArticles(related)
-      }
+      const data = await apiUtils.fetchNews()
+      // Filter out the current article and get up to 3 related articles
+      const related = data.filter((item: NewsArticle) => item.id !== parseInt(params.id as string)).slice(0, 3)
+      setRelatedArticles(related)
     } catch (error) {
       console.error('Error fetching related news:', error)
     }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -24,31 +25,13 @@ export default function ClientCarousel() {
       console.log('Fetching clients from API...')
       
       // Try to fetch from API
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/clients', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
+      const data = await apiUtils.fetchClients()
 
-      console.log('API response status:', response.status)
-      console.log('API response ok:', response.ok)
-
-      if (response.ok) {
-        const data = await response.json()
-        console.log('API clients data received:', data)
-        console.log('Number of API clients:', data?.length || 0)
-        // Update with API data if successful
-        if (data && data.length > 0) {
-          setClients(data)
-        }
-      } else {
-        console.error('API response not ok:', response.status, response.statusText)
-        const errorText = await response.text()
-        console.error('Error response body:', errorText)
-        // No fallback data - keep empty array
-        setClients([])
+      console.log('API clients data received:', data)
+      console.log('Number of API clients:', data?.length || 0)
+      // Update with API data if successful
+      if (data && data.length > 0) {
+        setClients(data)
       }
     } catch (error) {
       console.error('Error fetching clients:', error)

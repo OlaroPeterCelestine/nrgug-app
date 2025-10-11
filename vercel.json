@@ -18,5 +18,8 @@
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "BACKEND_URL": "https://nrgug-api-production.up.railway.app"
+  }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/Header'
@@ -30,30 +31,9 @@ export default function ClientsPage() {
       setLoading(true)
       setError(null)
       
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/clients', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
-
-      if (response.ok) {
-        const contentType = response.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json()
-          console.log('✅ Clients data received:', data)
-          setClients(data || [])
-        } else {
-          console.error('❌ Response is not JSON:', contentType)
-          setError('Invalid response format')
-        }
-      } else {
-        console.error('❌ API response not ok:', response.status, response.statusText)
-        const errorText = await response.text()
-        console.error('Error response body:', errorText)
-        setError(`Failed to load clients: ${response.status}`)
-      }
+      const data = await apiUtils.fetchClients()
+      console.log('✅ Clients data received:', data)
+      setClients(data || [])
     } catch (error) {
       console.error('💥 Error fetching clients:', error)
       setError('Failed to load clients. Please try again later.')

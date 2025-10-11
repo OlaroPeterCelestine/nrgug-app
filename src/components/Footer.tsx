@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 
 export default function Footer() {
   const [email, setEmail] = useState('')
@@ -22,38 +23,10 @@ export default function Footer() {
     setMessage('')
 
     try {
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/subscribers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      })
-
-      if (response.ok) {
-        setMessage('🎉 Welcome to the HYPE! You\'re now subscribed to our newsletter!')
-        setIsSuccess(true)
-        setEmail('')
-      } else {
-        const contentType = response.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          const errorData = await response.json()
-          if (response.status === 409) {
-            setMessage('This email is already subscribed to our newsletter!')
-          } else {
-            setMessage(errorData.message || 'Something went wrong. Please try again.')
-          }
-        } else {
-          const errorText = await response.text()
-          console.error('Error response body:', errorText)
-          if (response.status === 409) {
-            setMessage('This email is already subscribed to our newsletter!')
-          } else {
-            setMessage('Something went wrong. Please try again.')
-          }
-        }
-        setIsSuccess(false)
-      }
+      await apiUtils.subscribeToNewsletter(email)
+      setMessage('🎉 Welcome to the HYPE! You\'re now subscribed to our newsletter!')
+      setIsSuccess(true)
+      setEmail('')
     } catch (error) {
       console.error('Error subscribing:', error)
       setMessage('Network error. Please check your connection and try again.')

@@ -20,6 +20,8 @@ function PlayerProvider(param) {
     _s();
     const [isPlayerVisible, setIsPlayerVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [shouldStartPlaying, setShouldStartPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isVideoPlayerVisible, setIsVideoPlayerVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [shouldStartVideoPlaying, setShouldStartVideoPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const showPlayer = ()=>setIsPlayerVisible(true);
     const hidePlayer = ()=>setIsPlayerVisible(false);
     const minimizePlayer = ()=>setIsPlayerVisible(false);
@@ -28,6 +30,13 @@ function PlayerProvider(param) {
         setIsPlayerVisible(true);
     };
     const resetStartPlaying = ()=>setShouldStartPlaying(false);
+    const showVideoPlayer = ()=>setIsVideoPlayerVisible(true);
+    const hideVideoPlayer = ()=>setIsVideoPlayerVisible(false);
+    const startVideoPlaying = ()=>{
+        setShouldStartVideoPlaying(true);
+        setIsVideoPlayerVisible(true);
+    };
+    const resetStartVideoPlaying = ()=>setShouldStartVideoPlaying(false);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
         value: {
             isPlayerVisible,
@@ -36,16 +45,22 @@ function PlayerProvider(param) {
             minimizePlayer,
             startPlaying,
             shouldStartPlaying,
-            resetStartPlaying
+            resetStartPlaying,
+            isVideoPlayerVisible,
+            showVideoPlayer,
+            hideVideoPlayer,
+            startVideoPlaying,
+            shouldStartVideoPlaying,
+            resetStartVideoPlaying
         },
         children: children
     }, void 0, false, {
         fileName: "[project]/src/contexts/PlayerContext.tsx",
-        lineNumber: 31,
+        lineNumber: 47,
         columnNumber: 5
     }, this);
 }
-_s(PlayerProvider, "kTjSeuZedJ60LTtmuaiZRCn/p7g=");
+_s(PlayerProvider, "RG6bwus7nMXul63KjVdVPq71K4g=");
 _c = PlayerProvider;
 function usePlayer() {
     _s1();
@@ -79,7 +94,7 @@ function BottomStickyPlayer(param) {
     let { isVisible, shouldStartPlaying, onPlaybackStarted } = param;
     _s();
     const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [isBuffering, setIsBuffering] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [isBuffering, setIsBuffering] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isExpanded, setIsExpanded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isFullyExpanded, setIsFullyExpanded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [shows, setShows] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -178,57 +193,7 @@ function BottomStickyPlayer(param) {
         "BottomStickyPlayer.useEffect": ()=>{
             if (audioRef.current) {
                 audioRef.current.src = "https://dc4.serverse.com/proxy/nrgugstream/stream";
-                audioRef.current.preload = "auto"; // Preload the audio stream
-                // Set up event listeners for better buffering control
-                const audio = audioRef.current;
-                const handleCanPlay = {
-                    "BottomStickyPlayer.useEffect.handleCanPlay": ()=>{
-                        setIsBuffering(false);
-                        console.log('Audio ready to play');
-                    }
-                }["BottomStickyPlayer.useEffect.handleCanPlay"];
-                const handleLoadStart = {
-                    "BottomStickyPlayer.useEffect.handleLoadStart": ()=>{
-                        setIsBuffering(true);
-                        console.log('Audio loading started');
-                    }
-                }["BottomStickyPlayer.useEffect.handleLoadStart"];
-                const handleWaiting = {
-                    "BottomStickyPlayer.useEffect.handleWaiting": ()=>{
-                        setIsBuffering(true);
-                        console.log('Audio waiting for data');
-                    }
-                }["BottomStickyPlayer.useEffect.handleWaiting"];
-                const handleCanPlayThrough = {
-                    "BottomStickyPlayer.useEffect.handleCanPlayThrough": ()=>{
-                        setIsBuffering(false);
-                        console.log('Audio can play through without stopping');
-                    }
-                }["BottomStickyPlayer.useEffect.handleCanPlayThrough"];
-                const handleError = {
-                    "BottomStickyPlayer.useEffect.handleError": (e)=>{
-                        console.error('Audio error:', e);
-                        setIsBuffering(false);
-                    }
-                }["BottomStickyPlayer.useEffect.handleError"];
-                // Add event listeners
-                audio.addEventListener('canplay', handleCanPlay);
-                audio.addEventListener('loadstart', handleLoadStart);
-                audio.addEventListener('waiting', handleWaiting);
-                audio.addEventListener('canplaythrough', handleCanPlayThrough);
-                audio.addEventListener('error', handleError);
-                // Start loading the audio immediately
-                audio.load();
-                // Cleanup function
-                return ({
-                    "BottomStickyPlayer.useEffect": ()=>{
-                        audio.removeEventListener('canplay', handleCanPlay);
-                        audio.removeEventListener('loadstart', handleLoadStart);
-                        audio.removeEventListener('waiting', handleWaiting);
-                        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
-                        audio.removeEventListener('error', handleError);
-                    }
-                })["BottomStickyPlayer.useEffect"];
+                audioRef.current.preload = "none";
             }
         }
     }["BottomStickyPlayer.useEffect"], []);
@@ -236,53 +201,21 @@ function BottomStickyPlayer(param) {
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "BottomStickyPlayer.useEffect": ()=>{
             if (shouldStartPlaying && audioRef.current && !isPlaying) {
-                // Check if audio is ready to play
-                if (audioRef.current.readyState >= 2) {
-                    // Audio is already buffered, start playing immediately
-                    audioRef.current.play().then({
-                        "BottomStickyPlayer.useEffect": ()=>{
-                            setIsPlaying(true);
-                            setIsBuffering(false);
-                            console.log('Audio started playing immediately');
-                            // Notify parent that playback has started
-                            if (onPlaybackStarted) {
-                                onPlaybackStarted();
-                            }
+                const audio = audioRef.current;
+                // Play immediately
+                audio.play().then({
+                    "BottomStickyPlayer.useEffect": ()=>{
+                        setIsPlaying(true);
+                        console.log('Audio started playing');
+                        if (onPlaybackStarted) {
+                            onPlaybackStarted();
                         }
-                    }["BottomStickyPlayer.useEffect"]).catch({
-                        "BottomStickyPlayer.useEffect": (error)=>{
-                            console.error('Failed to start playback:', error);
-                        }
-                    }["BottomStickyPlayer.useEffect"]);
-                } else {
-                    // Audio not ready yet, wait for it to be ready
-                    const handleCanPlay = {
-                        "BottomStickyPlayer.useEffect.handleCanPlay": ()=>{
-                            var _audioRef_current;
-                            if (shouldStartPlaying && !isPlaying) {
-                                var _audioRef_current1;
-                                (_audioRef_current1 = audioRef.current) === null || _audioRef_current1 === void 0 ? void 0 : _audioRef_current1.play().then({
-                                    "BottomStickyPlayer.useEffect.handleCanPlay": ()=>{
-                                        setIsPlaying(true);
-                                        setIsBuffering(false);
-                                        console.log('Audio started playing after buffering');
-                                        // Notify parent that playback has started
-                                        if (onPlaybackStarted) {
-                                            onPlaybackStarted();
-                                        }
-                                    }
-                                }["BottomStickyPlayer.useEffect.handleCanPlay"]).catch({
-                                    "BottomStickyPlayer.useEffect.handleCanPlay": (error)=>{
-                                        console.error('Failed to start playback:', error);
-                                    }
-                                }["BottomStickyPlayer.useEffect.handleCanPlay"]);
-                            }
-                            (_audioRef_current = audioRef.current) === null || _audioRef_current === void 0 ? void 0 : _audioRef_current.removeEventListener('canplay', handleCanPlay);
-                        }
-                    }["BottomStickyPlayer.useEffect.handleCanPlay"];
-                    audioRef.current.addEventListener('canplay', handleCanPlay);
-                    setIsBuffering(true);
-                }
+                    }
+                }["BottomStickyPlayer.useEffect"]).catch({
+                    "BottomStickyPlayer.useEffect": (error)=>{
+                        console.error('Play failed:', error);
+                    }
+                }["BottomStickyPlayer.useEffect"]);
             }
         }
     }["BottomStickyPlayer.useEffect"], [
@@ -336,17 +269,17 @@ function BottomStickyPlayer(param) {
                         className: "w-8 h-1 bg-white/30 rounded-full"
                     }, void 0, false, {
                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                        lineNumber: 259,
+                        lineNumber: 188,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                    lineNumber: 252,
+                    lineNumber: 181,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                lineNumber: 251,
+                lineNumber: 180,
                 columnNumber: 7
             }, this),
             isFullyExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -366,22 +299,22 @@ function BottomStickyPlayer(param) {
                             d: "M7 10l5 5 5-5z"
                         }, void 0, false, {
                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                            lineNumber: 275,
+                            lineNumber: 204,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                        lineNumber: 274,
+                        lineNumber: 203,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                    lineNumber: 266,
+                    lineNumber: 195,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                lineNumber: 265,
+                lineNumber: 194,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -400,17 +333,17 @@ function BottomStickyPlayer(param) {
                                     className: "w-full h-full object-cover"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                    lineNumber: 304,
+                                    lineNumber: 233,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                lineNumber: 297,
+                                lineNumber: 226,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                            lineNumber: 296,
+                            lineNumber: 225,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -421,10 +354,10 @@ function BottomStickyPlayer(param) {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                             className: "text-white font-semibold transition-all duration-500 ".concat(isFullyExpanded ? 'text-2xl sm:text-3xl mb-2' : isExpanded ? 'text-sm sm:text-base truncate' : 'text-xs sm:text-sm truncate'),
-                                            children: isBuffering ? 'Preparing...' : (currentShow === null || currentShow === void 0 ? void 0 : currentShow.show_name) || 'NRG Live Radio'
+                                            children: (currentShow === null || currentShow === void 0 ? void 0 : currentShow.show_name) || 'NRG Live Radio'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                            lineNumber: 315,
+                                            lineNumber: 244,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -432,13 +365,13 @@ function BottomStickyPlayer(param) {
                                             children: (currentShow === null || currentShow === void 0 ? void 0 : currentShow.presenters) || 'Live from Kampala, Uganda'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                            lineNumber: 324,
+                                            lineNumber: 253,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                    lineNumber: 314,
+                                    lineNumber: 243,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -456,34 +389,34 @@ function BottomStickyPlayer(param) {
                                                                 className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                                lineNumber: 340,
+                                                                lineNumber: 269,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "relative inline-flex rounded-full h-2 w-2 bg-green-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                                lineNumber: 341,
+                                                                lineNumber: 270,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                        lineNumber: 339,
+                                                        lineNumber: 268,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-green-400 font-medium ".concat(isFullyExpanded ? 'text-sm sm:text-base' : 'text-xs'),
-                                                        children: isBuffering ? 'PREPARING' : 'LIVE'
+                                                        children: "LIVE"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                        lineNumber: 343,
+                                                        lineNumber: 272,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                lineNumber: 338,
+                                                lineNumber: 267,
                                                 columnNumber: 17
                                             }, this),
                                             currentShow && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -491,24 +424,24 @@ function BottomStickyPlayer(param) {
                                                 children: currentShow.time
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                                lineNumber: 350,
+                                                lineNumber: 279,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 266,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                    lineNumber: 336,
+                                    lineNumber: 265,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                            lineNumber: 313,
+                            lineNumber: 242,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -527,12 +460,12 @@ function BottomStickyPlayer(param) {
                                         d: "M6 4h4v16H6V4zm8 0h4v16h-4V4z"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                        lineNumber: 384,
+                                        lineNumber: 313,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                    lineNumber: 377,
+                                    lineNumber: 306,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                     viewBox: "0 0 24 24",
@@ -542,50 +475,50 @@ function BottomStickyPlayer(param) {
                                         d: "M8 5v14l11-7z"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                        lineNumber: 394,
+                                        lineNumber: 323,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                    lineNumber: 387,
+                                    lineNumber: 316,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                                lineNumber: 363,
+                                lineNumber: 292,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                            lineNumber: 361,
+                            lineNumber: 290,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                    lineNumber: 289,
+                    lineNumber: 218,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                lineNumber: 282,
+                lineNumber: 211,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("audio", {
                 ref: audioRef
             }, void 0, false, {
                 fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-                lineNumber: 403,
+                lineNumber: 332,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/BottomStickyPlayer.tsx",
-        lineNumber: 243,
+        lineNumber: 172,
         columnNumber: 5
     }, this);
 }
-_s(BottomStickyPlayer, "B0lHQW2VF0ZxceMJHUcMwsUcxL4=");
+_s(BottomStickyPlayer, "4qdhVFcncJlAafayrIBZQXnZ1zw=");
 _c = BottomStickyPlayer;
 var _c;
 __turbopack_context__.k.register(_c, "BottomStickyPlayer");

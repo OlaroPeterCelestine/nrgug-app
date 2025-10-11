@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -30,30 +31,9 @@ export default function ShowsPage() {
       setLoading(true)
       setError(null)
       
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/shows', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-      })
-
-      if (response.ok) {
-        const contentType = response.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json()
-          console.log('✅ Shows data received:', data)
-          setShows(data || [])
-        } else {
-          console.error('❌ Response is not JSON:', contentType)
-          setError('Invalid response format')
-        }
-      } else {
-        console.error('❌ API response not ok:', response.status, response.statusText)
-        const errorText = await response.text()
-        console.error('Error response body:', errorText)
-        setError(`Failed to load shows: ${response.status}`)
-      }
+      const data = await apiUtils.fetchShows()
+      console.log('✅ Shows data received:', data)
+      setShows(data || [])
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
       setError('Failed to load shows. Please try again later.')

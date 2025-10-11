@@ -22,7 +22,7 @@ export default function VideosSection() {
       setLoading(true)
       console.log('🎬 Fetching videos from API...')
       
-      const response = await fetch('https://nrgug-api-production.up.railway.app/api/videos', {
+      const response = await fetch('/api/proxy/videos', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
