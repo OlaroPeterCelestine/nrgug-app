@@ -100,15 +100,24 @@ export default function OnAirCarousel() {
     const days = shows.map(show => show.day_of_week)
     const uniqueDays = Array.from(new Set(days))
     
-    // Get current day and create day order starting from today
+    // Get current day and create day order starting from today, ending with Sunday
     const today = new Date().getDay()
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     
-    // Create day order starting from current day
+    // Create day order starting from current day, wrapping to include all days up to Sunday
     const dayOrder = []
     for (let i = 0; i < 7; i++) {
       const dayIndex = (today + i) % 7
       dayOrder.push(dayNames[dayIndex])
+    }
+    
+    // Ensure Sunday is always at the end if it's not the current day
+    if (today !== 0) { // If today is not Sunday
+      const sundayIndex = dayOrder.indexOf('Sunday')
+      if (sundayIndex !== -1) {
+        dayOrder.splice(sundayIndex, 1)
+        dayOrder.push('Sunday')
+      }
     }
     
     // Group Monday-Thursday into weekdays
@@ -183,7 +192,7 @@ export default function OnAirCarousel() {
                     isSelected
                       ? 'bg-red-600 text-white'
                       : isToday
-                        ? 'bg-blue-600 text-white border-2 border-blue-400'
+                        ? 'bg-red-500 text-white border-2 border-red-400'
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
