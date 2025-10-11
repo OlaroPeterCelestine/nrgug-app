@@ -66,11 +66,21 @@ export default function OnAirCarousel() {
       filteredShows = shows.filter(show => show.day_of_week === selectedDay)
     }
     
-    // Sort shows by start time within each day
+    // Sort shows by start time within each day, starting from current day
     return filteredShows
       .sort((a, b) => {
-        // First sort by day of week
-        const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        // Get current day and create day order starting from today
+        const today = new Date().getDay()
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        const currentDayName = dayNames[today]
+        
+        // Create day order starting from current day
+        const dayOrder = []
+        for (let i = 0; i < 7; i++) {
+          const dayIndex = (today + i) % 7
+          dayOrder.push(dayNames[dayIndex])
+        }
+        
         const aDayIndex = dayOrder.indexOf(a.day_of_week)
         const bDayIndex = dayOrder.indexOf(b.day_of_week)
         
@@ -90,6 +100,17 @@ export default function OnAirCarousel() {
     const days = shows.map(show => show.day_of_week)
     const uniqueDays = Array.from(new Set(days))
     
+    // Get current day and create day order starting from today
+    const today = new Date().getDay()
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    
+    // Create day order starting from current day
+    const dayOrder = []
+    for (let i = 0; i < 7; i++) {
+      const dayIndex = (today + i) % 7
+      dayOrder.push(dayNames[dayIndex])
+    }
+    
     // Group Monday-Thursday into weekdays
     const hasWeekdays = uniqueDays.some(day => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
     const weekendDays = uniqueDays.filter(day => !['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))
@@ -98,7 +119,10 @@ export default function OnAirCarousel() {
     if (hasWeekdays) {
       groupedDays.push('weekdays')
     }
-    groupedDays.push(...weekendDays)
+    
+    // Add weekend days in current day order
+    const orderedWeekendDays = dayOrder.filter(day => weekendDays.includes(day))
+    groupedDays.push(...orderedWeekendDays)
     
     return groupedDays
   }
