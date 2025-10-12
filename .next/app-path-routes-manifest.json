@@ -1,11 +1,15 @@
 {
   "/_not-found/page": "/_not-found",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/proxy/[...path]/route": "/api/proxy/[...path]",
   "/clients/page": "/clients",
   "/contact/page": "/contact",
   "/events/page": "/events",
+  "/login/page": "/login",
   "/news/[id]/page": "/news/[id]",
   "/news/page": "/news",
   "/page": "/",
   "/shop/page": "/shop",
-  "/shows/page": "/shows"
+  "/shows/page": "/shows",
+  "/video/page": "/video"
 }

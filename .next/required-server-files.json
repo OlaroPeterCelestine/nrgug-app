@@ -155,6 +155,36 @@
           "hostname": "logos-world.net",
           "port": "",
           "pathname": "/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "example.com",
+          "port": "",
+          "pathname": "/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "pub-6481c927139b4654ace8022882acbd62.r2.dev",
+          "port": "",
+          "pathname": "/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "nrgug-api-production.up.railway.app",
+          "port": "",
+          "pathname": "/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev",
+          "port": "",
+          "pathname": "/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "pub-1a0cc46c23f84b8ebf3f69e9b90b4314.r2.dev",
+          "port": "",
+          "pathname": "/**"
         }
       ],
       "unoptimized": false
@@ -195,7 +225,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg-website-dev",
+    "outputFileTracingRoot": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -384,10 +414,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.js",
     "turbopack": {
-      "root": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg-website-dev"
+      "root": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg"
     }
   },
-  "appDir": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg-website-dev",
+  "appDir": "/Users/olaropetercelestine/Desktop/bbs/nrgug/nrg",
   "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
