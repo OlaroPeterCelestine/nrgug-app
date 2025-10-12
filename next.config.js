@@ -113,6 +113,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'nrgug-api-production.up.railway.app',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

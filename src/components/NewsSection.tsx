@@ -90,6 +90,10 @@ export default function NewsSection() {
       const r2Path = url.split('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')[1]
       return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`
     }
+    // If it's already a local URL, return as is
+    if (url.includes('nrgug-api-production.up.railway.app/uploads/')) {
+      return url
+    }
     return url
   }
 
