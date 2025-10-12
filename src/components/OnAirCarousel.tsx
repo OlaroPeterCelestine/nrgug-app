@@ -301,9 +301,7 @@ export default function OnAirCarousel() {
                   </div>
                   <div className="mt-4 text-center">
                     <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
-                    <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
-                    <p className="font-semibold mb-1 text-red-500">{show.time}</p>
-                    <p className="text-sm text-gray-400">{show.day_of_week}</p>
+                    <p className="font-semibold text-red-500">{show.time}</p>
                   </div>
                 </div>
               )
