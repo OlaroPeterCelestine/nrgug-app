@@ -37,10 +37,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // Simulate loading time
+    // Simulate loading time - reduced for faster display
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 2000)
+    }, 1000)
     
     fetchHeroNews()
     
@@ -49,6 +49,7 @@ export default function Home() {
 
   const fetchHeroNews = async () => {
     try {
+      console.log('🚀 Starting to fetch hero news...')
       // First check if there's a hero selection from API
       const heroResponse = await fetch('https://nrgug-api-production.up.railway.app/api/hero-selection', {
         method: 'GET',
@@ -57,6 +58,8 @@ export default function Home() {
         },
         mode: 'cors',
       })
+      
+      console.log('📡 Hero selection response status:', heroResponse.status)
 
       if (heroResponse.ok) {
         const contentType = heroResponse.headers.get('content-type')
