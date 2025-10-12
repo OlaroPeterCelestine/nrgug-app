@@ -18,11 +18,17 @@ export function getClientApiUrl(endpoint: string): string {
 export async function clientFetch(endpoint: string, options: RequestInit = {}) {
   const url = getClientApiUrl(endpoint);
   
-  const response = await fetch(url, {
+  // Add cache-busting parameter to force fresh data
+  const cacheBuster = `?t=${Date.now()}`;
+  const finalUrl = url + cacheBuster;
+  
+  const response = await fetch(finalUrl, {
     ...options,
     headers: {
       ...CLIENT_API_CONFIG.HEADERS,
       ...options.headers,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
     },
   });
 
