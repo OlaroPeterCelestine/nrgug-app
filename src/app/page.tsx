@@ -228,6 +228,20 @@ export default function Home() {
           <>
             {/* Hero Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
+              {/* SEO-optimized heading and description */}
+              <div className="text-center mb-8">
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                  Welcome to <span className="text-red-500">NRG Radio Uganda</span> 106.5 FM
+                </h1>
+                <p className="text-xl text-gray-300 mb-2">
+                  The Number One Name in Music - Live from Nakasero, Kampala
+                </p>
+                <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+                  Tune in to Uganda's premier radio station for the best music, entertainment, news, and talk shows. 
+                  Broadcasting 24/7 on 106.5 FM across Kampala and surrounding areas.
+                </p>
+              </div>
+              
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                   {/* Main Story Column */}
                   <div className="lg:col-span-2">
@@ -351,6 +365,32 @@ export default function Home() {
                 />
               ))}
             </div>
+
+            {/* About NRG Radio Section - SEO Content */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  About NRG Radio Uganda 106.5 FM
+                </h2>
+                <div className="max-w-4xl mx-auto text-gray-300 space-y-4">
+                  <p className="text-lg">
+                    <strong>NRG Radio Uganda</strong> is the premier radio station in Kampala, broadcasting on <strong>106.5 FM</strong> 
+                    from our studios in Nakasero. As Uganda's leading music and entertainment radio station, we bring you the best 
+                    in local and international music, news, and talk shows.
+                  </p>
+                  <p className="text-lg">
+                    Our <strong>NRG Radio</strong> team is dedicated to providing high-quality programming that reflects the vibrant 
+                    culture of Uganda. From morning shows to late-night entertainment, <strong>NRG 106.5</strong> keeps you connected 
+                    to what matters most in Kampala and beyond.
+                  </p>
+                  <p className="text-lg">
+                    Tune in to <strong>NRG Radio Uganda</strong> for the latest hits, breaking news, and engaging discussions. 
+                    Whether you're in Kampala, Entebbe, or anywhere in Central Uganda, <strong>NRG 106.5 FM</strong> delivers 
+                    crystal-clear reception and exceptional content.
+                  </p>
+                </div>
+              </div>
+            </section>
 
             {/* On Air Carousel */}
             <OnAirCarousel />
