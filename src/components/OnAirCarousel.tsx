@@ -270,38 +270,27 @@ export default function OnAirCarousel() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {getFilteredShows().map((show) => {
               const isCurrentlyOnAir = isShowOnAirOrUpcoming(show)
               const isUpcoming = isShowUpcomingToday(show)
               
               return (
-                <div key={show.id} className="group">
-                  <div className="relative">
-                    <Image
-                      src={getImageSrc(show)}
-                      alt={show.presenters || `Show ${show.id}`}
-                      width={300}
-                      height={160}
-                      className="w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
-                    />
+                <div key={show.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-red-500 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-lg font-bold text-white">{show.show_name}</h3>
                     {isCurrentlyOnAir && (
-                      <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                      <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
                         LIVE
-                      </div>
+                      </span>
                     )}
                     {isUpcoming && (
-                      <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                         UPCOMING
-                      </div>
+                      </span>
                     )}
                   </div>
-                  <div className="mt-4 text-center">
-                    <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
-                    <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
-                    <p className="font-semibold mb-1 text-red-500">{show.time}</p>
-                    <p className="text-sm text-gray-400">{show.day_of_week}</p>
-                  </div>
+                  <p className="text-red-500 font-semibold">{show.time}</p>
                 </div>
               )
             })}
