@@ -2061,10 +2061,21 @@ function NewsSection() {
             return false;
         }
     };
-    const mapOldR2Url = (url)=>{
-        // Map old R2 URLs to new R2 URLs
+    const mapToLocalUrl = (url)=>{
+        // Map R2 URLs to local URLs
         if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev')) {
-            return url.replace('pub-6481c927139b4654ace8022882acbd62.r2.dev', 'pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev');
+            // Extract the path from R2 URL and convert to local URL
+            const r2Path = url.split('pub-6481c927139b4654ace8022882acbd62.r2.dev')[1];
+            return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`;
+        }
+        if (url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
+            // Extract the path from new R2 URL and convert to local URL
+            const r2Path = url.split('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')[1];
+            return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`;
+        }
+        // If it's already a local URL, return as is
+        if (url.includes('nrgug-api-production.up.railway.app/uploads/')) {
+            return url;
         }
         return url;
     };
@@ -2086,7 +2097,7 @@ function NewsSection() {
                             children: "Latest News"
                         }, void 0, false, {
                             fileName: "[project]/src/components/NewsSection.tsx",
-                            lineNumber: 99,
+                            lineNumber: 110,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -2095,13 +2106,13 @@ function NewsSection() {
                             children: "View All News →"
                         }, void 0, false, {
                             fileName: "[project]/src/components/NewsSection.tsx",
-                            lineNumber: 100,
+                            lineNumber: 111,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/NewsSection.tsx",
-                    lineNumber: 98,
+                    lineNumber: 109,
                     columnNumber: 9
                 }, this),
                 articles.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2114,14 +2125,14 @@ function NewsSection() {
                                     className: "fas fa-newspaper text-4xl mb-4 block"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                    lineNumber: 111,
+                                    lineNumber: 122,
                                     columnNumber: 15
                                 }, this),
                                 "No news articles available at the moment"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/NewsSection.tsx",
-                            lineNumber: 110,
+                            lineNumber: 121,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2129,13 +2140,13 @@ function NewsSection() {
                             children: "Check back later for the latest updates"
                         }, void 0, false, {
                             fileName: "[project]/src/components/NewsSection.tsx",
-                            lineNumber: 114,
+                            lineNumber: 125,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/NewsSection.tsx",
-                    lineNumber: 109,
+                    lineNumber: 120,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6",
@@ -2146,7 +2157,7 @@ function NewsSection() {
                                     className: "relative h-48 bg-gray-800",
                                     children: [
                                         article.image && isValidImageUrl(article.image) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                            src: mapOldR2Url(article.image),
+                                            src: mapToLocalUrl(article.image),
                                             alt: article.title || `News article ${article.id}`,
                                             width: 400,
                                             height: 240,
@@ -2154,7 +2165,7 @@ function NewsSection() {
                                             onError: handleImageError
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 125,
+                                            lineNumber: 136,
                                             columnNumber: 21
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "w-full h-full flex flex-col items-center justify-center text-gray-500",
@@ -2163,7 +2174,7 @@ function NewsSection() {
                                                     className: "fas fa-image text-4xl mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                                    lineNumber: 135,
+                                                    lineNumber: 146,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2171,13 +2182,13 @@ function NewsSection() {
                                                     children: "No Image"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 147,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 134,
+                                            lineNumber: 145,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2187,18 +2198,18 @@ function NewsSection() {
                                                 children: article.category || 'News'
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/NewsSection.tsx",
-                                                lineNumber: 140,
+                                                lineNumber: 151,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 139,
+                                            lineNumber: 150,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 134,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2211,7 +2222,7 @@ function NewsSection() {
                                                     className: "fas fa-calendar mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                                    lineNumber: 148,
+                                                    lineNumber: 159,
                                                     columnNumber: 21
                                                 }, this),
                                                 formatDate(article.timestamp || article.created_at || ''),
@@ -2222,14 +2233,14 @@ function NewsSection() {
                                                             children: "•"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                                            lineNumber: 152,
+                                                            lineNumber: 163,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {
                                                             className: "fas fa-user mr-1"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                                            lineNumber: 153,
+                                                            lineNumber: 164,
                                                             columnNumber: 25
                                                         }, this),
                                                         article.author
@@ -2238,7 +2249,7 @@ function NewsSection() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 147,
+                                            lineNumber: 158,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2246,7 +2257,7 @@ function NewsSection() {
                                             children: article.title || 'Untitled Article'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 170,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2260,46 +2271,46 @@ function NewsSection() {
                                                         className: "fas fa-arrow-right ml-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/NewsSection.tsx",
-                                                        lineNumber: 171,
+                                                        lineNumber: 182,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/NewsSection.tsx",
-                                                lineNumber: 166,
+                                                lineNumber: 177,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/NewsSection.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 176,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/NewsSection.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 157,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, article.id, true, {
                             fileName: "[project]/src/components/NewsSection.tsx",
-                            lineNumber: 119,
+                            lineNumber: 130,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/components/NewsSection.tsx",
-                    lineNumber: 117,
+                    lineNumber: 128,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/NewsSection.tsx",
-            lineNumber: 97,
+            lineNumber: 108,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/NewsSection.tsx",
-        lineNumber: 96,
+        lineNumber: 107,
         columnNumber: 5
     }, this);
 }
