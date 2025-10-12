@@ -228,7 +228,7 @@ export default function Home() {
           <>
             {/* Hero Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-              {/* SEO-optimized heading and description */}
+              {/* SEO-optimized heading and description - Clean text display */}
               <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                   Welcome to <span className="text-red-500">NRG Radio Uganda</span> 106.5 FM
