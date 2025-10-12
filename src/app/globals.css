@@ -123,6 +123,11 @@
     }
   }
 
+  /* Video Loading Shimmer Animation */
+  .animate-shimmer {
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
   /* Skeleton Loading States */
   .skeleton-text {
     @apply shimmer-dark h-4 rounded;

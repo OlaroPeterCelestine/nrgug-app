@@ -300,9 +300,9 @@ export default function OnAirCarousel() {
                     <Image
                       src={getImageSrc(show)}
                       alt={show.presenters || `Show ${show.id}`}
-                      width={300}
-                      height={160}
-                      className="w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
+                      width={400}
+                      height={200}
+                      className="w-full h-48 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
                     />
                     {isCurrentlyOnAir && (
                       <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">

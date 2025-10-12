@@ -5,10 +5,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 interface HeaderProps {
-  createPlayer: (type: 'listen' | 'watch') => void
+  createPlayer?: (type: 'listen' | 'watch') => void
 }
 
-export default function Header({ createPlayer }: HeaderProps) {
+export default function Header({ createPlayer }: HeaderProps = {}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // Close mobile menu when clicking outside or on escape key
@@ -92,9 +92,9 @@ export default function Header({ createPlayer }: HeaderProps) {
           <Link href="/">
             <div className="flex items-center">
               <Image
-                alt="Power 104.1 FM logo with text 'All about love' below"
+                alt="NRG Radio Uganda logo"
                 className="h-16 w-auto"
-                src="https://mmo.aiircdn.com/1449/66d36cdd8c650.png"
+                src="/nrg-logo.webp"
                 width={64}
                 height={64}
               />
@@ -119,24 +119,24 @@ export default function Header({ createPlayer }: HeaderProps) {
 
           {/* Player Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <button
-              onClick={() => createPlayer('listen')}
+            <Link
+              href="/listen"
               className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-semibold text-sm"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
               <span>Listen</span>
-            </button>
-            <button
-              onClick={() => createPlayer('watch')}
+            </Link>
+            <Link
+              href="/watch"
               className="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-semibold text-sm"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5l-1 1v1h8v-1l-1-1h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 13H3V5h18v11z"/>
               </svg>
               <span>Watch</span>
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Toggle */}
@@ -265,34 +265,42 @@ export default function Header({ createPlayer }: HeaderProps) {
                     Get In Touch
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/login"
+                    className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-900 rounded-lg transition-colors border-l-2 border-red-600"
+                    onClick={closeMobileMenu}
+                  >
+                    <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span className="text-red-400 font-semibold">Admin Access</span>
+                  </Link>
+                </li>
               </ul>
               
               {/* Player Buttons - Mobile */}
               <div className="mt-6 space-y-3">
-                <button
-                  onClick={() => {
-                    createPlayer('listen')
-                    closeMobileMenu()
-                  }}
+                <Link
+                  href="/listen"
+                  onClick={closeMobileMenu}
                   className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors duration-200 font-semibold"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                   <span>Listen Live</span>
-                </button>
-                <button
-                  onClick={() => {
-                    createPlayer('watch')
-                    closeMobileMenu()
-                  }}
+                </Link>
+                <Link
+                  href="/watch"
+                  onClick={closeMobileMenu}
                   className="w-full flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition-colors duration-200 font-semibold"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5l-1 1v1h8v-1l-1-1h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 13H3V5h18v11z"/>
                   </svg>
                   <span>Watch Live</span>
-                </button>
+                </Link>
               </div>
             </nav>
 

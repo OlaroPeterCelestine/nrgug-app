@@ -74,6 +74,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/favicon-test/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/favicon-test">> = Specific
+  const handler = {} as typeof import("../../src/app/favicon-test/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/listen/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/listen">> = Specific
+  const handler = {} as typeof import("../../src/app/listen/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/login/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/login">> = Specific
@@ -128,10 +146,28 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/stream-test/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/stream-test">> = Specific
+  const handler = {} as typeof import("../../src/app/stream-test/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/video/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/video">> = Specific
   const handler = {} as typeof import("../../src/app/video/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/watch/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/watch">> = Specific
+  const handler = {} as typeof import("../../src/app/watch/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

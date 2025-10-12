@@ -42,10 +42,28 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
   metadataBase: new URL('https://nrgug-website.vercel.app'),
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/favicon.svg', sizes: '180x180', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'en_UG',
@@ -93,11 +111,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <script
           type="application/ld+json"
@@ -109,7 +122,7 @@ export default function RootLayout({
               "alternateName": ["NRG Radio", "NRG 106.5", "NRG Radio 106.5 FM"],
               "description": "The Number One Name in Music - Live from Nakasero, Kampala, Uganda",
               "url": "https://nrgug-website.vercel.app",
-              "logo": "https://nrgug-website.vercel.app/logo.png",
+              "logo": "https://nrgug-website.vercel.app/nrg-logo.webp",
               "image": "https://nrgug-website.vercel.app/og-image.jpg",
               "foundingDate": "2020",
               "areaServed": {
