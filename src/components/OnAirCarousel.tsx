@@ -129,6 +129,9 @@ export default function OnAirCarousel() {
   const getFilteredShows = () => {
     let filteredShows: Show[] = []
     
+    console.log('🔍 Filtering shows for selectedDay:', selectedDay)
+    console.log('📋 All shows:', shows.map(s => ({ id: s.id, name: s.show_name, day: s.day_of_week })))
+    
     if (selectedDay === 'weekdays') {
       filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
     } else if (selectedDay === 'Saturday') {
@@ -141,6 +144,9 @@ export default function OnAirCarousel() {
       // If no day selected or invalid selection, return empty array
       filteredShows = []
     }
+    
+    console.log('✅ Filtered shows result:', filteredShows.length, 'shows for', selectedDay)
+    console.log('📝 Filtered shows:', filteredShows.map(s => ({ id: s.id, name: s.show_name, day: s.day_of_week })))
     
     // Show all shows for the selected day - no time filtering
     
