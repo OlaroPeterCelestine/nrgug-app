@@ -63,7 +63,12 @@ export default function OnAirCarousel() {
       setLoading(true)
       const data = await apiUtils.fetchShows()
       console.log('✅ Shows data received:', data)
-      setShows((data || []).slice(0, 6)) // Show only the first 6 shows
+      console.log('📊 Total shows count:', data?.length || 0)
+      console.log('📅 Shows by day:', data?.reduce((acc: any, show: any) => {
+        acc[show.day_of_week] = (acc[show.day_of_week] || 0) + 1
+        return acc
+      }, {}) || {})
+      setShows(data || []) // Show all available shows
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
     } finally {
