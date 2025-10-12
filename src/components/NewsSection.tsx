@@ -26,7 +26,7 @@ export default function NewsSection() {
     try {
       console.log('🔍 Fetching news from API...')
       
-      const response = await fetch('/api/proxy/news', {
+      const response = await fetch('https://nrgug-api-production.up.railway.app/api/news', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

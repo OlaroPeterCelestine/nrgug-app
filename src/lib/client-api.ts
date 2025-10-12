@@ -1,6 +1,6 @@
-// Client-side API configuration - uses proxy to hide the real API URL
+// Client-side API configuration - uses direct Railway API
 export const CLIENT_API_CONFIG = {
-  BASE_URL: '/api/proxy', // This will be proxied to the real API
+  BASE_URL: 'https://nrgug-api-production.up.railway.app/api', // Direct API call
   TIMEOUT: 10000,
   HEADERS: {
     'Content-Type': 'application/json',

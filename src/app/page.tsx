@@ -50,7 +50,7 @@ export default function Home() {
   const fetchHeroNews = async () => {
     try {
       // First check if there's a hero selection from API
-      const heroResponse = await fetch('/api/proxy/hero-selection', {
+      const heroResponse = await fetch('https://nrgug-api-production.up.railway.app/api/hero-selection', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
