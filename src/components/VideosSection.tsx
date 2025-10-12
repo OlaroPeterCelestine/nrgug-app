@@ -64,7 +64,7 @@ export default function VideosSection() {
     }
   }
 
-  // Convert video URL to embed URL (supports YouTube and TikTok)
+  // Convert video URL to embed URL (supports YouTube)
   const getEmbedUrl = (url: string) => {
     console.log('🎬 Converting URL to embed:', url)
     
@@ -82,22 +82,6 @@ export default function VideosSection() {
       const embedUrl = `https://www.youtube.com/embed/${videoId}?mute=1`
       console.log('🎬 Converted YouTube to embed URL:', embedUrl)
       return embedUrl
-    }
-    
-    // Handle TikTok URLs
-    if (url.includes('tiktok.com/') && url.includes('/video/')) {
-      // Extract video ID from TikTok URL
-      const videoId = url.split('/video/')[1].split('?')[0]
-      const embedUrl = `https://www.tiktok.com/embed/${videoId}`
-      console.log('🎬 Converted TikTok to embed URL:', embedUrl)
-      return embedUrl
-    }
-    
-    // Handle TikTok short URLs
-    if (url.includes('vm.tiktok.com/') || url.includes('vt.tiktok.com/')) {
-      // For short URLs, we'll need to resolve them first, but for now return as-is
-      console.log('🎬 TikTok short URL detected:', url)
-      return url
     }
     
     console.log('🎬 URL not recognized, returning as-is:', url)
@@ -130,32 +114,14 @@ export default function VideosSection() {
             
             return (
               <div key={video.id} className="flex flex-col rounded-lg hover:bg-gray-900/50 transition-colors">
-                {embedUrl.includes('tiktok.com/embed') ? (
-                  <div className={`w-full ${videoHeight} rounded-lg flex-shrink-0 overflow-hidden`}>
-                    <blockquote 
-                      className="tiktok-embed w-full h-full"
-                      cite={video.video_url}
-                      data-video-id={embedUrl.split('/embed/')[1]}
-                      style={{ 
-                        maxWidth: '100%', 
-                        minWidth: '325px',
-                        height: '100%',
-                        width: '100%'
-                      }}
-                    >
-                      <section></section>
-                    </blockquote>
-                  </div>
-                ) : (
-                  <iframe
-                    className={`w-full ${videoHeight} rounded-lg flex-shrink-0`}
-                    src={embedUrl}
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
-                )}
+                <iframe
+                  className={`w-full ${videoHeight} rounded-lg flex-shrink-0`}
+                  src={embedUrl}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
                 <div className="mt-2">
                   <h4 className="font-bold text-xs lg:text-sm text-center">{video.title}</h4>
                 </div>
