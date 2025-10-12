@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: nrgug-postgres
+    environment:
+      POSTGRES_DB: nrgug
+      POSTGRES_USER: nrgug_user
+      POSTGRES_PASSWORD: nrgug_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./apis/sql:/docker-entrypoint-initdb.d
+    networks:
+      - nrgug-network
+
+  # Go API
+  api:
+    build:
+      context: ./apis
+      dockerfile: Dockerfile
+    container_name: nrgug-api
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: nrgug_user
+      DB_PASSWORD: nrgug_password
+      DB_NAME: nrgug
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      FROM_EMAIL: ${FROM_EMAIL}
+      FROM_NAME: ${FROM_NAME}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - ./apis/uploads:/root/uploads
+    networks:
+      - nrgug-network
+    restart: unless-stopped
+
+  # NRG Frontend
+  nrg-frontend:
+    build:
+      context: ./nrg
+      dockerfile: Dockerfile
+    container_name: nrgug-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - nrgug-network
+    restart: unless-stopped
+
+  # Admin Dashboard
+  admin-dashboard:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    container_name: nrgug-admin
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "3001:3000"
+    depends_on:
+      - api
+    networks:
+      - nrgug-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  nrgug-network:
+    driver: bridge
