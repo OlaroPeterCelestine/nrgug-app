@@ -78,20 +78,16 @@ export default function NewsSection() {
     }
   }
 
-  const mapToLocalUrl = (url: string): string => {
-    // Map R2 URLs to local URLs
-    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev')) {
-      // Extract the path from R2 URL and convert to local URL
-      const r2Path = url.split('pub-6481c927139b4654ace8022882acbd62.r2.dev')[1]
-      return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`
-    }
-    if (url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
-      // Extract the path from new R2 URL and convert to local URL
-      const r2Path = url.split('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')[1]
-      return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`
-    }
-    // If it's already a local URL, return as is
+  const mapToR2Url = (url: string): string => {
+    // Map old local URLs to R2 URLs
     if (url.includes('nrgug-api-production.up.railway.app/uploads/')) {
+      // Extract the path from local URL and convert to R2 URL
+      const localPath = url.split('nrgug-api-production.up.railway.app/uploads')[1]
+      return `https://pub-6481c927139b4654ace8022882acbd62.r2.dev${localPath}`
+    }
+    // If it's already an R2 URL, return as is
+    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev') || 
+        url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
       return url
     }
     return url
@@ -133,14 +129,14 @@ export default function NewsSection() {
               >
                 <div className="relative h-48 bg-gray-800">
                   {article.image && isValidImageUrl(article.image) ? (
-                    <Image
-                      src={mapToLocalUrl(article.image)}
-                      alt={article.title || `News article ${article.id}`}
-                      width={400}
-                      height={240}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={handleImageError}
-                    />
+        <Image
+          src={mapToR2Url(article.image)}
+          alt={article.title || `News article ${article.id}`}
+          width={400}
+          height={240}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={handleImageError}
+        />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
                       <i className="fas fa-image text-4xl mb-2"></i>
