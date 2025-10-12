@@ -17,7 +17,25 @@ interface Show {
 export default function OnAirCarousel() {
   const [shows, setShows] = useState<Show[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedDay, setSelectedDay] = useState<string>('')
+  
+  // Get current day and map to our day filter options
+  const getCurrentDayFilter = () => {
+    const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+    
+    if (['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(currentDay)) {
+      return 'weekdays'
+    } else if (currentDay === 'Friday') {
+      return 'Friday'
+    } else if (currentDay === 'Saturday') {
+      return 'Saturday'
+    } else if (currentDay === 'Sunday') {
+      return 'Sunday'
+    }
+    
+    return 'weekdays' // fallback
+  }
+  
+  const [selectedDay, setSelectedDay] = useState<string>(getCurrentDayFilter())
 
   useEffect(() => {
     fetchShows()
