@@ -1,15 +1,16 @@
 {
+  "/api/test/route": "/api/test",
   "/_not-found/page": "/_not-found",
   "/api/auth/login/route": "/api/auth/login",
   "/api/proxy/[...path]/route": "/api/proxy/[...path]",
   "/clients/page": "/clients",
-  "/contact/page": "/contact",
-  "/events/page": "/events",
-  "/login/page": "/login",
   "/news/[id]/page": "/news/[id]",
+  "/login/page": "/login",
   "/news/page": "/news",
-  "/page": "/",
+  "/events/page": "/events",
   "/shop/page": "/shop",
   "/shows/page": "/shows",
+  "/contact/page": "/contact",
+  "/page": "/",
   "/video/page": "/video"
 }
