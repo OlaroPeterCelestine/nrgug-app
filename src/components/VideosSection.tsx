@@ -132,14 +132,21 @@ export default function VideosSection() {
             return (
               <div key={video.id} className="flex flex-col rounded-lg hover:bg-gray-900/50 transition-colors">
                 {embedUrl.includes('tiktok.com/embed') ? (
-                  <blockquote 
-                    className={`tiktok-embed w-full ${videoHeight} rounded-lg flex-shrink-0`}
-                    cite={video.video_url}
-                    data-video-id={embedUrl.split('/embed/')[1]}
-                    style={{ maxWidth: '100%', minWidth: '325px' }}
-                  >
-                    <section></section>
-                  </blockquote>
+                  <div className={`w-full ${videoHeight} rounded-lg flex-shrink-0 overflow-hidden`}>
+                    <blockquote 
+                      className="tiktok-embed w-full h-full"
+                      cite={video.video_url}
+                      data-video-id={embedUrl.split('/embed/')[1]}
+                      style={{ 
+                        maxWidth: '100%', 
+                        minWidth: '325px',
+                        height: '100%',
+                        width: '100%'
+                      }}
+                    >
+                      <section></section>
+                    </blockquote>
+                  </div>
                 ) : (
                   <iframe
                     className={`w-full ${videoHeight} rounded-lg flex-shrink-0`}
