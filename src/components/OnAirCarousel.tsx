@@ -119,10 +119,7 @@ export default function OnAirCarousel() {
       filteredShows = []
     }
     
-    // Filter to only show shows that are currently on air or upcoming today
-    filteredShows = filteredShows.filter(show => 
-      isShowOnAirOrUpcoming(show) || isShowUpcomingToday(show)
-    )
+    // Show all shows for the selected day - no time filtering
     
     // Sort shows in order: Saturday → Sunday → Mon-Thu → Friday
     return filteredShows
@@ -275,8 +272,11 @@ export default function OnAirCarousel() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
             {getFilteredShows().map((show) => {
-              const isCurrentlyOnAir = isShowOnAirOrUpcoming(show)
-              const isUpcoming = isShowUpcomingToday(show)
+              // Only show LIVE/UPCOMING status for shows on the current day
+              const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+              const isCurrentDay = show.day_of_week === currentDay
+              const isCurrentlyOnAir = isCurrentDay && isShowOnAirOrUpcoming(show)
+              const isUpcoming = isCurrentDay && isShowUpcomingToday(show)
               
               return (
                 <div key={show.id} className="group">
