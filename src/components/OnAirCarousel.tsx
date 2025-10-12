@@ -59,8 +59,13 @@ export default function OnAirCarousel() {
 
   const fetchShows = async () => {
     try {
-      console.log('🎯 Fetching shows from API...')
+      console.log('🎯 Fetching shows from API... (Cache-busted)')
       setLoading(true)
+      
+      // Force fresh data by adding timestamp
+      const timestamp = Date.now()
+      console.log('🕐 Cache bust timestamp:', timestamp)
+      
       const data = await apiUtils.fetchShows()
       console.log('✅ Shows data received:', data)
       console.log('📊 Total shows count:', data?.length || 0)

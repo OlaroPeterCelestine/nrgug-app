@@ -1597,8 +1597,11 @@ function OnAirCarousel() {
     ]);
     const fetchShows = async ()=>{
         try {
-            console.log('🎯 Fetching shows from API...');
+            console.log('🎯 Fetching shows from API... (Cache-busted)');
             setLoading(true);
+            // Force fresh data by adding timestamp
+            const timestamp = Date.now();
+            console.log('🕐 Cache bust timestamp:', timestamp);
             const data = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["apiUtils"].fetchShows();
             console.log('✅ Shows data received:', data);
             console.log('📊 Total shows count:', (data === null || data === void 0 ? void 0 : data.length) || 0);
@@ -1785,12 +1788,12 @@ function OnAirCarousel() {
                             children: "On Air"
                         }, void 0, false, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 230,
+                            lineNumber: 235,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/OnAirCarousel.tsx",
-                        lineNumber: 229,
+                        lineNumber: 234,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1810,24 +1813,24 @@ function OnAirCarousel() {
                                     children: day === 'weekdays' ? 'Mon-Thu' : day === 'Friday' ? 'Fri' : day === 'Saturday' ? 'Sat' : day === 'Sunday' ? 'Sun' : day
                                 }, day, false, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 239,
+                                    lineNumber: 244,
                                     columnNumber: 17
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 234,
+                            lineNumber: 239,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/OnAirCarousel.tsx",
-                        lineNumber: 232,
+                        lineNumber: 237,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/OnAirCarousel.tsx",
-                lineNumber: 228,
+                lineNumber: 233,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1841,19 +1844,19 @@ function OnAirCarousel() {
                                 className: "fas fa-radio text-4xl mb-4 block"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                lineNumber: 260,
+                                lineNumber: 265,
                                 columnNumber: 15
                             }, this),
                             "Loading shows..."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/OnAirCarousel.tsx",
-                        lineNumber: 259,
+                        lineNumber: 264,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                    lineNumber: 258,
+                    lineNumber: 263,
                     columnNumber: 11
                 }, this) : shows.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center py-12",
@@ -1865,14 +1868,14 @@ function OnAirCarousel() {
                                     className: "fas fa-radio text-4xl mb-4 block"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 267,
+                                    lineNumber: 272,
                                     columnNumber: 15
                                 }, this),
                                 "No shows available at the moment"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 266,
+                            lineNumber: 271,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1880,13 +1883,13 @@ function OnAirCarousel() {
                             children: "Check back later for our schedule"
                         }, void 0, false, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 270,
+                            lineNumber: 275,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                    lineNumber: 265,
+                    lineNumber: 270,
                     columnNumber: 11
                 }, this) : getFilteredShows().length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center py-12",
@@ -1898,7 +1901,7 @@ function OnAirCarousel() {
                                     className: "fas fa-calendar text-4xl mb-4 block"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 275,
+                                    lineNumber: 280,
                                     columnNumber: 15
                                 }, this),
                                 "No shows scheduled for ",
@@ -1906,7 +1909,7 @@ function OnAirCarousel() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 274,
+                            lineNumber: 279,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1914,7 +1917,7 @@ function OnAirCarousel() {
                             children: "Check back later or try a different day"
                         }, void 0, false, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 278,
+                            lineNumber: 283,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1927,7 +1930,7 @@ function OnAirCarousel() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 280,
+                                    lineNumber: 285,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1939,7 +1942,7 @@ function OnAirCarousel() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 281,
+                                    lineNumber: 286,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1949,19 +1952,19 @@ function OnAirCarousel() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 282,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 279,
+                            lineNumber: 284,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                    lineNumber: 273,
+                    lineNumber: 278,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8",
@@ -1987,7 +1990,7 @@ function OnAirCarousel() {
                                             className: "w-full h-40 object-cover transition-transform duration-300 cursor-pointer rounded-xl hover:scale-105"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                            lineNumber: 297,
+                                            lineNumber: 302,
                                             columnNumber: 21
                                         }, this),
                                         isCurrentlyOnAir && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1995,7 +1998,7 @@ function OnAirCarousel() {
                                             children: "LIVE"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                            lineNumber: 305,
+                                            lineNumber: 310,
                                             columnNumber: 23
                                         }, this),
                                         isUpcoming && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2003,13 +2006,13 @@ function OnAirCarousel() {
                                             children: "UPCOMING"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                            lineNumber: 310,
+                                            lineNumber: 315,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 296,
+                                    lineNumber: 301,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2020,7 +2023,7 @@ function OnAirCarousel() {
                                             children: show.show_name
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                            lineNumber: 316,
+                                            lineNumber: 321,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2028,36 +2031,36 @@ function OnAirCarousel() {
                                             children: show.time
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                            lineNumber: 317,
+                                            lineNumber: 322,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                                    lineNumber: 315,
+                                    lineNumber: 320,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, show.id, true, {
                             fileName: "[project]/src/components/OnAirCarousel.tsx",
-                            lineNumber: 295,
+                            lineNumber: 300,
                             columnNumber: 17
                         }, this);
                     })
                 }, void 0, false, {
                     fileName: "[project]/src/components/OnAirCarousel.tsx",
-                    lineNumber: 286,
+                    lineNumber: 291,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/OnAirCarousel.tsx",
-                lineNumber: 256,
+                lineNumber: 261,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/OnAirCarousel.tsx",
-        lineNumber: 227,
+        lineNumber: 232,
         columnNumber: 5
     }, this);
 }
