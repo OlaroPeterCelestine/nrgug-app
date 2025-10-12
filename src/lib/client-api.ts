@@ -18,8 +18,8 @@ export function getClientApiUrl(endpoint: string): string {
 export async function clientFetch(endpoint: string, options: RequestInit = {}) {
   const url = getClientApiUrl(endpoint);
   
-  // Add cache-busting parameter to force fresh data
-  const cacheBuster = `?t=${Date.now()}`;
+  // Add aggressive cache-busting parameter to force fresh data
+  const cacheBuster = `?t=${Date.now()}&v=${Math.random().toString(36).substr(2, 9)}`;
   const finalUrl = url + cacheBuster;
   
   const response = await fetch(finalUrl, {
