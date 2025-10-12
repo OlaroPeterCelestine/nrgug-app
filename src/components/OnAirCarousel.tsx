@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { apiUtils } from '@/lib/api-utils'
 import Image from 'next/image'
-import Link from 'next/link'
 
 interface Show {
   id: number
@@ -69,10 +68,10 @@ export default function OnAirCarousel() {
       const data = await apiUtils.fetchShows()
       console.log('✅ Shows data received:', data)
       console.log('📊 Total shows count:', data?.length || 0)
-      console.log('📅 Shows by day:', data?.reduce((acc: any, show: any) => {
+      console.log('📅 Shows by day:', data?.reduce((acc: Record<string, number>, show: Show) => {
         acc[show.day_of_week] = (acc[show.day_of_week] || 0) + 1
         return acc
-      }, {}) || {})
+      }, {} as Record<string, number>) || {})
       setShows(data || []) // Show all available shows
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
@@ -182,7 +181,6 @@ export default function OnAirCarousel() {
     
     const today = new Date().getDay()
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    const currentDayName = dayNames[today]
     
     // Check for each day group
     const hasWeekdays = uniqueDays.some(day => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day))

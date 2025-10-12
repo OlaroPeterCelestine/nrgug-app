@@ -71,7 +71,7 @@ export default function ContactPage() {
           <div className="text-center mb-16">
             <h1 className="text-5xl font-bold mb-6">Get in Touch</h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Ready to partner with NRG Radio? We're here to help you reach your audience and grow your business.
+              Ready to partner with NRG Radio? We&apos;re here to help you reach your audience and grow your business.
             </p>
           </div>
 

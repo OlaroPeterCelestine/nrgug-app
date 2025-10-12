@@ -104,7 +104,7 @@ export default function VideosSection() {
         </div>
       ) : videos.length > 0 ? (
         <div className="grid grid-cols-3 lg:block lg:space-y-0 gap-0">
-          {videos.map((video, index) => {
+          {videos.map((video) => {
             console.log('🎬 Rendering video:', video)
             const embedUrl = getEmbedUrl(video.video_url)
             console.log('🎬 Final embed URL:', embedUrl)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { apiUtils } from '@/lib/api-utils'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Player from '@/components/Player'
@@ -112,7 +113,7 @@ export default function NewsPage() {
             <div className="max-w-4xl">
               {/* Breadcrumb */}
               <nav className="flex items-center space-x-2 text-sm text-gray-400 mb-6">
-                <a href="/" className="hover:text-red-500 transition-colors">Home</a>
+                <Link href="/" className="hover:text-red-500 transition-colors">Home</Link>
                 <span>/</span>
                 <span className="text-red-500">News</span>
               </nav>

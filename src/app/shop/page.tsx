@@ -211,7 +211,7 @@ export default function ShopPage() {
               <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-xl p-8 text-center">
                 <h3 className="text-2xl font-bold text-white mb-4">Limited Edition Collection</h3>
                 <p className="text-red-100 mb-6">
-                  Get your hands on our exclusive limited edition items before they're gone forever.
+                  Get your hands on our exclusive limited edition items before they&apos;re gone forever.
                 </p>
                 <button className="bg-white text-red-600 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">
                   Shop Now

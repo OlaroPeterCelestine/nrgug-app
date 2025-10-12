@@ -97,7 +97,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-bold tracking-wider">HYPE-MAIL</h3>
             <div className="bg-black p-4 text-center rounded-lg shadow-lg">
-              <h4 className="font-playfair text-2xl mb-4">Don't miss the party!</h4>
+              <h4 className="font-playfair text-2xl mb-4">Don&apos;t miss the party!</h4>
               <form onSubmit={handleEmailSubmit}>
                 <input
                   type="email"

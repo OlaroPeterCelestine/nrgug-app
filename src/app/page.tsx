@@ -30,11 +30,11 @@ export default function Home() {
 
   const createPlayer = (type: 'listen' | 'watch') => {
     const id = `player_${Date.now()}`
-    setPlayers(prev => [...prev, { id, type }])
+    setPlayers((prev: Array<{ id: string; type: 'listen' | 'watch' }>) => [...prev, { id, type }])
   }
 
   const removePlayer = (id: string) => {
-    setPlayers(prev => prev.filter(player => player.id !== id))
+    setPlayers((prev: Array<{ id: string; type: 'listen' | 'watch' }>) => prev.filter((player: { id: string; type: 'listen' | 'watch' }) => player.id !== id))
   }
 
   useEffect(() => {
@@ -346,7 +346,7 @@ export default function Home() {
 
             {/* Container for floating players */}
             <div id="playerContainer" className="fixed inset-0 pointer-events-none">
-              {players.map(player => (
+              {players.map((player: { id: string; type: 'listen' | 'watch' }) => (
                 <Player
                   key={player.id}
                   id={player.id}
