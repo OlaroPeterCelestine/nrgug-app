@@ -119,17 +119,21 @@ export default function VideosSection() {
           ))}
         </div>
       ) : videos.length > 0 ? (
-        <div className="grid grid-cols-3 lg:block lg:space-y-0 gap-0">
-          {videos.map((video) => {
+        <div className="grid grid-cols-1 lg:block lg:space-y-4 gap-4">
+          {videos.map((video, index) => {
             console.log('🎬 Rendering video:', video)
             const embedUrl = getEmbedUrl(video.video_url)
             console.log('🎬 Final embed URL:', embedUrl)
             
+            // First video gets main story height, others get minor story height
+            const isMainVideo = index === 0
+            const videoHeight = isMainVideo ? 'h-[38rem]' : 'h-[200px] lg:h-[288px]'
+            
             return (
-              <div key={video.id} className="flex flex-col p-1 rounded-lg hover:bg-gray-900/50 transition-colors">
+              <div key={video.id} className="flex flex-col rounded-lg hover:bg-gray-900/50 transition-colors">
                 {embedUrl.includes('tiktok.com/embed') ? (
                   <blockquote 
-                    className="tiktok-embed w-full h-21 lg:h-25 rounded-lg flex-shrink-0" 
+                    className={`tiktok-embed w-full ${videoHeight} rounded-lg flex-shrink-0`}
                     cite={video.video_url}
                     data-video-id={embedUrl.split('/embed/')[1]}
                     style={{ maxWidth: '100%', minWidth: '325px' }}
@@ -138,7 +142,7 @@ export default function VideosSection() {
                   </blockquote>
                 ) : (
                   <iframe
-                    className="w-full h-21 lg:h-25 rounded-lg flex-shrink-0"
+                    className={`w-full ${videoHeight} rounded-lg flex-shrink-0`}
                     src={embedUrl}
                     title={video.title}
                     frameBorder="0"
