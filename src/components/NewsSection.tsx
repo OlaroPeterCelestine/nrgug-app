@@ -90,6 +90,10 @@ export default function NewsSection() {
         url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
       return url
     }
+    // If it's a new R2 URL format, return as is
+    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev/nrgug/')) {
+      return url
+    }
     return url
   }
 
