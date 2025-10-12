@@ -83,15 +83,12 @@ export default function NewsSection() {
     if (url.includes('nrgug-api-production.up.railway.app/uploads/')) {
       // Extract the path from local URL and convert to R2 URL
       const localPath = url.split('nrgug-api-production.up.railway.app/uploads')[1]
-      return `https://pub-6481c927139b4654ace8022882acbd62.r2.dev/nrgug${localPath}`
+      return `https://pub-1a0cc46c23f84b8ebf3f69e9b90b4314.r2.dev/nrgug${localPath}`
     }
     // If it's already an R2 URL, return as is
-    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev') ||
+    if (url.includes('pub-1a0cc46c23f84b8ebf3f69e9b90b4314.r2.dev') ||
+        url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev') ||
         url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
-      return url
-    }
-    // If it's a new R2 URL format, return as is
-    if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev/nrgug/')) {
       return url
     }
     return url
