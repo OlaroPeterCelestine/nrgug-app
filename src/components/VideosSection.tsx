@@ -22,7 +22,7 @@ export default function VideosSection() {
       setLoading(true)
       console.log('🎬 Fetching videos from API...')
       
-      const response = await fetch('/api/proxy/videos', {
+      const response = await fetch('https://nrgug-api-production.up.railway.app/api/videos', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -64,24 +64,40 @@ export default function VideosSection() {
     }
   }
 
-  // Convert YouTube URL to embed URL
+  // Convert video URL to embed URL (supports YouTube and TikTok)
   const getEmbedUrl = (url: string) => {
     console.log('🎬 Converting URL to embed:', url)
     
-    // Handle youtube.com/watch?v= format
+    // Handle YouTube youtube.com/watch?v= format
     if (url.includes('youtube.com/watch?v=')) {
       const videoId = url.split('v=')[1].split('&')[0]
       const embedUrl = `https://www.youtube.com/embed/${videoId}?mute=1`
-      console.log('🎬 Converted to embed URL:', embedUrl)
+      console.log('🎬 Converted YouTube to embed URL:', embedUrl)
       return embedUrl
     }
     
-    // Handle youtu.be/ format
+    // Handle YouTube youtu.be/ format
     if (url.includes('youtu.be/')) {
       const videoId = url.split('youtu.be/')[1].split('?')[0]
       const embedUrl = `https://www.youtube.com/embed/${videoId}?mute=1`
-      console.log('🎬 Converted to embed URL:', embedUrl)
+      console.log('🎬 Converted YouTube to embed URL:', embedUrl)
       return embedUrl
+    }
+    
+    // Handle TikTok URLs
+    if (url.includes('tiktok.com/') && url.includes('/video/')) {
+      // Extract video ID from TikTok URL
+      const videoId = url.split('/video/')[1].split('?')[0]
+      const embedUrl = `https://www.tiktok.com/embed/${videoId}`
+      console.log('🎬 Converted TikTok to embed URL:', embedUrl)
+      return embedUrl
+    }
+    
+    // Handle TikTok short URLs
+    if (url.includes('vm.tiktok.com/') || url.includes('vt.tiktok.com/')) {
+      // For short URLs, we'll need to resolve them first, but for now return as-is
+      console.log('🎬 TikTok short URL detected:', url)
+      return url
     }
     
     console.log('🎬 URL not recognized, returning as-is:', url)
@@ -111,14 +127,25 @@ export default function VideosSection() {
             
             return (
               <div key={video.id} className="flex flex-col p-1 rounded-lg hover:bg-gray-900/50 transition-colors">
-                <iframe
-                  className="w-full h-21 lg:h-25 rounded-lg flex-shrink-0"
-                  src={embedUrl}
-                  title={video.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
+                {embedUrl.includes('tiktok.com/embed') ? (
+                  <blockquote 
+                    className="tiktok-embed w-full h-21 lg:h-25 rounded-lg flex-shrink-0" 
+                    cite={video.video_url}
+                    data-video-id={embedUrl.split('/embed/')[1]}
+                    style={{ maxWidth: '100%', minWidth: '325px' }}
+                  >
+                    <section></section>
+                  </blockquote>
+                ) : (
+                  <iframe
+                    className="w-full h-21 lg:h-25 rounded-lg flex-shrink-0"
+                    src={embedUrl}
+                    title={video.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                )}
                 <div className="mt-2">
                   <h4 className="font-bold text-xs lg:text-sm text-center">{video.title}</h4>
                 </div>
