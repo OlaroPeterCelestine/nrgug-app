@@ -203,7 +203,7 @@ export default function OnAirCarousel() {
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
           {/* Day Filter */}
           <div className="flex flex-wrap gap-2">
-            {['Saturday', 'Sunday', 'weekdays', 'Friday'].map((day) => {
+            {['weekdays', 'Friday', 'Saturday', 'Sunday'].map((day) => {
               const isSelected = selectedDay === day
               
               return (
