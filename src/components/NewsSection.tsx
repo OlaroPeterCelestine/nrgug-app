@@ -86,6 +86,12 @@ export default function NewsSection() {
     return url
   }
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log('Image failed to load:', e.currentTarget.src)
+    // Replace with placeholder
+    e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI0MCIgdmlld0JveD0iMCAwIDQwMCAyNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjQwIiBmaWxsPSIjMzc0MTUxIi8+CjxwYXRoIGQ9Ik0xNzUgMTAwSDIyNVYxNDBIMTc1VjEwMFoiIGZpbGw9IiM2QjcyODAiLz4KPHBhdGggZD0iTTE5NSAxMjBIMjA1VjEzMEgxOTVWMTIwWiIgZmlsbD0iIzlDQTNBRiIvPgo8dGV4dCB4PSIyMDAiIHk9IjE2MCIgZmlsbD0iIzlDQTNBRiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSBVbmF2YWlsYWJsZTwvdGV4dD4KPC9zdmc+'
+  }
+
   return (
     <section className="max-w-7xl mx-auto mt-24 mb-16">
       <div className="container mx-auto px-4">
@@ -122,10 +128,12 @@ export default function NewsSection() {
                       width={400}
                       height={240}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={handleImageError}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <i className="fas fa-image text-gray-600 text-4xl"></i>
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+                      <i className="fas fa-image text-4xl mb-2"></i>
+                      <span className="text-sm">No Image</span>
                     </div>
                   )}
                   <div className="absolute top-4 left-4">
