@@ -65,7 +65,7 @@ export default function Footer() {
             >
               info@106.5nrgradio.ug
             </a>
-            <p className="text-xl font-bold tracking-wider pt-2">+256 771 751454</p>
+            <p className="text-xl font-bold tracking-wider pt-2">0740674674</p>
           </div>
 
           <div className="space-y-4">

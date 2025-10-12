@@ -1151,7 +1151,7 @@ function WhatsAppButton() {
         }
     ];
     const handleInquiryClick = (inquiry)=>{
-        const phoneNumber = '256700000000' // Add your WhatsApp number here
+        const phoneNumber = '256740674674' // NRG Radio WhatsApp number
         ;
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(inquiry.message)}`;
         window.open(whatsappUrl, '_blank');
