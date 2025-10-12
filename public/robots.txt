@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://nrgug-website.vercel.app/sitemap.xml
+
+# Disallow admin and login pages from indexing
+Disallow: /login
+Disallow: /admin/
+
+# Allow all other content
+Allow: /news/
+Allow: /shows/
+Allow: /videos/
+Allow: /contact
