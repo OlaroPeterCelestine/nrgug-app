@@ -40,7 +40,7 @@ export default function Home() {
     // Simulate loading time - reduced for faster display
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 1000)
+    }, 500)
     
     fetchHeroNews()
     
