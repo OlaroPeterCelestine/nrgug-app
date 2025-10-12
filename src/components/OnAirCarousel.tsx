@@ -54,7 +54,7 @@ export default function OnAirCarousel() {
   }
 
   // Function to check if a show is currently on air or upcoming
-  const isShowOnAirOrUpcoming = (show) => {
+  const isShowOnAirOrUpcoming = (show: Show) => {
     const now = new Date()
     const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
     const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
