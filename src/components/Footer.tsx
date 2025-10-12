@@ -60,10 +60,10 @@ export default function Footer() {
               <p>Kampala.</p>
             </div>
             <a
-              href="mailto:info@106.5nrgradio.ug"
+              href="mailto:tech@nrgug.radio"
               className="text-red-600 underline decoration-red-600 underline-offset-4 hover:text-red-500 transition-smooth text-sm"
             >
-              info@106.5nrgradio.ug
+              tech@nrgug.radio
             </a>
             <p className="text-xl font-bold tracking-wider pt-2">0740674674</p>
           </div>

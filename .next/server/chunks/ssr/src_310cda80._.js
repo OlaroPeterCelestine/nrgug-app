@@ -871,9 +871,9 @@ function Footer() {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                    href: "mailto:info@106.5nrgradio.ug",
+                                    href: "mailto:tech@nrgug.radio",
                                     className: "text-red-600 underline decoration-red-600 underline-offset-4 hover:text-red-500 transition-smooth text-sm",
-                                    children: "info@106.5nrgradio.ug"
+                                    children: "tech@nrgug.radio"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Footer.tsx",
                                     lineNumber: 62,
