@@ -107,7 +107,7 @@ export default function OnAirCarousel() {
     let filteredShows: Show[] = []
     
     if (selectedDay === 'weekdays') {
-      filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
+      filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].includes(show.day_of_week))
     } else if (selectedDay === 'Saturday') {
       filteredShows = shows.filter(show => show.day_of_week === 'Saturday')
     } else if (selectedDay === 'Sunday') {
@@ -119,10 +119,18 @@ export default function OnAirCarousel() {
       filteredShows = []
     }
     
-    // Filter to only show shows that are currently on air or upcoming today
-    filteredShows = filteredShows.filter(show => 
-      isShowOnAirOrUpcoming(show) || isShowUpcomingToday(show)
-    )
+    // For the current day, filter to show shows that are currently on air or upcoming
+    // For other days, show all shows for that day
+    const now = new Date()
+    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
+    
+    if (selectedDay === currentDay) {
+      // For current day, only show shows that are on air or upcoming
+      filteredShows = filteredShows.filter(show => 
+        isShowOnAirOrUpcoming(show) || isShowUpcomingToday(show)
+      )
+    }
+    // For other days, show all shows (no time filtering)
     
     // Sort shows in order: Saturday → Sunday → Mon-Thu → Friday
     return filteredShows
