@@ -119,15 +119,14 @@ export default function VideosSection() {
           ))}
         </div>
       ) : videos.length > 0 ? (
-        <div className="grid grid-cols-1 lg:block lg:space-y-4 gap-4">
+        <div className="grid grid-cols-3 lg:block lg:space-y-0 gap-0">
           {videos.map((video, index) => {
             console.log('🎬 Rendering video:', video)
             const embedUrl = getEmbedUrl(video.video_url)
             console.log('🎬 Final embed URL:', embedUrl)
             
-            // First video gets main story height, others get minor story height
-            const isMainVideo = index === 0
-            const videoHeight = isMainVideo ? 'h-[38rem]' : 'h-[200px] lg:h-[288px]'
+            // Use original smaller rectangle heights for all videos
+            const videoHeight = 'h-21 lg:h-25'
             
             return (
               <div key={video.id} className="flex flex-col rounded-lg hover:bg-gray-900/50 transition-colors">
