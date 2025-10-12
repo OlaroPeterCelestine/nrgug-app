@@ -84,7 +84,26 @@ export default function Home() {
         }
       }
 
-      // No fallback - if hero selection fails, show empty
+      // Fallback: fetch regular news if no hero selection
+      console.log('No hero selection found, fetching regular news as fallback')
+      const newsResponse = await fetch('https://nrgug-api-production.up.railway.app/api/news', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+      })
+      
+      if (newsResponse.ok) {
+        const newsData = await newsResponse.json()
+        if (newsData && newsData.length > 0) {
+          // Use first 3 news articles as hero content
+          setHeroNews(newsData.slice(0, 3))
+          return
+        }
+      }
+      
+      // If all else fails, show empty
       setHeroNews([])
     } catch (error) {
       console.error('Error fetching hero news:', error)
