@@ -45,7 +45,7 @@ export default function OnAirCarousel() {
       setLoading(true)
       const data = await apiUtils.fetchShows()
       console.log('✅ Shows data received:', data)
-      setShows((data || []).slice(0, 6)) // Show only the first 6 shows
+      setShows(data || []) // Show all shows
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
     } finally {
@@ -119,18 +119,7 @@ export default function OnAirCarousel() {
       filteredShows = []
     }
     
-    // For the current day, filter to show shows that are currently on air or upcoming
-    // For other days, show all shows for that day
-    const now = new Date()
-    const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
-    
-    if (selectedDay === currentDay) {
-      // For current day, only show shows that are on air or upcoming
-      filteredShows = filteredShows.filter(show => 
-        isShowOnAirOrUpcoming(show) || isShowUpcomingToday(show)
-      )
-    }
-    // For other days, show all shows (no time filtering)
+    // Show all shows for the selected day - no time filtering
     
     // Sort shows in order: Saturday → Sunday → Mon-Thu → Friday
     return filteredShows
