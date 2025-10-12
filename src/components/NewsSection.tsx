@@ -78,10 +78,17 @@ export default function NewsSection() {
     }
   }
 
-  const mapOldR2Url = (url: string): string => {
-    // Map old R2 URLs to new R2 URLs
+  const mapToLocalUrl = (url: string): string => {
+    // Map R2 URLs to local URLs
     if (url.includes('pub-6481c927139b4654ace8022882acbd62.r2.dev')) {
-      return url.replace('pub-6481c927139b4654ace8022882acbd62.r2.dev', 'pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')
+      // Extract the path from R2 URL and convert to local URL
+      const r2Path = url.split('pub-6481c927139b4654ace8022882acbd62.r2.dev')[1]
+      return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`
+    }
+    if (url.includes('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')) {
+      // Extract the path from new R2 URL and convert to local URL
+      const r2Path = url.split('pub-56fa6cb20f9f4070b3dcbdf365d81f80.r2.dev')[1]
+      return `https://nrgug-api-production.up.railway.app/uploads${r2Path}`
     }
     return url
   }
@@ -123,7 +130,7 @@ export default function NewsSection() {
                 <div className="relative h-48 bg-gray-800">
                   {article.image && isValidImageUrl(article.image) ? (
                     <Image
-                      src={mapOldR2Url(article.image)}
+                      src={mapToLocalUrl(article.image)}
                       alt={article.title || `News article ${article.id}`}
                       width={400}
                       height={240}
