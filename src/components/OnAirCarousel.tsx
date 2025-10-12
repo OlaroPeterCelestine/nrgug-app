@@ -104,7 +104,7 @@ export default function OnAirCarousel() {
   }
 
   const getFilteredShows = () => {
-    let filteredShows = []
+    let filteredShows: Show[] = []
     
     if (selectedDay === 'weekdays') {
       filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
