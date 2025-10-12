@@ -199,22 +199,6 @@ export default function OnAirCarousel() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 max-w-7xl mx-auto gap-4">
         <div>
           <h1 className="text-3xl font-bold">On Air</h1>
-          {shows.length > 0 && (
-            <p className="text-gray-400 text-sm mt-1">
-              {selectedDay === 'all' 
-                ? `Showing all ${shows.length} shows`
-                : selectedDay === 'weekdays'
-                  ? `Showing ${getFilteredShows().length} shows for Mon-Thu`
-                  : selectedDay === 'Friday'
-                    ? `Showing ${getFilteredShows().length} shows for Fri`
-                    : selectedDay === 'Saturday'
-                      ? `Showing ${getFilteredShows().length} shows for Sat`
-                      : selectedDay === 'Sunday'
-                        ? `Showing ${getFilteredShows().length} shows for Sun`
-                        : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
-              }
-            </p>
-          )}
         </div>
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
           {/* Day Filter */}
