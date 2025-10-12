@@ -45,7 +45,7 @@ export default function OnAirCarousel() {
       setLoading(true)
       const data = await apiUtils.fetchShows()
       console.log('✅ Shows data received:', data)
-      setShows(data || []) // Show all shows
+      setShows((data || []).slice(0, 6)) // Show only the first 6 shows
     } catch (error) {
       console.error('💥 Error fetching shows:', error)
     } finally {
@@ -54,7 +54,7 @@ export default function OnAirCarousel() {
   }
 
   // Function to check if a show is currently on air or upcoming
-  const isShowOnAirOrUpcoming = (show: Show) => {
+  const isShowOnAirOrUpcoming = (show) => {
     const now = new Date()
     const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
     const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
@@ -81,7 +81,7 @@ export default function OnAirCarousel() {
   }
 
   // Function to check if a show is upcoming today
-  const isShowUpcomingToday = (show: Show) => {
+  const isShowUpcomingToday = (show) => {
     const now = new Date()
     const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' })
     const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
@@ -104,10 +104,10 @@ export default function OnAirCarousel() {
   }
 
   const getFilteredShows = () => {
-    let filteredShows: Show[] = []
+    let filteredShows = []
     
     if (selectedDay === 'weekdays') {
-      filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].includes(show.day_of_week))
+      filteredShows = shows.filter(show => ['Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(show.day_of_week))
     } else if (selectedDay === 'Saturday') {
       filteredShows = shows.filter(show => show.day_of_week === 'Saturday')
     } else if (selectedDay === 'Sunday') {
@@ -119,7 +119,10 @@ export default function OnAirCarousel() {
       filteredShows = []
     }
     
-    // Show all shows for the selected day - no time filtering
+    // Filter to only show shows that are currently on air or upcoming today
+    filteredShows = filteredShows.filter(show => 
+      isShowOnAirOrUpcoming(show) || isShowUpcomingToday(show)
+    )
     
     // Sort shows in order: Saturday → Sunday → Mon-Thu → Friday
     return filteredShows
@@ -199,6 +202,22 @@ export default function OnAirCarousel() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 max-w-7xl mx-auto gap-4">
         <div>
           <h1 className="text-3xl font-bold">On Air</h1>
+          {shows.length > 0 && (
+            <p className="text-gray-400 text-sm mt-1">
+              {selectedDay === 'all' 
+                ? `Showing all ${shows.length} shows`
+                : selectedDay === 'weekdays'
+                  ? `Showing ${getFilteredShows().length} shows for Mon-Thu`
+                  : selectedDay === 'Friday'
+                    ? `Showing ${getFilteredShows().length} shows for Fri`
+                    : selectedDay === 'Saturday'
+                      ? `Showing ${getFilteredShows().length} shows for Sat`
+                      : selectedDay === 'Sunday'
+                        ? `Showing ${getFilteredShows().length} shows for Sun`
+                        : `Showing ${getFilteredShows().length} shows for ${selectedDay}`
+              }
+            </p>
+          )}
         </div>
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
           {/* Day Filter */}
@@ -282,7 +301,9 @@ export default function OnAirCarousel() {
                   </div>
                   <div className="mt-4 text-center">
                     <h3 className="text-lg font-bold mb-2">{show.show_name}</h3>
-                    <p className="text-red-500 font-semibold">{show.time}</p>
+                    <p className="text-gray-300 text-sm mb-1">{show.presenters}</p>
+                    <p className="font-semibold mb-1 text-red-500">{show.time}</p>
+                    <p className="text-sm text-gray-400">{show.day_of_week}</p>
                   </div>
                 </div>
               )
