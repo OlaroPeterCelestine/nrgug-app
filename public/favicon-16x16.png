@@ -1,0 +1,14 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="8" cy="8" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- NRG Text -->
+  <text x="8" y="6" font-family="Arial, sans-serif" font-size="4" font-weight="bold" text-anchor="middle" fill="white">NRG</text>
+  
+  <!-- Radio waves -->
+  <circle cx="8" cy="10" r="1.5" fill="none" stroke="white" stroke-width="0.5"/>
+  <circle cx="8" cy="10" r="2.5" fill="none" stroke="white" stroke-width="0.5" opacity="0.7"/>
+  <circle cx="8" cy="10" r="3.5" fill="none" stroke="white" stroke-width="0.5" opacity="0.4"/>
+</svg>
+
+
