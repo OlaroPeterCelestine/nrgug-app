@@ -64,11 +64,6 @@ export default function ClientCarousel() {
         <header className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold">Clientele</h2>
-            {clients.length > 0 && (
-              <p className="text-gray-400 text-sm mt-1">
-                Showing {Math.min(6, clients.length)} of {clients.length} clients
-              </p>
-            )}
           </div>
           <Link 
             href="/clients"

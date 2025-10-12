@@ -2598,31 +2598,15 @@ function ClientCarousel() {
                     className: "flex justify-between items-center mb-8",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-3xl font-bold",
-                                    children: "Clientele"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/ClientCarousel.tsx",
-                                    lineNumber: 66,
-                                    columnNumber: 13
-                                }, this),
-                                clients.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-gray-400 text-sm mt-1",
-                                    children: [
-                                        "Showing ",
-                                        Math.min(6, clients.length),
-                                        " of ",
-                                        clients.length,
-                                        " clients"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/ClientCarousel.tsx",
-                                    lineNumber: 68,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                className: "text-3xl font-bold",
+                                children: "Clientele"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ClientCarousel.tsx",
+                                lineNumber: 66,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/src/components/ClientCarousel.tsx",
                             lineNumber: 65,
                             columnNumber: 11
@@ -2633,7 +2617,7 @@ function ClientCarousel() {
                             children: "View All Clients"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ClientCarousel.tsx",
-                            lineNumber: 73,
+                            lineNumber: 68,
                             columnNumber: 11
                         }, this)
                     ]
@@ -2652,14 +2636,14 @@ function ClientCarousel() {
                                     className: "fas fa-building text-4xl mb-4 block"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ClientCarousel.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 79,
                                     columnNumber: 15
                                 }, this),
                                 "No clients available at the moment"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ClientCarousel.tsx",
-                            lineNumber: 83,
+                            lineNumber: 78,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2667,13 +2651,13 @@ function ClientCarousel() {
                             children: "Check back later for our client partners"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ClientCarousel.tsx",
-                            lineNumber: 87,
+                            lineNumber: 82,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ClientCarousel.tsx",
-                    lineNumber: 82,
+                    lineNumber: 77,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8",
@@ -2693,12 +2677,12 @@ function ClientCarousel() {
                                     title: client.name || `Client ${client.id}`
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ClientCarousel.tsx",
-                                    lineNumber: 103,
+                                    lineNumber: 98,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ClientCarousel.tsx",
-                                lineNumber: 97,
+                                lineNumber: 92,
                                 columnNumber: 19
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 src: getImageSrc(client),
@@ -2709,17 +2693,17 @@ function ClientCarousel() {
                                 title: client.name || `Client ${client.id}`
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ClientCarousel.tsx",
-                                lineNumber: 113,
+                                lineNumber: 108,
                                 columnNumber: 19
                             }, this)
                         }, client.id, false, {
                             fileName: "[project]/src/components/ClientCarousel.tsx",
-                            lineNumber: 92,
+                            lineNumber: 87,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/components/ClientCarousel.tsx",
-                    lineNumber: 90,
+                    lineNumber: 85,
                     columnNumber: 11
                 }, this)
             ]
