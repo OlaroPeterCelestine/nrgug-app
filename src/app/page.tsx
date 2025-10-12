@@ -227,7 +227,118 @@ export default function Home() {
         ) : (
           <>
             {/* Hero Section */}
-          
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
+              {/* SEO-optimized heading and description - Clean text display */}
+
+              
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                  {/* Main Story Column */}
+                  <div className="lg:col-span-2">
+                    {heroNews[0] && (
+                      <div className="rounded-lg overflow-hidden relative group h-full transition-all hover:-translate-y-1">
+                        <Image
+                          src={getImageSrc(heroNews[0].image)}
+                          alt={heroNews[0].title || "Main news story"}
+                          width={800}
+                          height={512}
+                          className="w-full h-[38rem] object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded">
+                          {heroNews[0].category || "Fresh drop"}
+                        </span>
+                        <div className="absolute bottom-0 left-0 p-6">
+                          <p className="text-sm text-gray-300 mb-2">{formatDate(heroNews[0].timestamp)}</p>
+                          <h2 className="text-3xl font-bold mb-4">
+                            {heroNews[0].title}
+                          </h2>
+                          <button 
+                            onClick={() => {
+                              console.log('Main story Read More clicked, navigating to:', `/news/${heroNews[0].id}`)
+                              router.push(`/news/${heroNews[0].id}`)
+                            }}
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors cursor-pointer z-10 relative"
+                            type="button"
+                          >
+                            Read More
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Minor Stories Column - Mobile: 2 columns, Desktop: 1 column */}
+                  <div className="lg:col-span-1 grid grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-8">
+                    {heroNews[1] && (
+                      <div className="rounded-lg overflow-hidden relative group h-[200px] lg:h-[288px] transition-all hover:-translate-y-1">
+                        <Image
+                          src={getImageSrc(heroNews[1].image)}
+                          alt={heroNews[1].title || "Minor news story 1"}
+                          width={400}
+                          height={200}
+                          priority
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded">
+                          {heroNews[1].category || "Hit"}
+                        </span>
+                        <div className="absolute bottom-0 left-0 p-3 lg:p-5">
+                          <p className="text-xs lg:text-xs text-gray-300 mb-1 lg:mb-2">{formatDate(heroNews[1].timestamp)}</p>
+                          <h3 className="text-xs lg:text-sm font-bold mb-2">
+                            {heroNews[1].title}
+                          </h3>
+                          <button 
+                            onClick={() => {
+                              console.log('Minor story 1 Read More clicked, navigating to:', `/news/${heroNews[1].id}`)
+                              router.push(`/news/${heroNews[1].id}`)
+                            }}
+                            className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors cursor-pointer z-10 relative"
+                            type="button"
+                          >
+                            Read More
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    {heroNews[2] && (
+                      <div className="rounded-lg overflow-hidden relative group h-[200px] lg:h-[288px] transition-all hover:-translate-y-1">
+                        <Image
+                          src={getImageSrc(heroNews[2].image)}
+                          alt={heroNews[2].title || "Minor news story 2"}
+                          width={400}
+                          height={200}
+                          priority
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <span className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded">
+                          {heroNews[2].category || "Icy"}
+                        </span>
+                        <div className="absolute bottom-0 left-0 p-3 lg:p-5">
+                          <p className="text-xs lg:text-xs text-gray-300 mb-1 lg:mb-2">{formatDate(heroNews[2].timestamp)}</p>
+                          <h3 className="text-xs lg:text-sm font-bold mb-2">
+                            {heroNews[2].title}
+                          </h3>
+                          <button 
+                            onClick={() => {
+                              console.log('Minor story 2 Read More clicked, navigating to:', `/news/${heroNews[2].id}`)
+                              router.push(`/news/${heroNews[2].id}`)
+                            }}
+                            className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors cursor-pointer z-10 relative"
+                            type="button"
+                          >
+                            Read More
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Videos Column */}
+                  <VideosSection />
+                </div>
+            </section>
 
             {/* Client Carousel */}
             <ClientCarousel />

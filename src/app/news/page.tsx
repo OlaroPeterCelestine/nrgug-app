@@ -11,7 +11,6 @@ import Image from 'next/image'
 interface NewsArticle {
   id: number
   title: string
-  story: string
   image?: string
   timestamp?: string
   author?: string
@@ -212,9 +211,7 @@ export default function NewsPage() {
                     <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">
                       {mainArticle.title}
                     </h1>
-                    <p className="text-gray-300 mb-4 text-lg">
-                      {mainArticle.story}
-                    </p>
+                   
                     <div className="text-sm text-gray-500 mb-4">
                       <span>{formatDate(mainArticle.timestamp || '')}</span>
                       <span className="mx-2 text-gray-600">|</span>
@@ -278,9 +275,7 @@ export default function NewsPage() {
                     <h2 className="text-xl font-bold text-white mb-2 leading-tight hover:underline cursor-pointer">
                       {article.title}
                     </h2>
-                    <p className="text-gray-300 mb-3 text-base">
-                      {article.story.length > 100 ? `${article.story.substring(0, 100)}...` : article.story}
-                    </p>
+                 
                     <div className="text-sm text-gray-500">
                       <span>{formatDate(article.timestamp || '')}</span>
                       <span className="mx-2 text-gray-600">|</span>
@@ -322,9 +317,7 @@ export default function NewsPage() {
                   <h2 className="text-xl font-bold text-white mb-2 leading-tight">
                     {article.title}
                   </h2>
-                  <p className="text-gray-300 mb-3 text-base">
-                    {article.story.length > 120 ? `${article.story.substring(0, 120)}...` : article.story}
-                  </p>
+              
                   <div className="text-sm text-gray-500">
                     <span>{formatDate(article.timestamp || '')}</span>
                     <span className="mx-2 text-gray-600">|</span>
