@@ -5,260 +5,235 @@ class MerchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: false,
-          pinned: true,
-          backgroundColor: Colors.grey[900],
-          title: const Text('Merch Store'),
-          centerTitle: true,
+    final items = [
+      {
+        'name': 'NRG UG Bucket Hat',
+        'price': '45,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680123/Bucket_Hat_Black-removebg-preview_j3jp4e.png',
+        'category': 'Accessories'
+      },
+      {
+        'name': 'NRG UG Water Bottle',
+        'price': '25,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Water_Bottle-removebg-preview_lj73bm.png',
+        'category': 'Accessories'
+      },
+      {
+        'name': 'NRG UG White T-Shirt',
+        'price': '35,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680125/White-removebg-preview_bjls5g.png',
+        'category': 'Apparel'
+      },
+      {
+        'name': 'NRG UG Electric Fan',
+        'price': '85,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Electric_Fan-removebg-preview_kyguy5.png',
+        'category': 'Electronics'
+      },
+      {
+        'name': 'NRG UG Power Banks',
+        'price': '65,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Power_Banks-removebg-preview_mqhneq.png',
+        'category': 'Electronics'
+      },
+      {
+        'name': 'NRG UG Tote Bags',
+        'price': '30,000 UGX',
+        'image': 'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Tote_Bags-removebg-preview_tipfkl.png',
+        'category': 'Accessories'
+      },
+    ];
+
+    List<Map<String, Object>> filtered(String category) {
+      if (category == 'All') return items;
+      return items.where((e) => e['category'] == category).toList();
+    }
+
+    Widget buildGrid(List<Map<String, Object>> list) {
+      return GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          // Slightly taller cards to reduce internal whitespace
+          childAspectRatio: 0.70,
         ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              // Featured Items Section
-              const Text(
-                'Featured Items',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final item = list[index];
+          final imageUrl = item['image'] as String;
+          final name = item['name'] as String;
+          final price = item['price'] as String;
+          final category = item['category'] as String;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[850],
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                        itemBuilder: (context, index) {
-                          final items = [
-                            {'name': 'NRG UG T-Shirt', 'price': '\$24.99', 'color': Colors.red[700]!},
-                            {'name': 'Radio Hoodie', 'price': '\$49.99', 'color': Colors.blue[700]!},
-                            {'name': 'DJ Cap', 'price': '\$19.99', 'color': Colors.green[700]!},
-                            {'name': 'Sticker Pack', 'price': '\$9.99', 'color': Colors.orange[700]!},
-                            {'name': 'Mug', 'price': '\$14.99', 'color': Colors.purple[700]!},
-                            {'name': 'Tote Bag', 'price': '\$16.99', 'color': Colors.yellow[700]!},
-                          ];
-                          final item = items[index];
-                          final color = item['color'] as Color;
-                          final name = item['name'] as String;
-                          final price = item['price'] as String;
-                    return Container(
-                      width: 150,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[850],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                            Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12),
-                                ),
-                              ),
-                            child: Center(
-                              child: Icon(Icons.shopping_bag, size: 40, color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                        Text(
-                                          name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          price,
-                                          style: TextStyle(
-                                            color: Colors.red[400],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                const SizedBox(height: 8),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Shop',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Categories Section
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.5,
-                children: [
-                  _buildCategoryCard('Apparel', Icons.checkroom, Colors.red[700]!),
-                  _buildCategoryCard('Accessories', Icons.watch, Colors.blue[700]!),
-                  _buildCategoryCard('Electronics', Icons.headphones, Colors.green[700]!),
-                  _buildCategoryCard('Collectibles', Icons.stars, Colors.orange[700]!),
-                ],
-              ),
-              const SizedBox(height: 24),
-              // Special Offers Section
-              const Text(
-                'Special Offers',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.red[900]!, Colors.red[700]!],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
+              ],
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Product Image
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '20% OFF',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      flex: 6,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        child: Container(
+                          width: double.infinity,
+                          color: Colors.grey[900],
+                          child: Image.network(
+                            imageUrl,
+                            // Cover to use more space and avoid empty margins
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[800],
+                                child: Center(
+                                  child: Icon(Icons.image_not_supported, color: Colors.grey[400], size: 40),
+                                ),
+                              );
+                            },
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'All T-Shirts',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              'Shop Now',
+                        ),
+                      ),
+                    ),
+                    // Product Details
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Category
+                            Text(
+                              category,
                               style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.grey[400],
+                                fontSize: 9,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            // Product Name
+                            Text(
+                              name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.local_offer,
-                      color: Colors.white,
-                      size: 60,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Shipping Info
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[850],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[800]!, width: 1),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.local_shipping, color: Colors.red, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Free Shipping',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 2),
+                            // Price
+                            Text(
+                              price,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'On orders over \$50',
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
+                // Add to Cart Button (Plus Icon)
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: Material(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(8),
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    return DefaultTabController(
+      length: 5,
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            floating: true,
+            pinned: true,
+            backgroundColor: Colors.black,
+            title: const Text('Merch'),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.red,
+                  child: const Icon(Icons.person, color: Colors.white, size: 20),
+                ),
               ),
-            ]),
+            ],
+            bottom: TabBar(
+              isScrollable: true,
+              indicatorColor: Colors.red,
+              labelColor: Colors.red,
+              unselectedLabelColor: Colors.grey[400],
+              tabs: const [
+                Tab(text: 'All'),
+                Tab(text: 'Apparel'),
+                Tab(text: 'Accessories'),
+                Tab(text: 'Electronics'),
+                Tab(text: 'Collectibles'),
+              ],
+            ),
+          ),
+        ],
+        body: Container(
+          color: Colors.black,
+          child: TabBarView(
+            children: [
+              buildGrid(filtered('All')),
+              buildGrid(filtered('Apparel')),
+              buildGrid(filtered('Accessories')),
+              buildGrid(filtered('Electronics')),
+              buildGrid(filtered('Collectibles')),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
