@@ -461,6 +461,7 @@ class _MainScreenState extends State<MainScreen> {
                       Navigator.pop(context);
                     },
                     scrollController: scrollController,
+                    ),
                   ),
                 );
               },  // closes scrollController builder
