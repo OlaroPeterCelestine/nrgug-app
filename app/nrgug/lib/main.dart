@@ -460,12 +460,11 @@ class _MainScreenState extends State<MainScreen> {
                         },
                         scrollController: scrollController,
                       ),
-                    ),
-                  );
-            },  // closes scrollController builder
-            ),
-          ),
-        );
+                    );
+                  },  // closes scrollController builder
+                ),
+              ),
+            );
           },  // closes StatefulBuilder builder
         );  // closes StatefulBuilder
       },  // closes showModalBottomSheet builder
