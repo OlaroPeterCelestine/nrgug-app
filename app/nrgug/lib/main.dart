@@ -415,53 +415,53 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       child: MusicPlayerExpanded(
-                    isPlaying: _isPlaying,
-                    isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
-                    isAudio: _isAudio,
-                    currentShow: _currentShow,
-                    onPlayPause: () async {
-                      // Update parent state first
-                      await _togglePlayStop();
-                      // Then update modal state to trigger rebuild with fresh values
-                      setModalState(() {
-                        // This will rebuild the StatefulBuilder, reading fresh _isPlaying/_isLoading values
-                      });
-                    },
-                    onToggleAudioVideo: (bool isAudio) async {
-                      // Stop current playback when switching modes
-                      if (_isAudio && _isPlaying) {
-                        // Switching from audio to video - stop audio
-                        await RadioPlayer.pause();
-                        setState(() {
-                          _isPlaying = false;
-                        });
-                      }
-                      
-                      // If switching from video to audio, automatically start audio
-                      final wasVideo = !_isAudio;
-                      
-                      setState(() {
-                        _isAudio = isAudio;
-                        _isPlaying = false; // Reset playing state when switching
-                      });
-                      setModalState(() {});
-                      
-                      // If switching to audio mode (from video), automatically start playing
-                      if (isAudio && wasVideo) {
-                        await _initializeRadioPlayer(autoPlay: true);
-                        setModalState(() {});
-                      } else if (isAudio) {
-                        // Just initialize without auto-play for other cases
-                        _initializeRadioPlayer(autoPlay: false);
-                      }
-                    },
-                    onClose: () {
-                      Navigator.pop(context);
-                    },
-                    scrollController: scrollController,
-                  ),
-                ),
-              );
+                        isPlaying: _isPlaying,
+                        isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
+                        isAudio: _isAudio,
+                        currentShow: _currentShow,
+                        onPlayPause: () async {
+                          // Update parent state first
+                          await _togglePlayStop();
+                          // Then update modal state to trigger rebuild with fresh values
+                          setModalState(() {
+                            // This will rebuild the StatefulBuilder, reading fresh _isPlaying/_isLoading values
+                          });
+                        },
+                        onToggleAudioVideo: (bool isAudio) async {
+                          // Stop current playback when switching modes
+                          if (_isAudio && _isPlaying) {
+                            // Switching from audio to video - stop audio
+                            await RadioPlayer.pause();
+                            setState(() {
+                              _isPlaying = false;
+                            });
+                          }
+                          
+                          // If switching from video to audio, automatically start audio
+                          final wasVideo = !_isAudio;
+                          
+                          setState(() {
+                            _isAudio = isAudio;
+                            _isPlaying = false; // Reset playing state when switching
+                          });
+                          setModalState(() {});
+                          
+                          // If switching to audio mode (from video), automatically start playing
+                          if (isAudio && wasVideo) {
+                            await _initializeRadioPlayer(autoPlay: true);
+                            setModalState(() {});
+                          } else if (isAudio) {
+                            // Just initialize without auto-play for other cases
+                            _initializeRadioPlayer(autoPlay: false);
+                          }
+                        },
+                        onClose: () {
+                          Navigator.pop(context);
+                        },
+                        scrollController: scrollController,
+                      ),
+                    ),
+                  );
             },  // closes scrollController builder
             ),
           ),

@@ -677,14 +677,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-          SizedBox(
-            height: 140,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _genres.length,
-              itemBuilder: (context, index) {
-                final genre = _genres[index];
-                return Container(
+                      SizedBox(
+                        height: 140,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _genres.length,
+                          itemBuilder: (context, index) {
+                            final genre = _genres[index];
+                            return Container(
                   width: 105,
                   margin: const EdgeInsets.only(right: 16),
                   child: Column(
@@ -724,9 +724,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -761,175 +762,175 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-          _videos.isEmpty
-              ? const SizedBox(
-                  height: 240,
-                  child: Center(
-                    child: Text(
-                      'No videos available',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                )
-              : SizedBox(
-                  height: 240,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _videos.length,
-                    itemBuilder: (context, index) {
-                      final video = _videos[index];
-                      final colors = [
-                        Colors.red[800]!,
-                        Colors.blue[800]!,
-                        Colors.purple[800]!,
-                        Colors.teal[800]!,
-                        Colors.orange[800]!,
-                      ];
-                      final color = colors[index % colors.length];
-                      return Container(
-                        width: 260,
-                        height: 240, // Fixed height to prevent overflow
-                        margin: const EdgeInsets.only(right: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[850],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Thumbnail with play button - make it clickable
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => YouTubePlayer(
-                                      videoUrl: video.videoUrl,
-                                      title: video.title,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                                child: SizedBox(
-                                  width: 260,
-                                  height: 150,
-                                  child: Stack(
-                                    children: [
-                                      Positioned.fill(
-                                        child: Image.network(
-                                          video.thumbnailUrl,
-                                          fit: BoxFit.cover,
-                                          loadingBuilder: (context, child, loadingProgress) {
-                                            if (loadingProgress == null) return child;
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [color.withOpacity(0.5), color.withOpacity(0.3)],
-                                                ),
-                                              ),
-                                              child: const Center(
-                                                child: CircularProgressIndicator(
-                                                  color: Colors.white,
-                                                  strokeWidth: 2,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [color, color.withOpacity(0.7)],
-                                                ),
-                                              ),
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.video_library,
-                                                  color: Colors.white54,
-                                                  size: 48,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(0.6),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.play_arrow,
-                                            size: 48,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                      _videos.isEmpty
+                          ? const SizedBox(
+                              height: 240,
+                              child: Center(
+                                child: Text(
+                                  'No videos available',
+                                  style: TextStyle(color: Colors.grey),
                                 ),
                               ),
-                            ),
-                            // Video meta - Constrained section
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 12,
-                                      backgroundColor: color,
-                                      child: const Icon(Icons.person, color: Colors.white, size: 14),
+                            )
+                          : SizedBox(
+                              height: 240,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _videos.length,
+                                itemBuilder: (context, index) {
+                                  final video = _videos[index];
+                                  final colors = [
+                                    Colors.red[800]!,
+                                    Colors.blue[800]!,
+                                    Colors.purple[800]!,
+                                    Colors.teal[800]!,
+                                    Colors.orange[800]!,
+                                  ];
+                                  final color = colors[index % colors.length];
+                                  return Container(
+                                    width: 260,
+                                    height: 240, // Fixed height to prevent overflow
+                                    margin: const EdgeInsets.only(right: 12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[850],
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              video.title,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // Thumbnail with play button - make it clickable
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => YouTubePlayer(
+                                                  videoUrl: video.videoUrl,
+                                                  title: video.title,
+                                                ),
                                               ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                                            child: SizedBox(
+                                              width: 260,
+                                              height: 150,
+                                              child: Stack(
+                                                children: [
+                                                  Positioned.fill(
+                                                    child: Image.network(
+                                                      video.thumbnailUrl,
+                                                      fit: BoxFit.cover,
+                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                        if (loadingProgress == null) return child;
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            gradient: LinearGradient(
+                                                              begin: Alignment.topLeft,
+                                                              end: Alignment.bottomRight,
+                                                              colors: [color.withOpacity(0.5), color.withOpacity(0.3)],
+                                                            ),
+                                                          ),
+                                                          child: const Center(
+                                                            child: CircularProgressIndicator(
+                                                              color: Colors.white,
+                                                              strokeWidth: 2,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      errorBuilder: (context, error, stackTrace) {
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            gradient: LinearGradient(
+                                                              begin: Alignment.topLeft,
+                                                              end: Alignment.bottomRight,
+                                                              colors: [color, color.withOpacity(0.7)],
+                                                            ),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Icon(
+                                                              Icons.video_library,
+                                                              color: Colors.white54,
+                                                              size: 48,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: Container(
+                                                      padding: const EdgeInsets.all(8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.black.withOpacity(0.6),
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons.play_arrow,
+                                                        size: 48,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            'NRG UG',
-                                            style: TextStyle(color: Colors.grey, fontSize: 11),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                        ),
+                                        // Video meta - Constrained section
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 12,
+                                                  backgroundColor: color,
+                                                  child: const Icon(Icons.person, color: Colors.white, size: 14),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Flexible(
+                                                        child: Text(
+                                                          video.title,
+                                                          style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                        'NRG UG',
+                                                        style: TextStyle(color: Colors.grey, fontSize: 11),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  );
+                              },
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                          ),
                     ],
                   ),
                 ),
@@ -964,49 +965,50 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-          SizedBox(
-            height: 220,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680123/Bucket_Hat_Black-removebg-preview_j3jp4e.png',
-                  'NRG UG Bucket Hat',
-                  '45,000 UGX',
-                  'Accessories'
-                ),
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Water_Bottle-removebg-preview_lj73bm.png',
-                  'NRG UG Water Bottle',
-                  '25,000 UGX',
-                  'Accessories'
-                ),
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680125/White-removebg-preview_bjls5g.png',
-                  'NRG UG White T-Shirt',
-                  '35,000 UGX',
-                  'Apparel'
-                ),
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Electric_Fan-removebg-preview_kyguy5.png',
-                  'NRG UG Electric Fan',
-                  '85,000 UGX',
-                  'Electronics'
-                ),
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Power_Banks-removebg-preview_mqhneq.png',
-                  'NRG UG Power Banks',
-                  '65,000 UGX',
-                  'Electronics'
-                ),
-                _buildProductCard(
-                  'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Tote_Bags-removebg-preview_tipfkl.png',
-                  'NRG UG Tote Bags',
-                  '30,000 UGX',
-                  'Accessories'
-                ),
-              ],
-            ),
+                      SizedBox(
+                        height: 220,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680123/Bucket_Hat_Black-removebg-preview_j3jp4e.png',
+                              'NRG UG Bucket Hat',
+                              '45,000 UGX',
+                              'Accessories'
+                            ),
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Water_Bottle-removebg-preview_lj73bm.png',
+                              'NRG UG Water Bottle',
+                              '25,000 UGX',
+                              'Accessories'
+                            ),
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680125/White-removebg-preview_bjls5g.png',
+                              'NRG UG White T-Shirt',
+                              '35,000 UGX',
+                              'Apparel'
+                            ),
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Electric_Fan-removebg-preview_kyguy5.png',
+                              'NRG UG Electric Fan',
+                              '85,000 UGX',
+                              'Electronics'
+                            ),
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Power_Banks-removebg-preview_mqhneq.png',
+                              'NRG UG Power Banks',
+                              '65,000 UGX',
+                              'Electronics'
+                            ),
+                            _buildProductCard(
+                              'https://res.cloudinary.com/dodl9nols/image/upload/v1757680124/Tote_Bags-removebg-preview_tipfkl.png',
+                              'NRG UG Tote Bags',
+                              '30,000 UGX',
+                              'Accessories'
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
