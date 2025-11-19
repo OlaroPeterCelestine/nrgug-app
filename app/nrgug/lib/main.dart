@@ -393,19 +393,30 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context, setModalState) {
             // Read current state values on each rebuild
             // Same size on both tablets and mobile (85%)
+            final screenWidth = MediaQuery.of(context).size.width;
+            final isTablet = screenWidth > 600;
+            // On tablets, make the bottom sheet 30% wider (constrained width)
+            final bottomSheetWidth = isTablet ? screenWidth * 1.3 : screenWidth;
+            final maxWidth = isTablet ? screenWidth * 0.9 : screenWidth; // Max 90% on tablets to prevent overflow
+            
             return DraggableScrollableSheet(
               initialChildSize: 0.85,
               minChildSize: 0.5,
               maxChildSize: 0.85,
               builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[850],
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
+                return Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: maxWidth,
                     ),
-                  ),
-                  child: MusicPlayerExpanded(
+                    width: bottomSheetWidth > maxWidth ? maxWidth : bottomSheetWidth,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[850],
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    child: MusicPlayerExpanded(
                     isPlaying: _isPlaying,
                     isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
                     isAudio: _isAudio,
