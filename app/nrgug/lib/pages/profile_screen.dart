@@ -823,12 +823,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // Points Section (only for logged-in users)
+                // Points & Streak Section (only for logged-in users)
                 if (!_isGuest) ...[
-                  _buildSectionTitle('Points & Stats'),
-                  _buildPointsCard(),
-                  const SizedBox(height: 16),
-                  _buildStreakCard(),
+                  _buildSectionTitle('Points & Streak'),
+                  _buildPointsAndStreakCard(),
                 ],
 
                 // Account Section
