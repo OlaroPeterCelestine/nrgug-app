@@ -1083,7 +1083,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-      Widget _buildPointsAndStreakCard() {
+  Widget _buildPointsAndStreakCard() {
         if (_isLoadingPoints) {
           return Container(
             padding: const EdgeInsets.all(24),
