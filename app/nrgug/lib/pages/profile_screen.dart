@@ -633,32 +633,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
 
       if (finalConfirm == true) {
-        // Stop radio if playing
-        try {
-          await RadioPlayer.pause();
-        } catch (e) {
-          // Ignore errors if radio is not initialized
-        }
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isLoggedIn', false);
-        await prefs.remove('userEmail');
-        await prefs.remove('userName');
-        await prefs.remove('isGuest');
-
+        // Show loading indicator
         if (!mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account deleted successfully'),
-            backgroundColor: Colors.red,
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+            ),
           ),
         );
 
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false,
-        );
+        try {
+          // Delete account from database via API
+          final prefs = await SharedPreferences.getInstance();
+          final userId = prefs.getInt('userId');
+          final jwtToken = prefs.getString('jwtToken');
+
+          if (userId != null) {
+            try {
+              final url = Uri.parse('${ApiConfig.baseUrl}/api/users/$userId');
+              final response = await http.delete(
+                url,
+                headers: {
+                  'Content-Type': 'application/json',
+                  if (jwtToken != null) 'Authorization': 'Bearer $jwtToken',
+                },
+              );
+
+              if (kDebugMode) {
+                developer.log('Delete account response: ${response.statusCode}');
+                developer.log('Delete account body: ${response.body}');
+              }
+
+              if (response.statusCode != 200 && response.statusCode != 204) {
+                throw Exception('Failed to delete account: ${response.statusCode}');
+              }
+            } catch (e) {
+              if (kDebugMode) {
+                developer.log('Error deleting account from API: $e');
+              }
+              // Continue with local cleanup even if API call fails
+            }
+          }
+
+          // Stop radio if playing
+          try {
+            await RadioPlayer.pause();
+          } catch (e) {
+            // Ignore errors if radio is not initialized
+          }
+
+          // Clear local data
+          await prefs.setBool('isLoggedIn', false);
+          await prefs.remove('userEmail');
+          await prefs.remove('userName');
+          await prefs.remove('userId');
+          await prefs.remove('jwtToken');
+          await prefs.remove('avatarSeed');
+          await prefs.remove('isGuest');
+
+          if (!mounted) return;
+
+          // Close loading dialog
+          Navigator.of(context).pop();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Account deleted successfully'),
+              backgroundColor: Colors.red,
+            ),
+          );
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false,
+          );
+        } catch (e) {
+          if (!mounted) return;
+
+          // Close loading dialog
+          Navigator.of(context).pop();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error deleting account: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }
