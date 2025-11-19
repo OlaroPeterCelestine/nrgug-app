@@ -263,8 +263,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               // ON AIR indicator on poster
               if (isLive)
                 Positioned(
-                  top: 4,
-                  right: 4,
+                  top: 6,
+                  right: 6,
                   child: Container(
                     width: 12,
                     height: 12,
