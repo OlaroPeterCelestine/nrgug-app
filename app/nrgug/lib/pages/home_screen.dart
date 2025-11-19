@@ -626,16 +626,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-          const SizedBox(height: 24),
-          // Discs of Mixes Section - Circular Discs
-          Text(
-            'Mixes & Sets',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
+          const SizedBox(height: 24),
+          // Discs of Mixes Section - Circular Discs (Responsive)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              final isTablet = screenWidth > 600;
+              final isLargeTablet = screenWidth > 900;
+              final contentWidth = isLargeTablet 
+                  ? screenWidth * 0.85 
+                  : isTablet 
+                      ? screenWidth * 0.90 
+                      : screenWidth - 32.0;
+              
+              return Center(
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Mixes & Sets',
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
           const SizedBox(height: 12),
           SizedBox(
             height: 140,
@@ -687,17 +710,39 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
-          // YouTube Videos Section - Wider
-          Text(
-            'Popular Videos',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
+          // YouTube Videos Section - Responsive
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              final isTablet = screenWidth > 600;
+              final isLargeTablet = screenWidth > 900;
+              final contentWidth = isLargeTablet 
+                  ? screenWidth * 0.85 
+                  : isTablet 
+                      ? screenWidth * 0.90 
+                      : screenWidth - 32.0;
+              
+              return Center(
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Popular Videos',
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
           const SizedBox(height: 12),
           _videos.isEmpty
               ? const SizedBox(
@@ -868,16 +913,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-          const SizedBox(height: 24),
-          // Merchandise Section - Horizontal Scroll
-          Text(
-            'Merchandise',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
+          const SizedBox(height: 24),
+          // Merchandise Section - Horizontal Scroll (Responsive)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              final isTablet = screenWidth > 600;
+              final isLargeTablet = screenWidth > 900;
+              final contentWidth = isLargeTablet 
+                  ? screenWidth * 0.85 
+                  : isTablet 
+                      ? screenWidth * 0.90 
+                      : screenWidth - 32.0;
+              
+              return Center(
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Merchandise',
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
           const SizedBox(height: 12),
           SizedBox(
             height: 220,
