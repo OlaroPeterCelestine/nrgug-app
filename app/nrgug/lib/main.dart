@@ -792,38 +792,38 @@ class _MainScreenState extends State<MainScreen> {
                     fontSize: isTablet ? 13 : 11,
                     fontWeight: FontWeight.normal,
                   ),
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.house, size: 26),
-                  activeIcon: Icon(CupertinoIcons.house_fill, size: 28),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.news, size: 26),
-                  activeIcon: Icon(CupertinoIcons.news_solid, size: 28),
-                  label: 'News',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.music_note, size: 26),
-                  activeIcon: Icon(CupertinoIcons.music_note, size: 28),
-                  label: 'NRG',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.bag, size: 26),
-                  activeIcon: Icon(CupertinoIcons.bag_fill, size: 28),
-                  label: 'Merch',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.calendar, size: 26),
-                  activeIcon: Icon(CupertinoIcons.calendar, size: 28),
-                  label: 'Schedule',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.settings, size: 26),
-                  activeIcon: Icon(CupertinoIcons.settings_solid, size: 28),
-                  label: 'Settings',
-                ),
-              ],
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.house, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.house_fill, size: isTablet ? 32 : 28),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.news, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.news_solid, size: isTablet ? 32 : 28),
+                      label: 'News',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.music_note, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.music_note, size: isTablet ? 32 : 28),
+                      label: 'NRG',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.bag, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.bag_fill, size: isTablet ? 32 : 28),
+                      label: 'Merch',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.calendar, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.calendar, size: isTablet ? 32 : 28),
+                      label: 'Schedule',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.settings, size: isTablet ? 30 : 26),
+                      activeIcon: Icon(CupertinoIcons.settings_solid, size: isTablet ? 32 : 28),
+                      label: 'Settings',
+                    ),
+                  ],
             ),
           ),
         ],
