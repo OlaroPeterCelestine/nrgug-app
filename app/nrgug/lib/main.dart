@@ -892,15 +892,6 @@ class MusicPlayerSheet extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-                ),
-              ),
               // ON AIR indicator
               if (currentShow != null)
                 Positioned(
@@ -916,6 +907,83 @@ class MusicPlayerSheet extends StatelessWidget {
                     ),
                   ),
                 ),
+            ],
+          ),
+          const SizedBox(width: 12),
+          // Show Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (currentShow != null) ...[
+                  Text(
+                    currentShow!.showName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${currentShow!.dayOfWeek} • ${currentShow!.startTime} - ${currentShow!.endTime}',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ] else ...[
+                  const Text(
+                    'NRG Radio Uganda',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Live Stream',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          // Play/Pause Button
+          GestureDetector(
+            onTap: isLoading ? null : onPlayPause,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: isLoading 
+                ? const SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : Icon(
+                    isPlaying ? Icons.stop_circle : Icons.play_circle_filled,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
             ],
           ),
           const SizedBox(width: 10),
