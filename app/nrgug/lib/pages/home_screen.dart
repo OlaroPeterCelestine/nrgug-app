@@ -502,39 +502,46 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-          // News Carousel Section - Responsive height
+          // News Carousel Section - Responsive height and width
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
               final isTablet = screenWidth > 600;
               // Responsive height: taller on tablets, standard on phones
               final carouselHeight = isTablet ? 600.0 : 480.0;
+              // On tablets, make it 3/4 width and center it
+              final carouselWidth = isTablet ? screenWidth * 0.75 : screenWidth - 32.0;
               
-              return _news.isEmpty
-                  ? SizedBox(
-                      height: carouselHeight,
-                      child: Center(
-                        child: Text(
-                          'No news available',
-                          style: TextStyle(color: Colors.grey),
+              return Center(
+                child: SizedBox(
+                  width: carouselWidth,
+                  child: _news.isEmpty
+                      ? SizedBox(
+                          height: carouselHeight,
+                          child: Center(
+                            child: Text(
+                              'No news available',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: carouselHeight,
+                          child: PageView.builder(
+                            controller: _pageController,
+                            onPageChanged: (index) {
+                              setState(() {
+                                _currentNewsIndex = index;
+                              });
+                            },
+                            itemCount: _news.length > 3 ? 3 : _news.length,
+                            itemBuilder: (context, index) {
+                              return _buildNewsCard(_news[index], isTablet: isTablet);
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                  : SizedBox(
-                      height: carouselHeight,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentNewsIndex = index;
-                          });
-                        },
-                        itemCount: _news.length > 3 ? 3 : _news.length,
-                        itemBuilder: (context, index) {
-                          return _buildNewsCard(_news[index], isTablet: isTablet);
-                        },
-                      ),
-                    );
+                ),
+              );
             },
           ),
           const SizedBox(height: 16),
