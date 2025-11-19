@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import '../config/api_config.dart';
 import '../main.dart';
+import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -154,12 +155,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else {
         // Handle error
         String errorMessage = 'Sign up failed. Please try again.';
+        bool isEmailExists = false;
+        
         try {
           final errorData = json.decode(response.body);
-          errorMessage = errorData['error'] ?? errorData.toString() ?? errorMessage;
+          errorMessage = errorData['error'] ?? errorData['message'] ?? errorData.toString() ?? errorMessage;
+          
+          // Check if error is due to existing email
+          final errorStr = errorMessage.toLowerCase();
+          if (errorStr.contains('already exists') || 
+              errorStr.contains('duplicate') || 
+              errorStr.contains('email') && (errorStr.contains('taken') || errorStr.contains('exists')) ||
+              response.statusCode == 409) {
+            isEmailExists = true;
+            errorMessage = 'An account with this email already exists. Please login instead.';
+          }
         } catch (_) {
-          // If response is not JSON, use response body or default message
-          errorMessage = response.body.isNotEmpty ? response.body : errorMessage;
+          // If response is not JSON, check status code
+          if (response.statusCode == 409) {
+            isEmailExists = true;
+            errorMessage = 'An account with this email already exists. Please login instead.';
+          } else {
+            errorMessage = response.body.isNotEmpty ? response.body : errorMessage;
+          }
         }
         
         if (kDebugMode) {
@@ -174,13 +192,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _isLoading = false;
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $errorMessage'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 5),
-          ),
-        );
+        // Show appropriate message
+        if (isEmailExists) {
+          // Show dialog with option to go to login
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: Colors.grey[900],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              title: const Text('Account Already Exists', style: TextStyle(color: Colors.white)),
+              content: Text(
+                errorMessage,
+                style: const TextStyle(color: Colors.white70),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
+                  },
+                  child: const Text('Go to Login', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     } catch (e, stackTrace) {
       if (kDebugMode) {
