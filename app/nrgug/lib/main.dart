@@ -14,6 +14,7 @@ import 'pages/schedule_screen.dart';
 import 'pages/settings_screen.dart';
 import 'models/show.dart';
 import 'services/show_service.dart';
+import 'services/streak_service.dart';
 import 'utils/show_helper.dart';
 
 void main() {
@@ -177,6 +178,19 @@ class _MainScreenState extends State<MainScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final prefs = await SharedPreferences.getInstance();
       final isFirstTime = prefs.getBool('isFirstTime') ?? true;
+      
+      // Update streak for logged-in users (not guests)
+      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      final isGuest = prefs.getBool('isGuest') ?? false;
+      if (isLoggedIn && !isGuest) {
+        final userId = prefs.getInt('userId');
+        if (userId != null) {
+          // Update streak in background (non-blocking)
+          StreakService.updateStreak(userId).catchError((e) {
+            // Silently fail - streak update is not critical
+          });
+        }
+      }
       
       if (isFirstTime) {
         // Mark that user has opened the app at least once

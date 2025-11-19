@@ -26,6 +26,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double _listeningHours = 0.0;
   int _textingStudioPoints = 0;
   int _totalListeningMinutes = 0;
+  int _streakDays = 0;
+  int _longestStreak = 0;
   bool _isLoadingPoints = false;
 
   @override
@@ -108,6 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _listeningHours = (data['listening_hours'] ?? 0.0).toDouble();
           _textingStudioPoints = data['texting_studio_points'] ?? 0;
           _totalListeningMinutes = data['total_listening_minutes'] ?? 0;
+          _streakDays = data['streak_days'] ?? 0;
+          _longestStreak = data['longest_streak'] ?? 0;
           _isLoadingPoints = false;
         });
       } else {
@@ -824,6 +828,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildSectionTitle('Points & Stats'),
                   _buildPointsCard(),
                   const SizedBox(height: 16),
+                  _buildStreakCard(),
                 ],
 
                 // Account Section
