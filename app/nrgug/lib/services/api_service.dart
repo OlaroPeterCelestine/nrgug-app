@@ -115,5 +115,52 @@ class ApiService {
       throw Exception('Network error: $e');
     }
   }
+
+  // Authenticated GET request with JWT token
+  Future<http.Response> getWithAuth(String endpoint, String token) async {
+    try {
+      final url = ApiConfig.getUrl(endpoint);
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception('Request timeout after 30 seconds');
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
+  }
+
+  // Authenticated POST request with JWT token
+  Future<http.Response> postWithAuth(String endpoint, Map<String, dynamic> body, String token) async {
+    try {
+      final url = ApiConfig.getUrl(endpoint);
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      ).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception('Request timeout after 30 seconds');
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
+  }
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/show.dart';
 import '../services/show_service.dart';
+import '../services/chat_service.dart';
 import '../utils/show_helper.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -12,13 +14,26 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   final ShowService _showService = ShowService();
+  final ChatService _chatService = ChatService();
   List<Show> _shows = [];
   bool _isLoading = true;
   String? _errorMessage;
+  String? _selectedDay; // Selected day filter
+  final List<String> _days = [
+    'All Days',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
 
   @override
   void initState() {
     super.initState();
+    _selectedDay = 'All Days';
     _loadShows();
   }
 
@@ -79,74 +94,112 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: false,
-          pinned: true,
-          backgroundColor: Colors.grey[900],
-          title: const Text('Schedule'),
-          centerTitle: true,
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              const Text(
-                'Live Shows',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (_shows.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Text(
-                      'No shows available',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                )
-              else
-                ..._getTodaysShows().map((show) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _buildLiveShowCard(show),
-                    )),
-            ]),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: false,
+            pinned: true,
+            backgroundColor: Colors.grey[900],
+            title: const Text('Schedule'),
+            centerTitle: true,
           ),
+          SliverPadding(
+            padding: const EdgeInsets.all(16.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                // Day Filter
+                const Text(
+                  'Filter by Day',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _days.length,
+                    itemBuilder: (context, index) {
+                      final day = _days[index];
+                      final isSelected = _selectedDay == day;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          label: Text(day),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              _selectedDay = day;
+                            });
+                          },
+                          selectedColor: Colors.red,
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : Colors.grey[300],
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                          backgroundColor: Colors.grey[800],
+                          checkmarkColor: Colors.white,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Live Shows',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                if (_shows.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: Text(
+                        'No shows available',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  )
+                else
+                  ..._getFilteredShows().map((show) => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _buildLiveShowCard(show),
+                      )),
+              ]),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showChatDialog(context),
+        backgroundColor: Colors.red,
+        icon: const Icon(Icons.chat, color: Colors.white),
+        label: const Text(
+          'Message Studio',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-      ],
+      ),
     );
   }
 
-  List<Show> _getTodaysShows() {
-    final now = DateTime.now();
-    final currentDay = _getDayName(now.weekday);
+  List<Show> _getFilteredShows() {
+    if (_selectedDay == null || _selectedDay == 'All Days') {
+      return _shows;
+    }
     
-    // Filter shows for today
-    final todayShows = _shows.where((show) {
-      return show.dayOfWeek.toLowerCase() == currentDay.toLowerCase();
+    // Filter shows by selected day
+    return _shows.where((show) {
+      return show.dayOfWeek.toLowerCase() == _selectedDay!.toLowerCase();
     }).toList();
-    
-    // If no shows for today, show all shows
-    return todayShows.isNotEmpty ? todayShows : _shows;
-  }
-
-  String _getDayName(int weekday) {
-    const days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
-    ];
-    return days[weekday - 1];
   }
 
   Widget _buildLiveShowCard(Show show) {
@@ -296,6 +349,160 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _showChatDialog(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final isGuest = prefs.getBool('isGuest') ?? true;
+
+    if (!isLoggedIn || isGuest) {
+      // Show login prompt for guests
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text(
+            'Login Required',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const Text(
+            'Please login to message the studio.',
+            style: TextStyle(color: Colors.grey),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // Navigate to profile/login screen
+                // You can implement navigation here if needed
+              },
+              child: const Text('Login', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    final TextEditingController messageController = TextEditingController();
+    bool isSending = false;
+
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text(
+            'Message Studio',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              controller: messageController,
+              maxLines: 5,
+              maxLength: 500,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                hintStyle: TextStyle(color: Colors.grey[600]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey[700]!),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey[700]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Colors.red),
+                ),
+                filled: true,
+                fillColor: Colors.grey[800],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: isSending
+                  ? null
+                  : () => Navigator.pop(context),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: isSending
+                  ? null
+                  : () async {
+                      if (messageController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter a message'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+
+                      setDialogState(() {
+                        isSending = true;
+                      });
+
+                      try {
+                        await _chatService.sendMessage(messageController.text.trim());
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Message sent successfully!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } catch (e) {
+                        setDialogState(() {
+                          isSending = false;
+                        });
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Failed to send message: ${e.toString()}'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                disabledBackgroundColor: Colors.grey[700],
+              ),
+              child: isSending
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      'Send',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

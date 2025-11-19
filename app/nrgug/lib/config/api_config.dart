@@ -25,6 +25,7 @@ class ApiConfig {
   static const String pointsLeaderboardEndpoint = '/api/points/leaderboard';
   static const String streakUpdateEndpoint = '/api/streak/update';
   static const String streakInfoEndpoint = '/api/streak';
+  static const String chatMessagesEndpoint = '/api/chat/messages';
   
   // Helper method to get full URL
   static String getUrl(String endpoint) {
