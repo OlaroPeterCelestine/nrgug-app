@@ -391,68 +391,81 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            // Read current state values on each rebuild
-            return DraggableScrollableSheet(
-              initialChildSize: 0.85,
-              minChildSize: 0.5,
-              maxChildSize: 0.85, // Same as initialChildSize to prevent sliding up
-              builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[850],
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: MusicPlayerExpanded(
-                    isPlaying: _isPlaying,
-                    isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
-                    isAudio: _isAudio,
-                    currentShow: _currentShow,
-                    onPlayPause: () async {
-                      // Update parent state first
-                      await _togglePlayStop();
-                      // Then update modal state to trigger rebuild with fresh values
-                      setModalState(() {
-                        // This will rebuild the StatefulBuilder, reading fresh _isPlaying/_isLoading values
-                      });
-                    },
-                    onToggleAudioVideo: (bool isAudio) async {
-                      // Stop current playback when switching modes
-                      if (_isAudio && _isPlaying) {
-                        // Switching from audio to video - stop audio
-                        await RadioPlayer.pause();
-                        setState(() {
-                          _isPlaying = false;
-                        });
-                      }
-                      
-                      // If switching from video to audio, automatically start audio
-                      final wasVideo = !_isAudio;
-                      
-                      setState(() {
-                        _isAudio = isAudio;
-                        _isPlaying = false; // Reset playing state when switching
-                      });
-                      setModalState(() {});
-                      
-                      // If switching to audio mode (from video), automatically start playing
-                      if (isAudio && wasVideo) {
-                        await _initializeRadioPlayer(autoPlay: true);
-                        setModalState(() {});
-                      } else if (isAudio) {
-                        // Just initialize without auto-play for other cases
-                        _initializeRadioPlayer(autoPlay: false);
-                      }
-                    },
-                    onClose: () {
-                      Navigator.pop(context);
-                    },
-                    scrollController: scrollController,
-                  ),
-                );
-              },  // closes scrollController builder
-            );    // closes DraggableScrollableSheet
+            // Constrain to phone width (max 600px) and center on tablets
+            final screenWidth = MediaQuery.of(context).size.width;
+            final maxWidth = 600.0; // Phone width constraint
+            final isTablet = screenWidth > maxWidth;
+            
+            return Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth,
+                  maxHeight: MediaQuery.of(context).size.height,
+                ),
+                child: DraggableScrollableSheet(
+                  initialChildSize: 0.85,
+                  minChildSize: 0.5,
+                  maxChildSize: 0.85, // Same as initialChildSize to prevent sliding up
+                  builder: (context, scrollController) {
+                    return Container(
+                      width: double.infinity, // Full width within constraint
+                      decoration: BoxDecoration(
+                        color: Colors.grey[850],
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      child: MusicPlayerExpanded(
+                        isPlaying: _isPlaying,
+                        isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
+                        isAudio: _isAudio,
+                        currentShow: _currentShow,
+                        onPlayPause: () async {
+                          // Update parent state first
+                          await _togglePlayStop();
+                          // Then update modal state to trigger rebuild with fresh values
+                          setModalState(() {
+                            // This will rebuild the StatefulBuilder, reading fresh _isPlaying/_isLoading values
+                          });
+                        },
+                        onToggleAudioVideo: (bool isAudio) async {
+                          // Stop current playback when switching modes
+                          if (_isAudio && _isPlaying) {
+                            // Switching from audio to video - stop audio
+                            await RadioPlayer.pause();
+                            setState(() {
+                              _isPlaying = false;
+                            });
+                          }
+                          
+                          // If switching from video to audio, automatically start audio
+                          final wasVideo = !_isAudio;
+                          
+                          setState(() {
+                            _isAudio = isAudio;
+                            _isPlaying = false; // Reset playing state when switching
+                          });
+                          setModalState(() {});
+                          
+                          // If switching to audio mode (from video), automatically start playing
+                          if (isAudio && wasVideo) {
+                            await _initializeRadioPlayer(autoPlay: true);
+                            setModalState(() {});
+                          } else if (isAudio) {
+                            // Just initialize without auto-play for other cases
+                            _initializeRadioPlayer(autoPlay: false);
+                          }
+                        },
+                        onClose: () {
+                          Navigator.pop(context);
+                        },
+                        scrollController: scrollController,
+                      ),
+                    );
+                  },  // closes scrollController builder
+                ),
+              ),
+            );
           },  // closes StatefulBuilder builder (now a block function)
         );  // closes StatefulBuilder
       },  // closes showModalBottomSheet builder
@@ -715,47 +728,62 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Constrain to phone width (max 600px) and center on tablets
+    final screenWidth = MediaQuery.of(context).size.width;
+    final maxWidth = 600.0; // Phone width constraint
+    final isTablet = screenWidth > maxWidth;
+    
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Music Player Mini Bar - Always visible
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[850],
-              border: Border(
-                top: BorderSide(color: Colors.grey[900]!, width: 0.5),
-              ),
-            ),
-            child: InkWell(
-              onTap: _showExpandedPlayer,
-              child: MusicPlayerSheet(
-                isPlaying: _isPlaying,
-                isLoading: _isLoading,
-                onPlayPause: _togglePlayStop,
-                currentShow: _currentShow,
-              ),
-            ),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          width: double.infinity,
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: _screens,
           ),
-          // Bottom Navigation Bar
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
+        ),
+      ),
+      bottomNavigationBar: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Music Player Mini Bar - Always visible
+              Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  border: Border(
+                    top: BorderSide(color: Colors.grey[900]!, width: 0.5),
+                  ),
                 ),
-              ],
-            ),
-            child: BottomNavigationBar(
+                child: InkWell(
+                  onTap: _showExpandedPlayer,
+                  child: MusicPlayerSheet(
+                    isPlaying: _isPlaying,
+                    isLoading: _isLoading,
+                    onPlayPause: _togglePlayStop,
+                    currentShow: _currentShow,
+                  ),
+                ),
+              ),
+              // Bottom Navigation Bar
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: BottomNavigationBar(
               currentIndex: _selectedIndex,
               onTap: (index) {
                 setState(() {
@@ -1111,12 +1139,11 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                   ),
                   // Video Player or Album Art
                   if (!widget.isAudio) ...[
-                    // Video Player - responsive iframe size (wider on tablets)
+                    // Video Player - use full width with margins (mobile view)
                     LayoutBuilder(
                       builder: (context, constraints) {
-                        final screenWidth = MediaQuery.of(context).size.width;
-                        final targetWidth = screenWidth - 32; // side margins
-                        final videoWidth = targetWidth.clamp(560.0, 900.0);
+                        final containerWidth = constraints.maxWidth;
+                        final videoWidth = containerWidth - 32; // side margins (16px each)
                         final videoHeight = videoWidth * (9.0 / 16.0);
                         return Center(
                           child: Container(
