@@ -63,8 +63,9 @@ class CachedImageWithShimmer extends StatelessWidget {
           ),
         );
       },
-      memCacheWidth: width != null ? width!.toInt() : null,
-      memCacheHeight: height != null ? height!.toInt() : null,
+      // Increase cache quality for better image rendering
+      memCacheWidth: width != null ? (width! * 2).toInt() : null,
+      memCacheHeight: height != null ? (height! * 2).toInt() : null,
     );
 
     if (borderRadius != null) {

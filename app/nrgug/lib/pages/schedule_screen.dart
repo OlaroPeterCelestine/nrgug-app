@@ -225,20 +225,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
       child: Row(
         children: [
-          // Show Poster/Image
+          // Show Poster/Image - Larger and better quality
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 child: CachedImageWithShimmer(
                   imageUrl: show.image != null && show.image!.isNotEmpty
                       ? show.image!
                       : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
-                  width: 80,
-                  height: 80,
+                  width: 100,
+                  height: 100,
                   fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   errorWidget: Container(
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
@@ -248,11 +250,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           Colors.red[900]!,
                         ],
                       ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.radio,
                       color: Colors.white,
-                      size: 32,
+                      size: 40,
                     ),
                   ),
                 ),
@@ -452,10 +455,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           isSending = false;
                         });
                         if (!mounted) return;
+                        // Extract clean error message
+                        String errorMessage = 'Failed to send message';
+                        if (e.toString().contains('Exception:')) {
+                          errorMessage = e.toString().replaceFirst('Exception: ', '');
+                        } else {
+                          errorMessage = e.toString();
+                        }
+                        
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Failed to send message: ${e.toString()}'),
+                            content: Text(errorMessage),
                             backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 4),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         );
                       }
