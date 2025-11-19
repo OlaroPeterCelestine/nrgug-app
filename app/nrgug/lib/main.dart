@@ -16,6 +16,7 @@ import 'models/show.dart';
 import 'services/show_service.dart';
 import 'services/streak_service.dart';
 import 'utils/show_helper.dart';
+import 'widgets/cached_image_with_shimmer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -872,36 +873,32 @@ class MusicPlayerSheet extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: Image.network(
-                    currentShow?.image != null && currentShow!.image!.isNotEmpty
+                  child: CachedImageWithShimmer(
+                    imageUrl: currentShow?.image != null && currentShow!.image!.isNotEmpty
                         ? currentShow!.image!
                         : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
                     width: 44,
                     height: 44,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        color: Colors.grey[800],
-                        child: const Center(
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.red[700],
-                        child: const Icon(Icons.music_note, color: Colors.white, size: 20),
-                      );
-                    },
+                    borderRadius: BorderRadius.circular(4),
+                    errorWidget: Container(
+                      color: Colors.grey[800],
+                      child: const Icon(
+                        Icons.radio,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
                   ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
                 ),
               ),
               // ON AIR indicator
@@ -1229,34 +1226,22 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  widget.currentShow?.image != null && widget.currentShow!.image!.isNotEmpty
+                                child: CachedImageWithShimmer(
+                                  imageUrl: widget.currentShow?.image != null && widget.currentShow!.image!.isNotEmpty
                                       ? widget.currentShow!.image!
                                       : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
                                   width: posterSize,
                                   height: posterHeight,
                                   fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  color: Colors.grey[800],
-                                  child: const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white54,
+                                  borderRadius: BorderRadius.circular(12),
+                                  errorWidget: Container(
+                                    color: Colors.red[700],
+                                    child: const Icon(
+                                      Icons.music_note,
+                                      color: Colors.white,
+                                      size: 80,
                                     ),
                                   ),
-                                );
-                              },
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      color: Colors.red[700],
-                                      child: const Icon(
-                                        Icons.music_note,
-                                        color: Colors.white,
-                                        size: 80,
-                                      ),
-                                    );
-                                  },
                                 ),
                               ),
                             ),

@@ -12,6 +12,7 @@ import '../services/client_service.dart';
 import '../services/hero_selection_service.dart';
 import '../widgets/profile_avatar_icon.dart';
 import '../widgets/youtube_player.dart';
+import '../widgets/cached_image_with_shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -177,17 +178,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: double.infinity,
                     color: Colors.grey[900],
-                    child: Image.network(
-                      url,
+                    child: CachedImageWithShimmer(
+                      imageUrl: url,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[800],
-                          child: Center(
-                            child: Icon(Icons.image_not_supported, color: Colors.grey[400], size: 40),
-                          ),
-                        );
-                      },
+                      errorWidget: Container(
+                        color: Colors.grey[800],
+                        child: Center(
+                          child: Icon(Icons.image_not_supported, color: Colors.grey[400], size: 40),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -820,45 +819,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: Stack(
                                                 children: [
                                                   Positioned.fill(
-                                                    child: Image.network(
-                                                      video.thumbnailUrl,
+                                                    child: CachedImageWithShimmer(
+                                                      imageUrl: video.thumbnailUrl,
                                                       fit: BoxFit.cover,
-                                                      loadingBuilder: (context, child, loadingProgress) {
-                                                        if (loadingProgress == null) return child;
-                                                        return Container(
-                                                          decoration: BoxDecoration(
-                                                            gradient: LinearGradient(
-                                                              begin: Alignment.topLeft,
-                                                              end: Alignment.bottomRight,
-                                                              colors: [color.withOpacity(0.5), color.withOpacity(0.3)],
-                                                            ),
+                                                      placeholderColor: color.withOpacity(0.5),
+                                                      errorWidget: Container(
+                                                        decoration: BoxDecoration(
+                                                          gradient: LinearGradient(
+                                                            begin: Alignment.topLeft,
+                                                            end: Alignment.bottomRight,
+                                                            colors: [color, color.withOpacity(0.7)],
                                                           ),
-                                                          child: const Center(
-                                                            child: CircularProgressIndicator(
-                                                              color: Colors.white,
-                                                              strokeWidth: 2,
-                                                            ),
+                                                        ),
+                                                        child: const Center(
+                                                          child: Icon(
+                                                            Icons.video_library,
+                                                            color: Colors.white54,
+                                                            size: 48,
                                                           ),
-                                                        );
-                                                      },
-                                                      errorBuilder: (context, error, stackTrace) {
-                                                        return Container(
-                                                          decoration: BoxDecoration(
-                                                            gradient: LinearGradient(
-                                                              begin: Alignment.topLeft,
-                                                              end: Alignment.bottomRight,
-                                                              colors: [color, color.withOpacity(0.7)],
-                                                            ),
-                                                          ),
-                                                          child: const Center(
-                                                            child: Icon(
-                                                              Icons.video_library,
-                                                              color: Colors.white54,
-                                                              size: 48,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                   Center(
@@ -1053,39 +1033,21 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             // Hero Image Background
             Positioned.fill(
-              child: Image.network(
-                news.image != null && news.image!.isNotEmpty
+              child: CachedImageWithShimmer(
+                imageUrl: news.image != null && news.image!.isNotEmpty
                     ? news.image!
                     : 'https://picsum.photos/seed/${Uri.encodeComponent(title)}/1200/800',
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.grey[800]!, Colors.grey[900]!],
-                      ),
+                errorWidget: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.grey[800]!, Colors.grey[900]!],
                     ),
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white54,
-                      ),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  // Suppress error logging by returning a fallback widget
-                  return Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.grey[800]!, Colors.grey[900]!],
-                      ),
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.article, size: 80, color: Colors.white54),
-                    ),
-                  );
-                },
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.article, size: 80, color: Colors.white54),
+                  ),
+                ),
               ),
             ),
             // Gradient overlay for text readability
@@ -1243,25 +1205,14 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: client.image != null && client.image!.isNotEmpty
-                ? Image.network(
-                    client.image!,
+                ? CachedImageWithShimmer(
+                    imageUrl: client.image!,
                     fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white54),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.business,
-                        color: Colors.white54,
-                        size: 60,
-                      );
-                    },
+                    errorWidget: const Icon(
+                      Icons.business,
+                      color: Colors.white54,
+                      size: 60,
+                    ),
                   )
                 : const Icon(
                     Icons.business,

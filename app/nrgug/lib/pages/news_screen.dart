@@ -4,6 +4,7 @@ import '../models/hero_selection.dart';
 import '../services/news_service.dart';
 import '../services/hero_selection_service.dart';
 import '../widgets/profile_avatar_icon.dart';
+import '../widgets/cached_image_with_shimmer.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -289,29 +290,12 @@ class _NewsScreenState extends State<NewsScreen> {
         children: [
           // Background image filling entire card
           Positioned.fill(
-            child: Image.network(
-              news.image != null && news.image!.isNotEmpty
+            child: CachedImageWithShimmer(
+              imageUrl: news.image != null && news.image!.isNotEmpty
                   ? news.image!
                   : 'https://picsum.photos/seed/${Uri.encodeComponent(title)}/1200/800',
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.grey[800]!, Colors.grey[900]!],
-                    ),
-                  ),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white54,
-                    ),
-                  ),
-                );
-              },
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(color: imageColor);
-              },
+              errorColor: imageColor,
             ),
           ),
           // Gradient overlay for readability
@@ -546,43 +530,23 @@ class _NewsScreenState extends State<NewsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Small image on left
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: SizedBox(
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: SizedBox(
+              width: 80,
+              height: 80,
+              child: news.image != null && news.image!.isNotEmpty
+                  ? CachedImageWithShimmer(
+                      imageUrl: news.image!,
                       width: 80,
                       height: 80,
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: news.image != null && news.image!.isNotEmpty
-                                ? Image.network(
-                                    news.image!,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        color: Colors.grey[800],
-                                        child: const Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white54,
-                                            strokeWidth: 2,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(color: imageColor);
-                                    },
-                                  )
-                                : Container(color: imageColor),
-                          ),
-                          Center(
-                            child: Icon(icon, size: 24, color: Colors.white.withOpacity(0.9)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                      fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(6),
+                      errorColor: imageColor,
+                    )
+                  : Container(color: imageColor),
+            ),
+          ),
           const SizedBox(width: 12),
           // Content on right
           Expanded(

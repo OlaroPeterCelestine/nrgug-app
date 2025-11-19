@@ -4,6 +4,7 @@ import '../models/show.dart';
 import '../services/show_service.dart';
 import '../services/chat_service.dart';
 import '../utils/show_helper.dart';
+import '../widgets/cached_image_with_shimmer.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -182,11 +183,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showChatDialog(context),
         backgroundColor: Colors.red,
-        icon: const Icon(Icons.chat, color: Colors.white),
+        icon: const Icon(Icons.chat_bubble_outline_rounded, color: Colors.white, size: 24),
         label: const Text(
           'Message Studio',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            letterSpacing: 0.5,
+          ),
         ),
+        elevation: 8,
+        tooltip: 'Tap to message the studio',
       ),
     );
   }
@@ -222,61 +230,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Container(
+                child: CachedImageWithShimmer(
+                  imageUrl: show.image != null && show.image!.isNotEmpty
+                      ? show.image!
+                      : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[800],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Image.network(
-                    show.image != null && show.image!.isNotEmpty
-                        ? show.image!
-                        : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg', // Default radio station poster
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        color: Colors.grey[800],
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white54,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback to default poster if image fails to load
-                      return Image.network(
-                        'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Final fallback - gradient background with radio icon
-                          return Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.red[800]!,
-                                  Colors.red[900]!,
-                                ],
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.radio,
-                              color: Colors.white,
-                              size: 32,
-                            ),
-                          );
-                        },
-                      );
-                    },
+                  fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(8),
+                  errorWidget: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.red[800]!,
+                          Colors.red[900]!,
+                        ],
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.radio,
+                      color: Colors.white,
+                      size: 32,
+                    ),
                   ),
                 ),
               ),
