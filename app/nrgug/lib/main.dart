@@ -1195,30 +1195,36 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                       textAlign: TextAlign.center,
                     ),
                   ] else ...[
-                    // Album Art - Show current show's image if available
-                    Stack(
-                      children: [
-                        Container(
-                          width: 323,
-                          height: 307,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 20,
-                                spreadRadius: 5,
+                    // Album Art - Show current show's image if available (bigger poster)
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final screenWidth = MediaQuery.of(context).size.width;
+                        final posterSize = screenWidth * 0.75; // 75% of screen width for bigger poster
+                        final posterHeight = posterSize * 0.95; // Slightly taller than wide
+                        
+                        return Stack(
+                          children: [
+                            Container(
+                              width: posterSize,
+                              height: posterHeight,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 20,
+                                    spreadRadius: 5,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              widget.currentShow?.image != null && widget.currentShow!.image!.isNotEmpty
-                                  ? widget.currentShow!.image!
-                                  : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
-                              width: 323,
-                              height: 307,
-                              fit: BoxFit.cover,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  widget.currentShow?.image != null && widget.currentShow!.image!.isNotEmpty
+                                      ? widget.currentShow!.image!
+                                      : 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
+                                  width: posterSize,
+                                  height: posterHeight,
+                                  fit: BoxFit.cover,
                               loadingBuilder: (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Container(
@@ -1230,24 +1236,24 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                                   ),
                                 );
                               },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.red[700],
-                                  child: const Icon(
-                                    Icons.music_note,
-                                    color: Colors.white,
-                                    size: 80,
-                                  ),
-                                );
-                              },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      color: Colors.red[700],
+                                      child: const Icon(
+                                        Icons.music_note,
+                                        color: Colors.white,
+                                        size: 80,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        // ON AIR indicator
-                        if (widget.currentShow != null)
-                          Positioned(
-                            top: 12,
-                            right: 12,
+                            // ON AIR indicator
+                            if (widget.currentShow != null)
+                              Positioned(
+                                top: 12,
+                                right: 12,
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               decoration: BoxDecoration(
@@ -1261,29 +1267,31 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                                   ),
                                 ],
                               ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.radio,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    'ON AIR',
-                                    style: TextStyle(
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.radio,
                                       color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 0.5,
+                                      size: 14,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(width: 4),
+                                    Text(
+                                      'ON AIR',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                      ],
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: 24),
                     // Currently Playing Show Info
@@ -1313,7 +1321,7 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                       ),
                       const SizedBox(height: 12),
                     ],
-                    // Song Info - Show current show if available
+                    // Song Info - Show current show if available (bigger text)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1322,7 +1330,7 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                             widget.currentShow?.showName ?? 'NRG UG Radio',
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
@@ -1330,14 +1338,14 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Text(
                       widget.currentShow != null
                           ? '${widget.currentShow!.dayOfWeek} · ${widget.currentShow!.time}${widget.currentShow!.presenters.isNotEmpty ? '\nHosted by ${widget.currentShow!.presenters}' : ''}'
                           : 'Live Stream',
                       style: const TextStyle(
                         color: Colors.grey,
-                        fontSize: 16,
+                        fontSize: 20,
                       ),
                       textAlign: TextAlign.center,
                     ),
