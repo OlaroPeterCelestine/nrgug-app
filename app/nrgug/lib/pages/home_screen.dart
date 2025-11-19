@@ -298,16 +298,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildNewsCarouselShimmer() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[900]!,
-      highlightColor: Colors.grey[800]!,
-      child: Container(
-        height: 480,
-        decoration: BoxDecoration(
-          color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isTablet = screenWidth > 600;
+        final carouselHeight = isTablet ? 600.0 : 480.0;
+        
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[900]!,
+          highlightColor: Colors.grey[800]!,
+          child: Container(
+            height: carouselHeight,
+            decoration: BoxDecoration(
+              color: Colors.grey[900],
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -494,32 +502,41 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-          // News Carousel Section
-          _news.isEmpty
-              ? const SizedBox(
-                  height: 480,
-                  child: Center(
-                    child: Text(
-                      'No news available',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                )
-              : SizedBox(
-                  height: 480,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentNewsIndex = index;
-                      });
-                    },
-                    itemCount: _news.length > 3 ? 3 : _news.length,
-                    itemBuilder: (context, index) {
-                      return _buildNewsCard(_news[index]);
-                    },
-                  ),
-                ),
+          // News Carousel Section - Responsive height
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              final isTablet = screenWidth > 600;
+              // Responsive height: taller on tablets, standard on phones
+              final carouselHeight = isTablet ? 600.0 : 480.0;
+              
+              return _news.isEmpty
+                  ? SizedBox(
+                      height: carouselHeight,
+                      child: Center(
+                        child: Text(
+                          'No news available',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      height: carouselHeight,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentNewsIndex = index;
+                          });
+                        },
+                        itemCount: _news.length > 3 ? 3 : _news.length,
+                        itemBuilder: (context, index) {
+                          return _buildNewsCard(_news[index], isTablet: isTablet);
+                        },
+                      ),
+                    );
+            },
+          ),
           const SizedBox(height: 16),
           // Indicator dots - Only 3
           _news.isEmpty
@@ -904,11 +921,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildNewsCard(News news) {
+  Widget _buildNewsCard(News news, {bool isTablet = false}) {
     final title = news.title;
     final category = news.category;
     final timeAgo = _getTimeAgo(news.timestamp);
     final meta = 'News · $timeAgo'; // Removed category since it's shown as badge
+    
+    // Responsive sizing based on device type
+    final horizontalPadding = isTablet ? 40.0 : 20.0;
+    final bottomPadding = isTablet ? 48.0 : 32.0;
+    final titleFontSize = isTablet ? 48.0 : 36.0;
+    final metaFontSize = isTablet ? 18.0 : 16.0;
+    final categoryFontSize = isTablet ? 14.0 : 12.0;
+    final buttonFontSize = isTablet ? 17.0 : 15.0;
+    final buttonPadding = isTablet 
+        ? const EdgeInsets.symmetric(horizontal: 32, vertical: 14)
+        : const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
+    final spacing = isTablet ? 20.0 : 16.0;
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -979,37 +1008,40 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Content Overlay
             Positioned(
-              left: 20,
-              right: 20,
-              bottom: 32,
+              left: horizontalPadding,
+              right: horizontalPadding,
+              bottom: bottomPadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Category Badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? 16 : 12, 
+                      vertical: isTablet ? 8 : 6
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       category,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12,
+                        fontSize: categoryFontSize,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: spacing),
                   // Title
                   Text(
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 36,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                       height: 1.1,
                       letterSpacing: -0.5,
@@ -1021,10 +1053,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    maxLines: 3,
+                    maxLines: isTablet ? 4 : 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: spacing * 0.75),
                   // Metadata Row
                   Row(
                     children: [
@@ -1032,7 +1064,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         meta,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: metaFontSize,
                           fontWeight: FontWeight.w500,
                           shadows: [
                             Shadow(
@@ -1045,7 +1077,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: spacing * 1.25),
                   // Action Buttons Row
                   Row(
                     children: [
@@ -1055,15 +1087,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: buttonPadding,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Read More',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: buttonFontSize,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
