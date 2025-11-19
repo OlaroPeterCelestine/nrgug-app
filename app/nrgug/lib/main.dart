@@ -398,25 +398,23 @@ class _MainScreenState extends State<MainScreen> {
             // On tablets, make the bottom sheet 80% width, on mobile use full width
             final bottomSheetWidth = isTablet ? screenWidth * 0.80 : screenWidth;
             
-            return DraggableScrollableSheet(
-              initialChildSize: 0.85,
-              minChildSize: 0.5,
-              maxChildSize: 0.85,
-              builder: (context, scrollController) {
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: bottomSheetWidth,
-                    ),
-                    child: Container(
-                      width: bottomSheetWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[850],
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(20),
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: bottomSheetWidth,
+                child: DraggableScrollableSheet(
+                  initialChildSize: 0.85,
+                  minChildSize: 0.5,
+                  maxChildSize: 0.85,
+                  builder: (context, scrollController) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[850],
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
                       ),
-                    ),
-                    child: MusicPlayerExpanded(
+                      child: MusicPlayerExpanded(
                     isPlaying: _isPlaying,
                     isLoading: _isLoading && !_isPlaying, // Don't show loading if already playing
                     isAudio: _isAudio,
@@ -463,10 +461,11 @@ class _MainScreenState extends State<MainScreen> {
                     scrollController: scrollController,
                     ),
                     ),
-                  ),
-                );
-              },  // closes scrollController builder
-            );    // closes DraggableScrollableSheet
+                  );
+                },  // closes scrollController builder
+                ),
+              ),
+            );
           },  // closes StatefulBuilder builder (now a block function)
         );  // closes StatefulBuilder
       },  // closes showModalBottomSheet builder
