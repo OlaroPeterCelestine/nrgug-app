@@ -759,16 +759,16 @@ class _MainScreenState extends State<MainScreen> {
               // Bottom Navigation Bar
               Container(
                 padding: EdgeInsets.symmetric(vertical: navBarPadding),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
                 child: BottomNavigationBar(
                   currentIndex: _selectedIndex,
                   onTap: (index) {
@@ -824,9 +824,11 @@ class _MainScreenState extends State<MainScreen> {
                       label: 'Settings',
                     ),
                   ],
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
