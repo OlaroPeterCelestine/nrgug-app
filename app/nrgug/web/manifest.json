@@ -1,11 +1,11 @@
 {
-    "name": "nrgug",
-    "short_name": "nrgug",
+    "name": "NRG Radio Uganda",
+    "short_name": "NRG Radio",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "NRG Radio Uganda - Live Radio Streaming App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -21,6 +21,8 @@ class ApiConfig {
   static const String contactEndpoint = '/api/contact';
   static const String heroSelectionEndpoint = '/api/hero-selection';
   static const String healthEndpoint = '/health';
+  static const String pointsUserEndpoint = '/api/points/user';
+  static const String pointsLeaderboardEndpoint = '/api/points/leaderboard';
   
   // Helper method to get full URL
   static String getUrl(String endpoint) {

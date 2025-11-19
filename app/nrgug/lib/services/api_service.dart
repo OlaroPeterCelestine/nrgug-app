@@ -12,7 +12,6 @@ class ApiService {
     while (attempt <= retries) {
       try {
         final url = ApiConfig.getUrl(endpoint);
-        print('API Request: GET $url (attempt ${attempt + 1}/${retries + 1})'); // Debug log
         
         final response = await http.get(
           Uri.parse(url),
@@ -27,11 +26,9 @@ class ApiService {
           },
         );
         
-        print('API Response: ${response.statusCode} for $url'); // Debug log
         return response;
       } catch (e) {
         attempt++;
-        print('API Error (attempt $attempt): $e'); // Debug log
         
         // If this was the last attempt, throw the error
         if (attempt > retries) {

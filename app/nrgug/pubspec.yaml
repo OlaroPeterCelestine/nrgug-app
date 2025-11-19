@@ -1,5 +1,5 @@
 name: nrgug
-description: "A new Flutter project."
+description: "NRG Radio Uganda - Live Radio Streaming App"
 
 publish_to: 'none' 
 
@@ -18,16 +18,20 @@ dependencies:
   icons_plus: ^5.0.0
   
   radio_player: ^2.2.1
-  webview_flutter: ^4.4.2
-  http: ^1.2.0
-  connectivity_plus: ^6.0.5
+  webview_flutter: ^4.10.0
+  http: ^1.6.0
+  connectivity_plus: ^6.1.5
+  shared_preferences: ^2.3.3
+  avatar_plus: ^0.0.5
+  shimmer: ^3.0.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 
 flutter:

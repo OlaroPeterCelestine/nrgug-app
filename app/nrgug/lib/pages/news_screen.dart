@@ -3,6 +3,7 @@ import '../models/news.dart';
 import '../models/hero_selection.dart';
 import '../services/news_service.dart';
 import '../services/hero_selection_service.dart';
+import '../widgets/profile_avatar_icon.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -32,44 +33,94 @@ class _NewsScreenState extends State<NewsScreen> {
     });
 
     try {
-      // Fetch hero selection (3 main stories) and fallback to regular news
-      HeroSelection? heroSelection;
+      // Load cached data first (fast, shows content immediately)
+      List<News> cachedHeroNews = [];
+      List<News> cachedAllNews = [];
+      
       try {
-        heroSelection = await _heroSelectionService.getHeroSelection();
-      } catch (e) {
-        print('Hero selection not available, using regular news: $e');
-      }
-      
-      // Fetch all news
-      final allNews = await _newsService.getNews();
-      
-      // Use hero selection stories if available, otherwise use first 3 news
-      List<News> heroNewsList = [];
-      if (heroSelection != null) {
-        heroNewsList = heroSelection.getHeroStories();
-        // Get hero story IDs to exclude from all news
-        final heroIds = heroNewsList.map((n) => n.id).toSet();
-        // Filter out hero stories from all news
-        final otherNews = allNews.where((n) => !heroIds.contains(n.id)).toList();
+        final cachedHeroSelection = await _heroSelectionService.getHeroSelection(useCache: true);
+        final cachedNews = await _newsService.getNews(useCache: true);
         
-        setState(() {
-          _heroNews = heroNewsList;
-          _allNews = otherNews;
-          _isLoading = false;
-        });
-      } else {
-        // Fallback: use first 3 as hero, rest as all news
-        setState(() {
-          _heroNews = allNews.take(3).toList();
-          _allNews = allNews.skip(3).toList();
-          _isLoading = false;
-        });
+        if (cachedHeroSelection != null) {
+          cachedHeroNews = cachedHeroSelection.getHeroStories();
+          final heroIds = cachedHeroNews.map((n) => n.id).toSet();
+          cachedAllNews = cachedNews.where((n) => !heroIds.contains(n.id)).toList();
+        } else {
+          cachedHeroNews = cachedNews.take(3).toList();
+          cachedAllNews = cachedNews.skip(3).toList();
+        }
+        
+        // Show cached data immediately
+        if (cachedHeroNews.isNotEmpty || cachedAllNews.isNotEmpty) {
+          setState(() {
+            _heroNews = cachedHeroNews;
+            _allNews = cachedAllNews;
+            _isLoading = false; // Show content, but will refresh in background
+          });
+        }
+      } catch (e) {
+        // Silently fail - will fetch from API instead
+      }
+
+      // Fetch fresh data from API in background
+      try {
+        // Fetch hero selection (3 main stories) and fallback to regular news
+        HeroSelection? heroSelection;
+        try {
+          heroSelection = await _heroSelectionService.getHeroSelection(useCache: false);
+        } catch (e) {
+          // Silently fail - will use regular news instead
+        }
+        
+        // Fetch all news
+        final allNews = await _newsService.getNews(useCache: false);
+        
+        // Use hero selection stories if available, otherwise use first 3 news
+        List<News> heroNewsList = [];
+        if (heroSelection != null) {
+          heroNewsList = heroSelection.getHeroStories();
+          // Get hero story IDs to exclude from all news
+          final heroIds = heroNewsList.map((n) => n.id).toSet();
+          // Filter out hero stories from all news
+          final otherNews = allNews.where((n) => !heroIds.contains(n.id)).toList();
+          
+          if (mounted) {
+            setState(() {
+              _heroNews = heroNewsList;
+              _allNews = otherNews;
+              _isLoading = false;
+            });
+          }
+        } else {
+          // Fallback: use first 3 as hero, rest as all news
+          if (mounted) {
+            setState(() {
+              _heroNews = allNews.take(3).toList();
+              _allNews = allNews.skip(3).toList();
+              _isLoading = false;
+            });
+          }
+        }
+      } catch (e) {
+        // If fresh data fetch fails, keep cached data if available
+        if (cachedHeroNews.isEmpty && cachedAllNews.isEmpty) {
+          if (mounted) {
+            setState(() {
+              _errorMessage = e.toString().replaceAll('Exception: ', '');
+              _isLoading = false;
+            });
+          }
+        } else {
+          // We have cached data, so silently use it
+        }
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -151,11 +202,7 @@ class _NewsScreenState extends State<NewsScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.person, color: Colors.white, size: 20),
-              ),
+              child: const ProfileAvatarIcon(size: 36),
             ),
           ],
         ),

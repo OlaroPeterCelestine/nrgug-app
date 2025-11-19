@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:radio_player/radio_player.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'pages/login_screen.dart';
 import 'pages/home_screen.dart';
 import 'pages/news_screen.dart';
 import 'pages/nrg_screen.dart';
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NRG UG',
+      title: 'NRG Radio Uganda',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
@@ -42,8 +44,68 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const MainScreen(),
+      home: const AuthWrapper(),
     );
+  }
+}
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isLoading = true;
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load login status synchronously if possible, or use cached value
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    // Use a faster approach - check SharedPreferences without blocking
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    
+    // Update state immediately without waiting
+    if (mounted) {
+      setState(() {
+        _isLoggedIn = isLoggedIn;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+          ),
+        ),
+      );
+    }
+
+    // Stop radio if navigating to login screen
+    if (!_isLoggedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          await RadioPlayer.pause();
+        } catch (e) {
+          // Ignore errors if radio is not initialized
+        }
+      });
+    }
+
+    return _isLoggedIn ? const MainScreen() : const LoginScreen();
   }
 }
 
@@ -81,6 +143,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    // Load shows in background (non-blocking)
     _loadShows();
     
     // Set up remote control event listeners for lock screen controls
@@ -110,9 +173,20 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
     
-    // Start audio playback immediately on app launch
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeRadioPlayer(autoPlay: true);
+    // Check if it's first time opening app, and auto-play if not
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final prefs = await SharedPreferences.getInstance();
+      final isFirstTime = prefs.getBool('isFirstTime') ?? true;
+      
+      if (isFirstTime) {
+        // Mark that user has opened the app at least once
+        await prefs.setBool('isFirstTime', false);
+        // Don't auto-play on first time
+        _initializeRadioPlayer(autoPlay: false);
+      } else {
+        // Auto-play on subsequent opens
+        _initializeRadioPlayer(autoPlay: true);
+      }
     });
   }
 
@@ -137,7 +211,6 @@ class _MainScreenState extends State<MainScreen> {
       });
     } catch (e) {
       // Silently fail - shows are optional
-      print('Failed to load shows: $e');
     }
   }
 
@@ -158,47 +231,56 @@ class _MainScreenState extends State<MainScreen> {
       return;
     }
     
-    setState(() {
-      _isLoading = true;
-    });
+    // Only show loading if auto-playing
+    if (autoPlay) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     
     try {
       // Set station without waiting for metadata parsing to speed up
-      await RadioPlayer.setStation(
+      // Use unawaited for non-blocking initialization
+      RadioPlayer.setStation(
         title: 'NRG UG Radio',
         url: 'https://dc4.serverse.com/proxy/nrgugstream/stream',
         logoNetworkUrl: 'https://mmo.aiircdn.com/1449/67f4d50dd6ded.jpg',
         parseStreamMetadata: false, // Disable metadata parsing for faster initialization
-      );
-      
-      if (autoPlay) {
-        // Start playing immediately
-        await RadioPlayer.play();
-        
-        // Wait 800ms before stopping loading indicator
-        await Future.delayed(const Duration(milliseconds: 800));
-        
-        // Stop loading after 800ms
-        if (mounted) {
-          setState(() {
-            _isPlaying = true;
-            _isLoading = false;
+      ).then((_) async {
+        if (autoPlay) {
+          // Start playing immediately
+          await RadioPlayer.play();
+          
+          // Update state quickly without long delay
+          if (mounted) {
+            setState(() {
+              _isPlaying = true;
+              _isLoading = false;
+            });
+          }
+          
+          // Set album art asynchronously without blocking
+          _setAlbumArt().catchError((e) {
+            // Ignore errors in album art setting
           });
+        } else {
+          // Just set up the station, don't play
+          if (mounted) {
+            setState(() {
+              _isPlaying = false;
+              _isLoading = false;
+            });
+          }
         }
-        
-        // Set album art asynchronously without blocking
-        _setAlbumArt().catchError((e) {
-          // Ignore errors in album art setting
-        });
-      } else {
-        // Just set up the station, don't play
+      }).catchError((e) {
+        // If initialization fails, stop loading
         if (mounted) {
           setState(() {
+            _isLoading = false;
             _isPlaying = false;
-            _isLoading = false;
           });
         }
-      }
+      });
       
     } catch (e) {
       // If initialization fails, stop loading

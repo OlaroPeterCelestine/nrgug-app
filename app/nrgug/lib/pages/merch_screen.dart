@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/profile_avatar_icon.dart';
 
 class MerchScreen extends StatelessWidget {
   const MerchScreen({super.key});
@@ -199,11 +200,7 @@ class MerchScreen extends StatelessWidget {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.red,
-                  child: const Icon(Icons.person, color: Colors.white, size: 20),
-                ),
+                child: const ProfileAvatarIcon(size: 36),
               ),
             ],
             bottom: TabBar(

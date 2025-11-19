@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import '../models/news.dart';
 import '../models/video.dart';
@@ -8,6 +10,7 @@ import '../services/news_service.dart';
 import '../services/video_service.dart';
 import '../services/client_service.dart';
 import '../services/hero_selection_service.dart';
+import '../widgets/profile_avatar_icon.dart';
 import '../widgets/youtube_player.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -67,38 +70,82 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      // Fetch hero selection (3 main stories) and fallback to regular news
-      HeroSelection? heroSelection;
-      try {
-        heroSelection = await _heroSelectionService.getHeroSelection();
-      } catch (e) {
-        print('Hero selection not available, using regular news: $e');
-      }
+      // Load cached data first (fast, shows content immediately)
+      List<News> cachedNewsList = [];
+      List<Video> cachedVideos = [];
+      List<Client> cachedClients = [];
       
-      final videos = await _videoService.getVideos();
-      final clients = await _clientService.getClients();
-
-      // Use hero selection stories if available, otherwise use first 3 news
-      List<News> newsList = [];
-      if (heroSelection != null) {
-        newsList = heroSelection.getHeroStories();
-      } else {
-        // Fallback: get regular news and take first 3
-        final allNews = await _newsService.getNews();
-        newsList = allNews.take(3).toList();
+      try {
+        final allCachedNews = await _newsService.getNews(useCache: true);
+        cachedNewsList = allCachedNews.take(3).toList();
+        cachedVideos = await _videoService.getVideos(useCache: true);
+        cachedClients = await _clientService.getClients(useCache: true);
+        
+        // Show cached data immediately
+        if (cachedNewsList.isNotEmpty || cachedVideos.isNotEmpty || cachedClients.isNotEmpty) {
+          setState(() {
+            _news = cachedNewsList;
+            _videos = cachedVideos;
+            _clients = cachedClients;
+            _isLoading = false; // Show content, but will refresh in background
+          });
+        }
+      } catch (e) {
+        // Silently fail - will fetch from API instead
       }
 
-      setState(() {
-        _news = newsList;
-        _videos = videos;
-        _clients = clients;
-        _isLoading = false;
-      });
+      // Fetch fresh data from API in background
+      try {
+        // Fetch hero selection (3 main stories) and fallback to regular news
+        HeroSelection? heroSelection;
+        try {
+          heroSelection = await _heroSelectionService.getHeroSelection(useCache: false);
+        } catch (e) {
+          // Silently fail - will use regular news instead
+        }
+        
+        final videos = await _videoService.getVideos(useCache: false);
+        final clients = await _clientService.getClients(useCache: false);
+
+        // Use hero selection stories if available, otherwise use first 3 news
+        List<News> newsList = [];
+        if (heroSelection != null) {
+          newsList = heroSelection.getHeroStories();
+        } else {
+          // Fallback: get regular news and take first 3
+          final allNews = await _newsService.getNews(useCache: false);
+          newsList = allNews.take(3).toList();
+        }
+
+        // Update with fresh data
+        if (mounted) {
+          setState(() {
+            _news = newsList;
+            _videos = videos;
+            _clients = clients;
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        // If fresh data fetch fails, keep cached data if available
+        if (cachedNewsList.isEmpty && cachedVideos.isEmpty && cachedClients.isEmpty) {
+          if (mounted) {
+            setState(() {
+              _errorMessage = e.toString().replaceAll('Exception: ', '');
+              _isLoading = false;
+            });
+          }
+        } else {
+          // We have cached data, so silently use it
+        }
+      }
     } catch (e) {
-      setState(() {
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -250,13 +297,154 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  Widget _buildNewsCarouselShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[900]!,
+      highlightColor: Colors.grey[800]!,
+      child: Container(
+        height: 480,
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionShimmer(String title) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[900]!,
+      highlightColor: Colors.grey[800]!,
+      child: Container(
+        height: 24,
+        width: 150,
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVideoListShimmer() {
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[900]!,
+            highlightColor: Colors.grey[800]!,
+            child: Container(
+              width: 300,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildClientListShimmer() {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[900]!,
+            highlightColor: Colors.grey[800]!,
+            child: Container(
+              width: 120,
+              height: 120,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildFeaturedAdsShimmer() {
+    return SizedBox(
+      height: 150,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[900]!,
+            highlightColor: Colors.grey[800]!,
+            child: Container(
+              width: 150,
+              height: 150,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.red),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              floating: false,
+              pinned: true,
+              backgroundColor: Colors.black,
+              title: const Text('Home'),
+              centerTitle: true,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: const ProfileAvatarIcon(size: 36),
+                ),
+              ],
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // News Carousel Shimmer
+                  _buildNewsCarouselShimmer(),
+                  const SizedBox(height: 16),
+                  // Videos Section Shimmer
+                  _buildSectionShimmer('Latest Videos'),
+                  const SizedBox(height: 12),
+                  _buildVideoListShimmer(),
+                  const SizedBox(height: 24),
+                  // Featured Ads Section Shimmer
+                  _buildSectionShimmer('Featured Ads'),
+                  const SizedBox(height: 12),
+                  _buildFeaturedAdsShimmer(),
+                  const SizedBox(height: 24),
+                  // Clients Section Shimmer
+                  _buildSectionShimmer('Our Partners'),
+                  const SizedBox(height: 12),
+                  _buildClientListShimmer(),
+                ]),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -298,11 +486,7 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.person, color: Colors.white, size: 20),
-              ),
+              child: const ProfileAvatarIcon(size: 36),
             ),
           ],
         ),
@@ -367,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          // Ads Section
+          // Featured Ads Section - Show Clients
           Text(
             'Featured Ads',
             style: const TextStyle(
@@ -377,33 +561,44 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            height: 150,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue[900]!, Colors.blue[700]!],
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.ads_click, size: 50, color: Colors.white),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Sponsored Content',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+          _clients.isEmpty
+              ? Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue[900]!, Colors.blue[700]!],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.ads_click, size: 50, color: Colors.white),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'No clients available',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _clients.length,
+                    itemBuilder: (context, index) {
+                      return _buildFeaturedAdCard(_clients[index]);
+                    },
+                  ),
+                ),
           const SizedBox(height: 24),
           // Discs of Mixes Section - Circular Discs
           Text(
@@ -713,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final title = news.title;
     final category = news.category;
     final timeAgo = _getTimeAgo(news.timestamp);
-    final meta = 'News · ${news.category} · $timeAgo';
+    final meta = 'News · $timeAgo'; // Removed category since it's shown as badge
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -879,6 +1074,68 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeaturedAdCard(Client client) {
+    return Container(
+      width: 150,
+      height: 150,
+      margin: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[800]!, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: client.link != null && client.link!.isNotEmpty
+            ? () async {
+                final uri = Uri.parse(client.link!);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              }
+            : null,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: client.image != null && client.image!.isNotEmpty
+                ? Image.network(
+                    client.image!,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white54),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.business,
+                        color: Colors.white54,
+                        size: 60,
+                      );
+                    },
+                  )
+                : const Icon(
+                    Icons.business,
+                    color: Colors.white54,
+                    size: 60,
+                  ),
+          ),
         ),
       ),
     );

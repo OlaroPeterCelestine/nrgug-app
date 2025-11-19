@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/profile_avatar_icon.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -26,11 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.person, color: Colors.white, size: 20),
-              ),
+              child: const ProfileAvatarIcon(size: 36),
             ),
           ],
         ),
