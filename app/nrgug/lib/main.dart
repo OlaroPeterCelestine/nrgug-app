@@ -395,9 +395,8 @@ class _MainScreenState extends State<MainScreen> {
             // Same size on both tablets and mobile (85%)
             final screenWidth = MediaQuery.of(context).size.width;
             final isTablet = screenWidth > 600;
-            // On tablets, make the bottom sheet wider (98% of screen width for more space)
-            // On mobile, use full width
-            final bottomSheetWidth = isTablet ? screenWidth * 0.98 : screenWidth;
+            // On tablets, make the bottom sheet 80% width, on mobile use full width
+            final bottomSheetWidth = isTablet ? screenWidth * 0.80 : screenWidth;
             
             return DraggableScrollableSheet(
               initialChildSize: 0.85,
@@ -405,8 +404,12 @@ class _MainScreenState extends State<MainScreen> {
               maxChildSize: 0.85,
               builder: (context, scrollController) {
                 return Center(
-                  child: Container(
-                    width: bottomSheetWidth,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: bottomSheetWidth,
+                    ),
+                    child: Container(
+                      width: bottomSheetWidth,
                     decoration: BoxDecoration(
                       color: Colors.grey[850],
                       borderRadius: const BorderRadius.vertical(
@@ -458,6 +461,7 @@ class _MainScreenState extends State<MainScreen> {
                       Navigator.pop(context);
                     },
                     scrollController: scrollController,
+                    ),
                     ),
                   ),
                 );
