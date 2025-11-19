@@ -301,8 +301,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
         final isTablet = screenWidth > 600;
-        final carouselHeight = isTablet ? 600.0 : 480.0;
+        // Responsive height: 3/4 of screen height on tablets, standard on phones
+        final carouselHeight = isTablet ? screenHeight * 0.75 : 480.0;
         
         return Shimmer.fromColors(
           baseColor: Colors.grey[900]!,
@@ -506,9 +508,10 @@ class _HomeScreenState extends State<HomeScreen> {
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
+              final screenHeight = MediaQuery.of(context).size.height;
               final isTablet = screenWidth > 600;
-              // Responsive height: taller on tablets, standard on phones
-              final carouselHeight = isTablet ? 600.0 : 480.0;
+              // Responsive height: 3/4 of screen height on tablets, standard on phones
+              final carouselHeight = isTablet ? screenHeight * 0.75 : 480.0;
               // On tablets, make it 3/4 width and center it
               final carouselWidth = isTablet ? screenWidth * 0.75 : screenWidth - 32.0;
               
