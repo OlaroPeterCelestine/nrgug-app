@@ -395,9 +395,9 @@ class _MainScreenState extends State<MainScreen> {
             // Same size on both tablets and mobile (85%)
             final screenWidth = MediaQuery.of(context).size.width;
             final isTablet = screenWidth > 600;
-            // On tablets, make the bottom sheet 30% wider (constrained width)
-            final bottomSheetWidth = isTablet ? screenWidth * 1.3 : screenWidth;
-            final maxWidth = isTablet ? screenWidth * 0.9 : screenWidth; // Max 90% on tablets to prevent overflow
+            // On tablets, make the bottom sheet same width as hero section (93.75% of screen width)
+            // On mobile, use full width
+            final bottomSheetWidth = isTablet ? screenWidth * 0.9375 : screenWidth;
             
             return DraggableScrollableSheet(
               initialChildSize: 0.85,
@@ -406,10 +406,7 @@ class _MainScreenState extends State<MainScreen> {
               builder: (context, scrollController) {
                 return Center(
                   child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: maxWidth,
-                    ),
-                    width: bottomSheetWidth > maxWidth ? maxWidth : bottomSheetWidth,
+                    width: bottomSheetWidth,
                     decoration: BoxDecoration(
                       color: Colors.grey[850],
                       borderRadius: const BorderRadius.vertical(
