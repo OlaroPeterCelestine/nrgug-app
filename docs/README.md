@@ -1,123 +1,127 @@
-# NRG UG - Complete Radio Station Platform
+# 🚀 NRGUG Broadcasting Services
 
-A comprehensive radio station platform consisting of a Go API backend, Next.js public website, and Next.js admin dashboard.
+A comprehensive broadcasting management system with API and dashboard for news, shows, clients, and subscriber management.
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
 nrgug/
-├── apis/          # Go API Backend (Railway deployed)
-├── nrg/           # Next.js Public Website (Vercel deployed)
-├── admin/         # Next.js Admin Dashboard (Vercel deployed)
-├── docs/          # Documentation and guides
-└── .github/       # GitHub Actions workflows
+├── apis/                    # Go API backend
+│   ├── main.go             # Main API server
+│   ├── main.prod.go        # Production API server
+│   ├── middleware/         # Security and logging middleware
+│   ├── models/             # Data models
+│   ├── controllers/        # API controllers
+│   ├── database/           # Database repositories
+│   ├── handlers/           # Request handlers
+│   ├── routes/             # API routes
+│   ├── services/           # Business logic services
+│   └── utils/              # Utility functions
+├── dashboard/              # Next.js frontend dashboard
+│   ├── src/                # Source code
+│   ├── public/             # Static assets
+│   └── uploads/            # File uploads
+├── scripts/                # Production scripts and configs
+│   ├── deploy-production.sh
+│   ├── test-production-ready.sh
+│   ├── create-role-users.sh
+│   ├── Dockerfile
+│   ├── docker-compose.prod.yml
+│   ├── production.env
+│   ├── PRODUCTION_DEPLOYMENT.md
+│   └── PRODUCTION_READY_SUMMARY.md
+├── test/                   # Test scripts
+│   ├── test-all-apis.sh
+│   └── test-complete-system.sh
+└── nginx/                  # Nginx configuration
+    └── nginx.conf
 ```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+ 
-- Go 1.21+
-- PostgreSQL
-- Git
+### Development
+```bash
+# Start API server
+cd apis
+go run main.go
 
-### Development Setup
+# Start dashboard
+cd dashboard
+npm run dev
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/OlaroPeterCelestine/nrgug-website.git
-   cd nrgug
-   ```
+### Production
+```bash
+# Deploy to production
+./scripts/deploy-production.sh
+```
 
-2. **API Backend**
-   ```bash
-   cd apis
-   go mod download
-   go run main.go
-   ```
+## ✨ Features
 
-3. **Public Website**
-   ```bash
-   cd nrg
-   npm install
-   npm run dev
-   ```
+- **News Management** - Create, edit, and manage news articles
+- **Shows Management** - Schedule and manage broadcasting shows
+- **Client Management** - Manage client information and relationships
+- **User Management** - Role-based user authentication
+- **Subscriber Management** - Email subscription system
+- **Email System** - Bulk email with unsubscribe functionality
+- **File Uploads** - Image upload with WebP compression
+- **Dashboard** - Modern React dashboard with shadcn/ui
+- **API** - RESTful API with comprehensive endpoints
 
-4. **Admin Dashboard**
-   ```bash
-   cd admin
-   npm install
-   npm run dev
-   ```
+## 🛠️ Technology Stack
+
+### Backend
+- **Go** - High-performance API server
+- **PostgreSQL** - Primary database
+- **Redis** - Caching and session storage
+- **Docker** - Containerization
+
+### Frontend
+- **Next.js** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - UI components
+- **Axios** - HTTP client
+
+### Production
+- **Nginx** - Reverse proxy and load balancer
+- **Docker Compose** - Service orchestration
+- **SSL/TLS** - Security encryption
+- **WebP** - Image compression
 
 ## 📚 Documentation
 
-- [Complete Web App Report](docs/NRGUG_WEB_APP_REPORT.md)
-- [GitHub Secrets Setup](docs/GITHUB_SECRETS_SETUP.md)
-- [Streaming Configuration](docs/STREAMING_CONFIG.md)
-- [Quick Reference](docs/GITHUB_SECRETS_QUICK_REFERENCE.md)
+- **API Documentation** - Available at `/api/docs`
+- **Production Guide** - `scripts/PRODUCTION_DEPLOYMENT.md`
+- **Production Summary** - `scripts/PRODUCTION_READY_SUMMARY.md`
 
-## 🌐 Live Deployments
+## 🔧 Configuration
 
-- **Public Website**: [nrgug-website.vercel.app](https://nrgug-website.vercel.app)
-- **API Backend**: [nrgug-api-production.up.railway.app](https://nrgug-api-production.up.railway.app)
-- **Admin Dashboard**: [nrgug-admin.vercel.app](https://nrgug-admin.vercel.app)
+### Environment Variables
+Copy `scripts/production.env` and configure:
+- Database connection
+- SMTP email settings
+- Security keys
+- Domain configuration
 
-## 🛠️ Tech Stack
+## 🚀 Deployment
 
-### Backend (APIs)
-- **Go** with Gorilla Mux
-- **PostgreSQL** database
-- **Railway** deployment
-- **Cloudflare R2** storage
+The system is production-ready with:
+- ✅ Docker containerization
+- ✅ Nginx reverse proxy
+- ✅ SSL/HTTPS support
+- ✅ Security hardening
+- ✅ Performance optimization
+- ✅ WebP image compression
+- ✅ Automated deployment
 
-### Frontend (NRG Website)
-- **Next.js 15** with App Router
-- **TypeScript**
-- **Tailwind CSS**
-- **Vercel** deployment
+## 📞 Support
 
-### Admin Dashboard
-- **Next.js 15** with App Router
-- **TypeScript**
-- **Tailwind CSS**
-- **Vercel** deployment
-
-## 🎯 Features
-
-- **Live Audio Streaming** - Real-time radio broadcast
-- **Live Video Streaming** - Visual radio experience
-- **Real-time Schedule** - Dynamic show scheduling
-- **News Management** - Content management system
-- **User Authentication** - Secure admin access
-- **Mobile Responsive** - Optimized for all devices
-- **SEO Optimized** - Search engine friendly
-
-## 📱 Mobile App
-
-A Flutter mobile application with the same features as the website, including:
-- Live streaming
-- Schedule viewing
-- News reading
-- Gamification system
-- Push notifications
-
-## 🔧 Development
-
-Each component can be developed independently:
-
-- **APIs**: Go backend with PostgreSQL
-- **NRG Website**: Next.js frontend
-- **Admin**: Next.js admin dashboard
+For support and documentation:
+- Check the production guides in `scripts/`
+- Review API documentation
+- Use health check endpoint: `/health`
 
 ## 📄 License
 
-This project is proprietary to NRG Radio Uganda.
-
-## 🤝 Contributing
-
-This is a private project. For access or questions, contact the development team.
-
----
-
-**NRG Radio Uganda** - The Number One Name in Music 🎵
+NRGUG Broadcasting Services - Production Ready System

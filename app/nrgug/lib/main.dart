@@ -1136,6 +1136,33 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                       },
                     ),
                     const SizedBox(height: 24),
+                    // Currently Playing Show Info
+                    if (widget.currentShow != null) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.red.withOpacity(0.5), width: 1),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.radio, color: Colors.red, size: 18),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Currently Playing',
+                              style: TextStyle(
+                                color: Colors.red[300],
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     // Video Info - Show current show if available
                     Text(
                       widget.currentShow?.showName ?? 'NRG UG Radio',
@@ -1248,6 +1275,33 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                       ],
                     ),
                     const SizedBox(height: 24),
+                    // Currently Playing Show Info
+                    if (widget.currentShow != null) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.red.withOpacity(0.5), width: 1),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.radio, color: Colors.red, size: 18),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Currently Playing',
+                              style: TextStyle(
+                                color: Colors.red[300],
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     // Song Info - Show current show if available
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
