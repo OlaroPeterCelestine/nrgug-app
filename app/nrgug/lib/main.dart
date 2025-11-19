@@ -1301,7 +1301,6 @@ class _MusicPlayerExpandedState extends State<MusicPlayerExpanded> {
                                   ),
                                 ),
                               ),
-                            ),
                           ],
                         );
                       },
