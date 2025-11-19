@@ -392,16 +392,11 @@ class _MainScreenState extends State<MainScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             // Read current state values on each rebuild
-            final screenWidth = MediaQuery.of(context).size.width;
-            final isTablet = screenWidth > 600;
-            // On tablets, make it 100% height, on phones keep 85%
-            final initialSize = isTablet ? 1.0 : 0.85;
-            final maxSize = isTablet ? 1.0 : 0.85;
-            
+            // Same size on both tablets and mobile (85%)
             return DraggableScrollableSheet(
-              initialChildSize: initialSize,
+              initialChildSize: 0.85,
               minChildSize: 0.5,
-              maxChildSize: maxSize,
+              maxChildSize: 0.85,
               builder: (context, scrollController) {
                 return Container(
                   decoration: BoxDecoration(
