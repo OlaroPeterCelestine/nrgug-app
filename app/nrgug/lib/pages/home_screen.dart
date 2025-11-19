@@ -578,54 +578,77 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          // Featured Ads Section - Show Clients
-          Text(
-            'Featured Ads',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 12),
-          _clients.isEmpty
-              ? Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.blue[900]!, Colors.blue[700]!],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.ads_click, size: 50, color: Colors.white),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'No clients available',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+          // Featured Ads Section - Show Clients (Responsive)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = MediaQuery.of(context).size.width;
+              final isTablet = screenWidth > 600;
+              final isLargeTablet = screenWidth > 900;
+              final contentWidth = isLargeTablet 
+                  ? screenWidth * 0.85 
+                  : isTablet 
+                      ? screenWidth * 0.90 
+                      : screenWidth - 32.0;
+              
+              return Center(
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Featured Ads',
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                  ),
-                )
-              : SizedBox(
-                  height: 150,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _clients.length,
-                    itemBuilder: (context, index) {
-                      return _buildFeaturedAdCard(_clients[index]);
-                    },
+                      ),
+                      const SizedBox(height: 12),
+                      _clients.isEmpty
+                          ? Container(
+                              height: 150,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.blue[900]!, Colors.blue[700]!],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.ads_click, size: 50, color: Colors.white),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'No clients available',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 150,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _clients.length,
+                                itemBuilder: (context, index) {
+                                  return _buildFeaturedAdCard(_clients[index]);
+                                },
+                              ),
+                            ),
+                    ],
                   ),
                 ),
+              );
+            },
+          ),
           const SizedBox(height: 24),
           // Discs of Mixes Section - Circular Discs
           LayoutBuilder(
