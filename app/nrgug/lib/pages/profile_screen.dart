@@ -777,375 +777,646 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A0A),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            floating: false,
+            floating: true,
             pinned: true,
-            backgroundColor: Colors.black,
-            title: const Text('Profile'),
+            elevation: 0,
+            backgroundColor: const Color(0xFF0A0A0A),
+            title: const Text(
+              'Profile',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
             centerTitle: true,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                // Profile Header
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey[800]!, width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      // Profile Avatar
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.red, width: 3),
-                        ),
-                        child: ClipOval(
-                          child: _avatarSeed != null && _avatarSeed!.isNotEmpty
-                              ? SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: AvatarPlus(_avatarSeed!),
-                                )
-                              : CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.red,
-                                  child: _userName != null && _userName!.isNotEmpty
-                                      ? Text(
-                                          _userName![0].toUpperCase(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 36,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : const Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 50,
-                                        ),
-                                ),
-                        ),
+                const SizedBox(height: 8),
+                // Profile Header Card
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, child) {
+                    return Transform.scale(
+                      scale: 0.8 + (0.2 * value),
+                      child: Opacity(
+                        opacity: value,
+                        child: child,
                       ),
-                      const SizedBox(height: 16),
-                      // User Name
-                      Text(
-                        _isGuest
-                            ? 'Guest User'
-                            : (_userName ?? 'User'),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(28),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.grey[900]!,
+                          Colors.grey[850]!,
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      // User Email
-                      if (_userEmail != null && !_isGuest)
-                        Text(
-                          _userEmail!,
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 14,
-                          ),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
-                      if (_isGuest)
-                        Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[800],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            'Guest Mode',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      // Points & Streak (only for logged-in users)
-                      if (!_isGuest) ...[
-                        const SizedBox(height: 24),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.red[900]!, Colors.red[700]!],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Profile Avatar with animated border
+                        TweenAnimationBuilder<double>(
+                          tween: Tween(begin: 0.0, end: 1.0),
+                          duration: const Duration(milliseconds: 800),
+                          curve: Curves.elasticOut,
+                          builder: (context, value, child) {
+                            return Transform.scale(
+                              scale: value,
+                              child: child,
+                            );
+                          },
+                          child: Stack(
                             children: [
-                              // Points Section
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    if (_isLoadingPoints)
-                                      const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                        ),
-                                      )
-                                    else ...[
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: const Icon(
-                                          Icons.stars,
-                                          color: Colors.white,
-                                          size: 24,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const Text(
-                                        'Points',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '$_points',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.red[400]!,
+                                      Colors.red[600]!,
                                     ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.red.withOpacity(0.4),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
                                   ],
                                 ),
+                                padding: const EdgeInsets.all(4),
+                                child: ClipOval(
+                                  child: _avatarSeed != null && _avatarSeed!.isNotEmpty
+                                      ? SizedBox(
+                                          width: 112,
+                                          height: 112,
+                                          child: AvatarPlus(_avatarSeed!),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.red[600]!,
+                                                Colors.red[800]!,
+                                              ],
+                                            ),
+                                          ),
+                                          child: _userName != null && _userName!.isNotEmpty
+                                              ? Center(
+                                                  child: Text(
+                                                    _userName![0].toUpperCase(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 42,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                  size: 56,
+                                                ),
+                                        ),
+                                ),
                               ),
-                              // Divider
-                              Container(
-                                width: 1,
-                                height: 60,
-                                color: Colors.white.withOpacity(0.3),
-                              ),
-                              // Streak Section
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    if (_isLoadingPoints)
-                                      const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              // Edit button overlay
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: _handleChangeAvatar,
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black, width: 3),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 8,
                                         ),
-                                      )
-                                    else ...[
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: const Icon(
-                                          Icons.local_fire_department,
-                                          color: Colors.white,
-                                          size: 24,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const Text(
-                                        'Streak',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '$_streakDays',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        _streakDays == 1 ? 'day' : 'days',
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(0.8),
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        // User Name
+                        Text(
+                          _isGuest
+                              ? 'Guest User'
+                              : (_userName ?? 'User'),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // User Email
+                        if (_userEmail != null && !_isGuest)
+                          Text(
+                            _userEmail!,
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 15,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        if (_isGuest)
+                          Container(
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.grey[800]!,
+                                  Colors.grey[700]!,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'Guest Mode',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        // Points & Streak (only for logged-in users)
+                        if (!_isGuest) ...[
+                          const SizedBox(height: 28),
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.red[900]!,
+                                  Colors.red[800]!,
+                                  Colors.red[700]!,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.red.withOpacity(0.4),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // Points Section
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      if (_isLoadingPoints)
+                                        const SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.5,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          ),
+                                        )
+                                      else ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.25),
+                                            borderRadius: BorderRadius.circular(12),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.2),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                          child: const Icon(
+                                            Icons.stars_rounded,
+                                            color: Colors.white,
+                                            size: 28,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Points',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          '$_points',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                                // Divider
+                                Container(
+                                  width: 1.5,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.white.withOpacity(0.4),
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // Streak Section
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      if (_isLoadingPoints)
+                                        const SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.5,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          ),
+                                        )
+                                      else ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.25),
+                                            borderRadius: BorderRadius.circular(12),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.2),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                          child: const Icon(
+                                            Icons.local_fire_department_rounded,
+                                            color: Colors.white,
+                                            size: 28,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Streak',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          '$_streakDays',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                        Text(
+                                          _streakDays == 1 ? 'day' : 'days',
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(0.85),
+                                            fontSize: 11,
+                                            letterSpacing: 0.3,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 28),
 
                 // Account Section
                 _buildSectionTitle('Account'),
                 _buildAction(
-                  icon: Icons.face_outlined,
+                  icon: Icons.face_rounded,
                   title: 'Change Avatar',
                   onTap: _handleChangeAvatar,
+                  iconColor: Colors.blue,
                 ),
                 if (!_isGuest)
                   _buildAction(
-                    icon: Icons.edit_outlined,
+                    icon: Icons.edit_rounded,
                     title: 'Edit Profile',
                     onTap: _handleEditProfile,
+                    iconColor: Colors.green,
                   ),
                 if (!_isGuest)
                   _buildAction(
-                    icon: Icons.lock_outlined,
+                    icon: Icons.lock_rounded,
                     title: 'Change Password',
                     onTap: _handleChangePassword,
+                    iconColor: Colors.orange,
                   ),
                 if (!_isGuest)
                   _buildAction(
-                    icon: Icons.delete_outline,
+                    icon: Icons.delete_forever_rounded,
                     title: 'Delete Account',
                     onTap: _handleDeleteAccount,
+                    iconColor: Colors.red,
                   ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
 
                 // Preferences Section
                 _buildSectionTitle('Preferences'),
                 _buildAction(
-                  icon: Icons.notifications_outlined,
+                  icon: Icons.notifications_rounded,
                   title: 'Notifications',
+                  iconColor: Colors.purple,
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Navigate to settings'),
-                        backgroundColor: Colors.red,
+                      SnackBar(
+                        content: const Text('Navigate to settings'),
+                        backgroundColor: Colors.grey[800],
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     );
                   },
                 ),
                 _buildAction(
-                  icon: Icons.favorite_outline,
+                  icon: Icons.favorite_rounded,
                   title: 'Favorites',
+                  iconColor: Colors.pink,
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Favorites feature coming soon'),
-                        backgroundColor: Colors.red,
+                      SnackBar(
+                        content: const Text('Favorites feature coming soon'),
+                        backgroundColor: Colors.grey[800],
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
 
                 // About Section
                 _buildSectionTitle('About'),
                 _buildAction(
-                  icon: Icons.info_outline,
+                  icon: Icons.info_rounded,
                   title: 'App Version',
-                  trailing: const Text(
-                    '1.0.0',
-                    style: TextStyle(color: Colors.white70),
+                  iconColor: Colors.cyan,
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      '1.0.0',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
                 _buildAction(
-                  icon: Icons.help_outline,
+                  icon: Icons.help_rounded,
                   title: 'Help & Support',
+                  iconColor: Colors.teal,
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Help & support feature coming soon'),
-                        backgroundColor: Colors.red,
+                      SnackBar(
+                        content: const Text('Help & support feature coming soon'),
+                        backgroundColor: Colors.grey[800],
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     );
                   },
                 ),
                 const SizedBox(height: 24),
 
-                // Logout Button
+                // Logout/Sign In Button
                 if (!_isGuest)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.scale(
+                          scale: 0.9 + (0.1 * value),
+                          child: child,
                         ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.red[600]!,
+                            Colors.red[700]!,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.4),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
                       ),
-                      onPressed: _handleLogout,
-                      child: const Text(
-                        'Logout',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: _handleLogout,
+                          borderRadius: BorderRadius.circular(16),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 if (_isGuest)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.scale(
+                          scale: 0.9 + (0.1 * value),
+                          child: child,
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.red[600]!,
+                            Colors.red[700]!,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.4),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
                           ),
-                          (route) => false,
-                        );
-                      },
-                      child: const Text(
-                        'Sign In or Sign Up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(16),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.login_rounded,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Sign In or Sign Up',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 40),
               ]),
             ),
           ),
@@ -1156,14 +1427,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12, top: 8),
+      padding: const EdgeInsets.only(bottom: 16, top: 4, left: 4),
       child: Text(
-        title,
+        title.toUpperCase(),
         style: TextStyle(
-          color: Colors.grey[400],
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.0,
+          color: Colors.grey[500],
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.5,
         ),
       ),
     );
@@ -1174,32 +1445,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String title,
     Widget? trailing,
     VoidCallback? onTap,
+    Color? iconColor,
   }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[800]!, width: 1),
-      ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(8),
+    final defaultIconColor = iconColor ?? Colors.red;
+    
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, 10 * (1 - value)),
+            child: child,
           ),
-          child: Icon(icon, color: Colors.red, size: 20),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.grey[900]!,
+              Colors.grey[850]!,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.grey[800]!.withOpacity(0.5),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        defaultIconColor.withOpacity(0.2),
+                        defaultIconColor.withOpacity(0.1),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: defaultIconColor.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Icon(icon, color: defaultIconColor, size: 22),
+                ),
+                title: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+                trailing: trailing ?? Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.grey[600],
+                  size: 24,
+                ),
+              ),
+            ),
           ),
         ),
-        trailing: trailing ?? const Icon(Icons.chevron_right, color: Colors.white70),
-        onTap: onTap,
       ),
     );
   }
