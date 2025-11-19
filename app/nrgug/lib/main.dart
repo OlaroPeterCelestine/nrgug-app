@@ -395,9 +395,9 @@ class _MainScreenState extends State<MainScreen> {
             // Same size on both tablets and mobile (85%)
             final screenWidth = MediaQuery.of(context).size.width;
             final isTablet = screenWidth > 600;
-            // On tablets, make the bottom sheet same width as hero section (93.75% of screen width)
+            // On tablets, make the bottom sheet wider (98% of screen width for more space)
             // On mobile, use full width
-            final bottomSheetWidth = isTablet ? screenWidth * 0.9375 : screenWidth;
+            final bottomSheetWidth = isTablet ? screenWidth * 0.98 : screenWidth;
             
             return DraggableScrollableSheet(
               initialChildSize: 0.85,
