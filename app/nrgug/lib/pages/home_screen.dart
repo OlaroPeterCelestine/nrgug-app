@@ -512,8 +512,8 @@ class _HomeScreenState extends State<HomeScreen> {
               final isTablet = screenWidth > 600;
               // Responsive height: 3/4 of screen height on tablets, standard on phones
               final carouselHeight = isTablet ? screenHeight * 0.75 : 480.0;
-              // On tablets, make it 3/4 width and center it
-              final carouselWidth = isTablet ? screenWidth * 0.75 : screenWidth - 32.0;
+              // On tablets, make it 3/4 width (75%) + 25% wider = 93.75% width, on phones full width minus padding
+              final carouselWidth = isTablet ? screenWidth * 0.9375 : screenWidth - 32.0;
               
               return Center(
                 child: SizedBox(
