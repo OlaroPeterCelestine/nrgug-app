@@ -78,8 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'name': name,
         'email': email,
         'password': password,
-        'role': 'user', // Default role for new users
-        'user_type': 'app', // Mark as app user
+        'avatar_seed': _avatarSeed, // Include avatar seed
       };
       
       if (kDebugMode) {

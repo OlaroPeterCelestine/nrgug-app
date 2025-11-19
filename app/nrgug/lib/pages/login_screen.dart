@@ -81,8 +81,14 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         // Handle error
-        final errorData = json.decode(response.body);
-        final errorMessage = errorData['error'] ?? 'Login failed. Please check your credentials.';
+        String errorMessage = 'Login failed. Please check your credentials.';
+        try {
+          final errorData = json.decode(response.body);
+          errorMessage = errorData['error'] ?? errorData['message'] ?? errorMessage;
+        } catch (_) {
+          // If response is not JSON, use default message
+          errorMessage = 'Login failed. Please check your credentials.';
+        }
         
         if (!mounted) return;
 
