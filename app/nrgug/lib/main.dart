@@ -392,10 +392,16 @@ class _MainScreenState extends State<MainScreen> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             // Read current state values on each rebuild
+            final screenWidth = MediaQuery.of(context).size.width;
+            final isTablet = screenWidth > 600;
+            // On tablets, make it 100% height, on phones keep 85%
+            final initialSize = isTablet ? 1.0 : 0.85;
+            final maxSize = isTablet ? 1.0 : 0.85;
+            
             return DraggableScrollableSheet(
-              initialChildSize: 0.85,
+              initialChildSize: initialSize,
               minChildSize: 0.5,
-              maxChildSize: 0.85, // Same as initialChildSize to prevent sliding up
+              maxChildSize: maxSize,
               builder: (context, scrollController) {
                 return Container(
                   decoration: BoxDecoration(
@@ -720,31 +726,39 @@ class _MainScreenState extends State<MainScreen> {
         index: _selectedIndex,
         children: _screens,
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Music Player Mini Bar - Always visible
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[850],
-              border: Border(
-                top: BorderSide(color: Colors.grey[900]!, width: 0.5),
+      bottomNavigationBar: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          final isTablet = screenWidth > 600;
+          // Increase height on tablets
+          final playerBarHeight = isTablet ? 80.0 : 60.0;
+          final navBarPadding = isTablet ? 12.0 : 8.0;
+          
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Music Player Mini Bar - Always visible
+              Container(
+                height: playerBarHeight,
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  border: Border(
+                    top: BorderSide(color: Colors.grey[900]!, width: 0.5),
+                  ),
+                ),
+                child: InkWell(
+                  onTap: _showExpandedPlayer,
+                  child: MusicPlayerSheet(
+                    isPlaying: _isPlaying,
+                    isLoading: _isLoading,
+                    onPlayPause: _togglePlayStop,
+                    currentShow: _currentShow,
+                  ),
+                ),
               ),
-            ),
-            child: InkWell(
-              onTap: _showExpandedPlayer,
-              child: MusicPlayerSheet(
-                isPlaying: _isPlaying,
-                isLoading: _isLoading,
-                onPlayPause: _togglePlayStop,
-                currentShow: _currentShow,
-              ),
-            ),
-          ),
-          // Bottom Navigation Bar
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+              // Bottom Navigation Bar
+              Container(
+                padding: EdgeInsets.symmetric(vertical: navBarPadding),
             decoration: BoxDecoration(
               color: Colors.transparent,
               boxShadow: [
@@ -755,29 +769,29 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ],
             ),
-            child: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              onTap: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent,
-              selectedItemColor: Colors.red,
-              unselectedItemColor: Colors.white,
-              iconSize: 28,
-              elevation: 0,
-              showUnselectedLabels: true,
-              showSelectedLabels: true,
-              selectedLabelStyle: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.normal,
-              ),
+                child: BottomNavigationBar(
+                  currentIndex: _selectedIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.transparent,
+                  selectedItemColor: Colors.red,
+                  unselectedItemColor: Colors.white,
+                  iconSize: isTablet ? 32 : 28,
+                  elevation: 0,
+                  showUnselectedLabels: true,
+                  showSelectedLabels: true,
+                  selectedLabelStyle: TextStyle(
+                    fontSize: isTablet ? 13 : 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: isTablet ? 13 : 11,
+                    fontWeight: FontWeight.normal,
+                  ),
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.house, size: 26),
