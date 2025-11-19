@@ -626,14 +626,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
           const SizedBox(height: 24),
-          // Discs of Mixes Section - Circular Discs (Responsive)
+          // Discs of Mixes Section - Circular Discs
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
@@ -659,7 +653,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-          const SizedBox(height: 12),
+                      const SizedBox(height: 12),
           SizedBox(
             height: 140,
             child: ListView.builder(
@@ -717,7 +711,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           const SizedBox(height: 24),
-          // YouTube Videos Section - Responsive
+          // YouTube Videos Section
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
@@ -743,7 +737,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-          const SizedBox(height: 12),
+                      const SizedBox(height: 12),
           _videos.isEmpty
               ? const SizedBox(
                   height: 240,
@@ -920,7 +914,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           const SizedBox(height: 24),
-          // Merchandise Section - Horizontal Scroll (Responsive)
+          // Merchandise Section - Horizontal Scroll
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
@@ -946,7 +940,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-          const SizedBox(height: 12),
+                      const SizedBox(height: 12),
           SizedBox(
             height: 220,
             child: ListView(
