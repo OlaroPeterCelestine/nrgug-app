@@ -929,7 +929,7 @@ class MusicPlayerSheet extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${currentShow!.dayOfWeek} • ${currentShow!.startTime} - ${currentShow!.endTime}',
+                    '${currentShow!.dayOfWeek} • ${currentShow!.time}',
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 11,
